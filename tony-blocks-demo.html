@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Block Demo — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #fff; overflow-x: hidden; }
+        section { display: none; }
+        section.active { display: block; }
+
+        /* ── Hero ── */
+        .hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.75) 100%); }
+        .hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 96px 80px; max-width: 1400px; }
+        .hero-eyebrow { display: inline-block; font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); margin-bottom: 20px; }
+        .hero-title { font-family: var(--font-heading); font-size: clamp(52px, 7vw, 96px); line-height: 0.95; text-transform: uppercase; color: #fff; max-width: 860px; }
+        .hero-title em { color: var(--color-teal); font-style: normal; }
+        .hero-scroll { position: absolute; bottom: 36px; right: 96px; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+        .hero-scroll-line { width: 1px; height: 40px; background: rgba(255,255,255,0.3); }
+
+        /* ── Timeline ── */
+        .timeline-section { background: #fff; padding: 96px; }
+        .timeline-inner { max-width: 1120px; margin: 0 auto; }
+        .section-eyebrow { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-green); margin-bottom: 16px; }
+        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: #000; margin-bottom: 64px; }
+        .timeline-entries { display: flex; flex-direction: column; gap: 0; border-top: 1px solid rgba(0,0,0,0.08); }
+        .timeline-entry { border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .timeline-entry-header { display: grid; grid-template-columns: 120px 1fr auto; gap: 40px; align-items: center; padding: 28px 0; cursor: pointer; user-select: none; }
+        .timeline-year { font-family: var(--font-heading); font-size: 36px; color: var(--color-green); line-height: 1; }
+        .timeline-headline { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: #000; line-height: 1.1; }
+        .timeline-toggle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, background 0.2s; }
+        .timeline-toggle svg { width: 12px; height: 12px; color: rgba(0,0,0,0.4); transition: transform 0.3s, color 0.2s; }
+        .timeline-entry.open .timeline-toggle { border-color: var(--color-green); background: var(--color-green); }
+        .timeline-entry.open .timeline-toggle svg { color: #fff; transform: rotate(45deg); }
+        .timeline-body { display: grid; grid-template-columns: 120px 1fr; gap: 40px; overflow: hidden; max-height: 0; transition: max-height 0.5s cubic-bezier(0.25,1,0.5,1); }
+        .timeline-entry.open .timeline-body { max-height: 800px; }
+        .timeline-body-content { padding-bottom: 40px; }
+        .timeline-body-content p { font-family: var(--font-body); font-size: 17px; line-height: 1.65; color: rgba(0,0,0,0.6); margin-bottom: 24px; }
+        .timeline-images { display: flex; gap: 12px; flex-wrap: wrap; }
+        .timeline-images img { height: 160px; width: auto; border-radius: 10px; object-fit: cover; flex: 1; min-width: 140px; max-width: 280px; }
+
+        /* ── Bio ── */
+        .bio-section { background: #000; padding: 0; overflow: hidden; }
+        .bio-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; min-height: 680px; }
+        .bio-photo { position: relative; overflow: hidden; min-height: 580px; }
+        .bio-photo img { width: 100%; height: 100%; object-fit: cover; display: block; object-position: center top; }
+        .bio-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, #000 100%); }
+        .bio-text { padding: 80px 80px 80px 64px; display: flex; flex-direction: column; justify-content: center; gap: 24px; }
+        .bio-label { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); }
+        .bio-name { font-family: var(--font-heading); font-size: clamp(40px, 4vw, 60px); line-height: 0.95; text-transform: uppercase; color: #fff; }
+        .bio-title { font-family: var(--font-body); font-size: 16px; font-weight: 700; color: var(--color-teal); text-transform: uppercase; letter-spacing: 0.06em; }
+        .bio-text p { font-family: var(--font-body); font-size: 17px; line-height: 1.65; color: rgba(255,255,255,0.65); }
+        .bio-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .bio-tag { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.55); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 14px; border-radius: 980px; }
+
+        /* ── Pull quote ── */
+        .quote-section { background: var(--color-green); padding: 96px; }
+        .quote-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+        .quote-mark { font-family: var(--font-heading); font-size: 120px; line-height: 0.6; color: rgba(255,255,255,0.15); margin-bottom: 0; }
+        .quote-text { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 44px); line-height: 1.1; text-transform: uppercase; color: #fff; margin-bottom: 32px; }
+        .quote-attribution { font-family: var(--font-body); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+
+        /* ── Pillars ── */
+        .pillars-section { background: #f5f5f7; padding: 96px; }
+        .pillars-inner { max-width: 1120px; margin: 0 auto; }
+        .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .pillar { background: #fff; padding: 48px 40px; }
+        .pillar:first-child { border-radius: 16px 0 0 16px; }
+        .pillar:last-child { border-radius: 0 16px 16px 0; }
+        .pillar-number { font-family: var(--font-heading); font-size: 72px; line-height: 1; color: var(--color-teal); margin-bottom: 24px; }
+        .pillar h3 { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: #000; margin-bottom: 16px; }
+        .pillar p { font-family: var(--font-body); font-size: 16px; line-height: 1.6; color: rgba(0,0,0,0.55); }
+
+        /* ── Awards ── */
+        .awards-section { background: #f5f5f7; padding: 96px; }
+        .awards-inner { max-width: 1120px; margin: 0 auto; }
+        .section-subline { font-family: var(--font-body); font-size: 18px; line-height: 1.6; color: rgba(0,0,0,0.55); max-width: 680px; margin: -40px 0 48px; }
+        .awards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+        .award-card { background: #fff; border-radius: 16px; padding: 40px 32px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(0,0,0,0.04); }
+        .award-icon { width: fit-content; background: rgba(7,125,87,0.08); color: var(--color-green); border-radius: 980px; padding: 7px 12px; font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .award-year { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-green); }
+        .award-name { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: #000; line-height: 1.1; }
+        .award-body { font-family: var(--font-body); font-size: 15px; line-height: 1.55; color: rgba(0,0,0,0.55); }
+        .award-source { margin-top: auto; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--color-green); text-decoration: none; }
+
+        /* ── Media Cards ── */
+        .media-section { background: #fff; padding: 96px; }
+        .media-inner { max-width: 1120px; margin: 0 auto; }
+        .media-heading { font-family: var(--font-heading); font-size: 30px; line-height: 1; text-transform: uppercase; color: #000; margin-bottom: 24px; }
+        .media-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .media-card { background: #f5f5f7; border-radius: 14px; padding: 28px 24px; color: inherit; text-decoration: none; min-height: 230px; display: flex; flex-direction: column; gap: 12px; transition: transform 0.25s, background 0.25s, box-shadow 0.25s; }
+        .media-card:hover { transform: translateY(-4px); background: #fff; box-shadow: 0 18px 48px rgba(0,0,0,0.1); }
+        .media-card-type { font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-green); }
+        .media-card h4 { font-family: var(--font-heading); font-size: 20px; line-height: 1.05; text-transform: uppercase; color: #000; }
+        .media-card p { font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: rgba(0,0,0,0.55); }
+        .media-card-link { margin-top: auto; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--color-green); }
+
+        /* ── CTA band ── */
+        .cta-band { background: #000; padding: 96px; text-align: center; }
+        .cta-band h2 { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 56px); text-transform: uppercase; color: #fff; margin-bottom: 20px; line-height: 1; }
+        .cta-band p { font-family: var(--font-body); font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.55); max-width: 560px; margin: 0 auto 40px; }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary { background: var(--color-green); color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 14px 32px; border-radius: 980px; text-decoration: none; transition: background 0.2s; }
+        .btn-primary:hover { background: #065e42; color: #fff; }
+        .btn-ghost { background: transparent; color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 13px 32px; border-radius: 980px; border: 1px solid rgba(255,255,255,0.25); text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.5); color: #fff; }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .bio-inner { grid-template-columns: 1fr; }
+            .bio-photo { min-height: 420px; }
+            .bio-photo-overlay { background: linear-gradient(to bottom, transparent 60%, #000 100%); }
+            .bio-text { padding: 48px; }
+            .media-grid { grid-template-columns: repeat(2, 1fr); }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .pillar:first-child { border-radius: 16px 16px 0 0; }
+            .pillar:last-child { border-radius: 0 0 16px 16px; }
+        }
+        @media (max-width: 768px) {
+            .hero-content { padding: 0 24px 56px; }
+            .hero-scroll { display: none; }
+            .timeline-section, .pillars-section, .quote-section, .awards-section, .media-section, .cta-band { padding: 56px 24px; }
+            .timeline-entry-header { grid-template-columns: 80px 1fr auto; gap: 16px; }
+            .timeline-body { grid-template-columns: 1fr; }
+            .timeline-body > :first-child { display: none; }
+            .bio-text { padding: 40px 24px; }
+            .media-grid { grid-template-columns: 1fr; }
+            .awards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+    <div class="hero">
+        <img class="hero-img" src="images/brand/tony.jpg" alt="Tony Rinaudo in the field in Africa">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-eyebrow">Founder of FMNR</span>
+            <h1 class="hero-title">The man who<br><em>refused</em> to give<br>up on the land.</h1>
+        </div>
+        <div class="hero-scroll">
+            <div class="hero-scroll-line"></div>
+            <span>Scroll</span>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ TIMELINE ═══════════════ -->
+<section id="timeline">
+    <div class="timeline-section">
+        <div class="timeline-inner">
+            <p class="section-eyebrow">The journey</p>
+            <h2 class="section-headline">Accelerating<br>land restoration<br>since 1981</h2>
+            <div class="timeline-entries">
+                <div class="timeline-entry open">
+                    <div class="timeline-entry-header">
+                        <span class="timeline-year">1981</span>
+                        <span class="timeline-headline">A young agronomist arrives in the Sahel</span>
+                        <div class="timeline-toggle"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+                    </div>
+                    <div class="timeline-body">
+                        <div></div>
+                        <div class="timeline-body-content">
+                            <p>Tony Rinaudo arrives in the Maradi region of Niger as a missionary agronomist. The landscape is bleak — a semi-arid wasteland stripped bare by decades of over-farming, drought and population pressure.</p>
+                            <div class="timeline-images">
+                                <img src="images/brand/tony-3.jpg" alt="Tony Rinaudo speaking with communities">
+                                <img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_18_Image_0020.jpg" alt="FMNR field work">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-entry">
+                    <div class="timeline-entry-header">
+                        <span class="timeline-year">1983</span>
+                        <span class="timeline-headline">The underground forest discovery</span>
+                        <div class="timeline-toggle"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+                    </div>
+                    <div class="timeline-body">
+                        <div></div>
+                        <div class="timeline-body-content">
+                            <p>During a moment of despair on a dusty road, Tony notices small green shoots emerging from what appear to be dead tree stumps — the living remnants of a vast "underground forest."</p>
+                            <div class="timeline-images">
+                                <img src="images/brand/tony-1.jpg" alt="Tony Rinaudo in an FMNR landscape">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-entry">
+                    <div class="timeline-entry-header">
+                        <span class="timeline-year">2018</span>
+                        <span class="timeline-headline">Right Livelihood Award — the "Alternative Nobel"</span>
+                        <div class="timeline-toggle"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+                    </div>
+                    <div class="timeline-body">
+                        <div></div>
+                        <div class="timeline-body-content">
+                            <p>Tony receives the Right Livelihood Award in recognition of his transformative work in land restoration and food security.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ BIO ═══════════════ -->
+<section id="bio">
+    <div class="bio-section">
+        <div class="bio-inner">
+            <div class="bio-photo">
+                <img src="images/brand/tony-2.jpg" alt="Tony Rinaudo portrait">
+                <div class="bio-photo-overlay"></div>
+            </div>
+            <div class="bio-text">
+                <span class="bio-label">About</span>
+                <h2 class="bio-name">Tony<br>Rinaudo</h2>
+                <span class="bio-title">Principal Advisor &amp; FMNR Pioneer</span>
+                <p>Tony grew up in rural Australia with a deep love of the land. After completing his agricultural studies he moved to Niger in 1981 with his wife Liz, not knowing that a chance observation beside a dusty road would set the course for the rest of his life.</p>
+                <p>Over four decades he has dedicated himself to demonstrating that degraded land is not dead land — and that the communities who live on that land hold the keys to its restoration.</p>
+                <div class="bio-tags">
+                    <span class="bio-tag">Right Livelihood Laureate 2018</span>
+                    <span class="bio-tag">The Forest Maker</span>
+                    <span class="bio-tag">World Vision Principal Advisor</span>
+                    <span class="bio-tag">26 Countries</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ QUOTE ═══════════════ -->
+<section id="quote">
+    <div class="quote-section">
+        <div class="quote-inner">
+            <div class="quote-mark">"</div>
+            <p class="quote-text">The trees were never dead. They were simply waiting for someone to give them permission to grow.</p>
+            <p class="quote-attribution">— Tony Rinaudo, FMNR Founder</p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ PILLARS ═══════════════ -->
+<section id="pillars">
+    <div class="pillars-section">
+        <div class="pillars-inner">
+            <p class="section-eyebrow">His approach</p>
+            <h2 class="section-headline">Faith + Persistence + Community</h2>
+            <div class="pillars-grid">
+                <div class="pillar">
+                    <div class="pillar-number">01</div>
+                    <h3>Believe<br>the impossible</h3>
+                    <p>When the agricultural establishment said the Sahel was beyond saving, Tony refused to accept it. He saw what others overlooked.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-number">02</div>
+                    <h3>Empower<br>the farmer</h3>
+                    <p>FMNR does not depend on outside experts. Tony's insight was radical: the solution already exists within farming communities.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-number">03</div>
+                    <h3>Scale through<br>community</h3>
+                    <p>Real change is contagious. By working with communities rather than for them, Tony's approach spreads farmer to farmer.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ AWARDS ═══════════════ -->
+<section id="awards">
+    <div class="awards-section">
+        <div class="awards-inner">
+            <p class="section-eyebrow">Recognition</p>
+            <h2 class="section-headline">Awards &amp; Honours</h2>
+            <div class="awards-grid">
+                <div class="award-card">
+                    <div class="award-icon">Award</div>
+                    <span class="award-year">2018</span>
+                    <h3 class="award-name">Right Livelihood Award</h3>
+                    <p class="award-body">Tony was recognised for showing at large scale how drylands can be greened at minimal cost.</p>
+                    <a class="award-source" href="#">View source</a>
+                </div>
+                <div class="award-card">
+                    <div class="award-icon">Honour</div>
+                    <span class="award-year">2019</span>
+                    <h3 class="award-name">Member of the Order of Australia</h3>
+                    <p class="award-body">Appointed AM for significant service to conservation as a pioneer in international reforestation.</p>
+                </div>
+                <div class="award-card">
+                    <div class="award-icon">Peace</div>
+                    <span class="award-year">2025</span>
+                    <h3 class="award-name">Luxembourg Peace Prize</h3>
+                    <p class="award-body">Named Outstanding Environmental Peace laureate for restoration work.</p>
+                    <a class="award-source" href="#">View source</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ MEDIA CARDS ═══════════════ -->
+<section id="media-cards">
+    <div class="media-section">
+        <div class="media-inner">
+            <h3 class="media-heading">Podcasts &amp; Articles</h3>
+            <div class="media-grid">
+                <a class="media-card" href="#" onclick="event.preventDefault()">
+                    <span class="media-card-type">Podcast</span>
+                    <h4>Invisible forests in plain view</h4>
+                    <p>Tony explains FMNR's potential to restore degraded land while strengthening livelihoods.</p>
+                    <span class="media-card-link">Listen now</span>
+                </a>
+                <a class="media-card" href="#" onclick="event.preventDefault()">
+                    <span class="media-card-type">Article</span>
+                    <h4>Reforesting the world</h4>
+                    <p>A profile of Tony's work restoring millions of hectares of degraded land.</p>
+                    <span class="media-card-link">Read article</span>
+                </a>
+                <a class="media-card" href="#" onclick="event.preventDefault()">
+                    <span class="media-card-type">Podcast</span>
+                    <h4>The hidden roots of restoration</h4>
+                    <p>A long-form conversation on mindsets and the human side of regeneration.</p>
+                    <span class="media-card-link">Listen now</span>
+                </a>
+                <a class="media-card" href="#" onclick="event.preventDefault()">
+                    <span class="media-card-type">Article</span>
+                    <h4>Turning deserts into farmland</h4>
+                    <p>An interview on Tony's early calling and the behaviour change behind FMNR.</p>
+                    <span class="media-card-link">Read article</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ CTA ═══════════════ -->
+<section id="cta">
+    <div class="cta-band">
+        <h2>Learn about FMNR</h2>
+        <p>Tony's life work is a methodology available to everyone. Explore the research, training resources and community stories.</p>
+        <div class="cta-buttons">
+            <a href="#" class="btn-primary" onclick="event.preventDefault()">Explore Resources</a>
+            <a href="#" class="btn-ghost" onclick="event.preventDefault()">See Our Impact</a>
+        </div>
+    </div>
+</section>
+
+<script>
+(function() {
+    // Show only the block matching the hash
+    var hash = window.location.hash.replace('#', '') || 'hero';
+    var target = document.getElementById(hash);
+    if (target) target.classList.add('active');
+    else document.getElementById('hero').classList.add('active');
+
+    // Timeline accordion
+    var entries = document.querySelectorAll('.timeline-entry');
+    entries.forEach(function(entry) {
+        entry.querySelector('.timeline-entry-header').addEventListener('click', function() {
+            var isOpen = entry.classList.contains('open');
+            entries.forEach(function(e) { e.classList.remove('open'); });
+            if (!isOpen) entry.classList.add('open');
+        });
+    });
+})();
+</script>
+</body>
+</html>
