@@ -22,7 +22,8 @@
         .btn-donate:hover { background: #065e42; }
 
         /* ── Mega Menu ── */
-        .mega-menu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-top: 1px solid #ebebeb; box-shadow: 0 32px 80px rgba(0,0,0,0.1), 0 2px 0 rgba(0,0,0,0.04); z-index: 999; opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; transition: opacity 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.22s; }
+        .site-header.mega-open { border-bottom-color: transparent; }
+        .mega-menu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-top: none; box-shadow: 0 32px 80px rgba(0,0,0,0.1), 0 2px 0 rgba(0,0,0,0.04); z-index: 999; opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; transition: opacity 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.22s; }
         .mega-menu.open { opacity: 1; transform: translateY(0); visibility: visible; pointer-events: auto; transition: opacity 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s; }
         .mega-inner { max-width: 1280px; margin: 0 auto; padding: 40px 48px 48px; }
         .mega-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
@@ -135,6 +136,7 @@
 
         var menu = document.getElementById('mega-menu');
         var backdrop = document.getElementById('mega-backdrop');
+        var header = document.getElementById('site-header');
         var eyebrowEl = document.getElementById('mega-eyebrow');
         var viewAllEl = document.getElementById('mega-view-all');
         var colsEl = document.getElementById('mega-cols');
@@ -161,6 +163,7 @@
             renderMenu(key);
             menu.classList.add('open');
             backdrop.classList.add('open');
+            header.classList.add('mega-open');
             document.querySelectorAll('.nav-links a').forEach(function(a) {
                 a.classList.toggle('active', a.getAttribute('data-mega') === key);
             });
@@ -173,6 +176,7 @@
             activeKey = null;
             menu.classList.remove('open');
             backdrop.classList.remove('open');
+            header.classList.remove('mega-open');
             document.querySelectorAll('.nav-links a').forEach(function(a) { a.classList.remove('active'); });
         }
 
