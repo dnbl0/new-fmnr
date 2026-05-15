@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mega Menu Demo — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f5f5f7; min-height: 100vh; }
+
+        /* ── Header ── */
+        .site-header { background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #ebebeb; }
+        .logo img { height: 33px; display: block; }
+        .nav-links { display: flex; gap: 4px; }
+        .nav-links a { font-family: var(--font-body); font-weight: 700; font-size: 15px; color: var(--color-charcoal); text-decoration: none; padding: 10px 14px; border-radius: 8px; transition: background 0.15s, color 0.15s; }
+        .nav-links a:hover { background: #f5f5f7; }
+        .nav-links a.active { color: var(--color-green); background: rgba(7,125,87,0.06); }
+        .header-actions { display: flex; align-items: center; gap: 16px; }
+        .btn-donate { background: var(--color-green); color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 20px; border-radius: 980px; text-decoration: none; transition: background 0.2s; }
+        .btn-donate:hover { background: #065e42; }
+
+        /* ── Mega Menu ── */
+        .mega-menu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-top: 1px solid #ebebeb; box-shadow: 0 32px 80px rgba(0,0,0,0.1), 0 2px 0 rgba(0,0,0,0.04); z-index: 999; opacity: 0; transform: translateY(-8px); visibility: hidden; pointer-events: none; transition: opacity 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.22s; }
+        .mega-menu.open { opacity: 1; transform: translateY(0); visibility: visible; pointer-events: auto; transition: opacity 0.22s cubic-bezier(0.4,0,0.2,1), transform 0.22s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s; }
+        .mega-inner { max-width: 1280px; margin: 0 auto; padding: 40px 48px 48px; }
+        .mega-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0; }
+        .mega-eyebrow { font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-green); }
+        .mega-view-all { font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--color-green); text-decoration: none; }
+        .mega-view-all:hover { text-decoration: underline; }
+        .mega-body { display: grid; grid-template-columns: 1fr 280px; gap: 48px; }
+        .mega-cols { display: flex; gap: 40px; }
+        .mega-col { flex: 1; min-width: 160px; }
+        .mega-col-heading { font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(0,0,0,0.38); margin-bottom: 16px; }
+        .mega-col ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+        .mega-col li a { display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; border-radius: 8px; text-decoration: none; transition: background 0.15s; }
+        .mega-col li a:hover { background: #f5f5f7; }
+        .mega-link-label { font-family: var(--font-body); font-size: 15px; font-weight: 700; color: #1d1d1f; }
+        .mega-link-desc { font-family: var(--font-body); font-size: 13px; color: rgba(0,0,0,0.4); }
+        .mega-featured { flex-shrink: 0; }
+        .mega-card { display: block; text-decoration: none; border-radius: 12px; overflow: hidden; background: #f5f5f7; transition: transform 0.2s; }
+        .mega-card:hover { transform: translateY(-2px); }
+        .mega-card img { width: 100%; height: 160px; object-fit: cover; }
+        .mega-card-label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--color-green); padding: 14px 16px 4px; }
+        .mega-card-heading { display: block; font-family: var(--font-heading); font-size: 16px; text-transform: uppercase; color: #1d1d1f; padding: 0 16px 16px; line-height: 1.1; }
+
+        /* Backdrop */
+        .mega-backdrop { position: fixed; top: 65px; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0); pointer-events: none; z-index: 998; transition: background 0.3s, backdrop-filter 0.3s; }
+        .mega-backdrop.open { background: rgba(0,0,0,0.25); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); pointer-events: auto; }
+
+        /* ── Instruction banner ── */
+        .demo-banner { background: #000; color: #fff; text-align: center; padding: 48px; margin: 48px; border-radius: 16px; }
+        .demo-banner h2 { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; margin-bottom: 12px; }
+        .demo-banner p { font-size: 16px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+        .demo-banner .hint { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-size: 13px; font-weight: 700; color: var(--color-teal); text-transform: uppercase; letter-spacing: 0.06em; }
+        .demo-banner .hint svg { width: 16px; height: 16px; }
+
+        /* ── Nav label pills ── */
+        .nav-pills { display: flex; gap: 8px; justify-content: center; padding: 32px 48px; flex-wrap: wrap; }
+        .nav-pill { font-family: var(--font-body); font-size: 14px; font-weight: 700; padding: 10px 20px; border-radius: 980px; border: 1.5px solid rgba(0,0,0,0.1); background: #fff; color: var(--color-charcoal); cursor: pointer; transition: all 0.2s; }
+        .nav-pill:hover { border-color: var(--color-green); color: var(--color-green); }
+        .nav-pill.active { background: var(--color-green); color: #fff; border-color: var(--color-green); }
+    </style>
+</head>
+<body>
+
+    <!-- Header with mega menu -->
+    <header class="site-header" id="site-header">
+        <a href="index.html" class="logo"><img src="fmnr-logo-figma.png" alt="FMNR"></a>
+        <nav class="nav-links" id="nav-links">
+            <a href="#" data-mega="partner">Partner</a>
+            <a href="#" data-mega="adopt">Adopt</a>
+            <a href="#" data-mega="impact">Impact</a>
+            <a href="#" data-mega="fund">Fund</a>
+            <a href="#" data-mega="what">About</a>
+        </nav>
+        <div class="header-actions">
+            <a href="#" class="btn-donate">Get in touch</a>
+        </div>
+
+        <div class="mega-backdrop" id="mega-backdrop"></div>
+        <div class="mega-menu" id="mega-menu">
+            <div class="mega-inner">
+                <div class="mega-header">
+                    <span class="mega-eyebrow" id="mega-eyebrow"></span>
+                    <a href="#" class="mega-view-all" id="mega-view-all"></a>
+                </div>
+                <div class="mega-body">
+                    <div class="mega-cols" id="mega-cols"></div>
+                    <div class="mega-featured" id="mega-featured"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick-switch pills -->
+    <div class="nav-pills" id="nav-pills">
+        <button class="nav-pill active" data-key="partner">Partner</button>
+        <button class="nav-pill" data-key="adopt">Adopt</button>
+        <button class="nav-pill" data-key="impact">Impact</button>
+        <button class="nav-pill" data-key="fund">Fund</button>
+        <button class="nav-pill" data-key="what">About</button>
+    </div>
+
+    <!-- Demo content -->
+    <div class="demo-banner">
+        <h2>Mega Menu Demo</h2>
+        <p>Hover or click the navigation links above to explore each mega menu panel.<br>Each label reveals a different content structure with columns, links, and a featured card.</p>
+        <span class="hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Hover the nav links above
+        </span>
+    </div>
+
+    <script>
+    (function() {
+        var megaData = {
+            partner: { eyebrow: 'Partnership', viewAll: 'View all partnerships', viewAllHref: 'partner.html',
+                cols: [{ heading: 'Partner Types', links: [{ label: 'Faith Based Partners', href: '#', desc: 'Churches and faith communities' }, { label: 'NGO & Restoration', href: '#', desc: 'Non-profits and development orgs' }, { label: 'Corporate Partners', href: '#', desc: 'Carbon, CSR and sustainability' }, { label: 'Government Partners', href: '#', desc: 'National and regional policy' }] }, { heading: 'Resources', links: [{ label: 'Partnership Framework', href: '#', desc: 'How we work together' }, { label: 'MOU Templates', href: '#', desc: 'Start the formal process' }, { label: 'Partner Stories', href: '#', desc: 'Case studies from the field' }] }],
+                featured: { img: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&q=75&fit=crop', label: 'Partnership', heading: 'Join 200+ partners worldwide', href: '#' } },
+            adopt: { eyebrow: 'Adoption', viewAll: 'Adoption resources', viewAllHref: '#',
+                cols: [{ heading: 'Getting Started', links: [{ label: 'What is FMNR?', href: '#', desc: 'The basics explained' }, { label: 'Step-by-step guide', href: '#', desc: 'From field to forest' }, { label: 'Training programs', href: '#', desc: 'Hands-on learning' }, { label: 'Field toolkits', href: '#', desc: 'Practical resources' }] }, { heading: 'Support', links: [{ label: 'Community bylaws', href: '#', desc: 'Governance templates' }, { label: 'Monitoring apps', href: '#', desc: 'Track your progress' }] }],
+                featured: { img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&q=75&fit=crop', label: 'New Guide', heading: 'Adopting FMNR in dryland Africa', href: '#' } },
+            impact: { eyebrow: 'Impact', viewAll: 'Full impact evidence', viewAllHref: 'impact.html',
+                cols: [{ heading: 'Impact Areas', links: [{ label: 'Environmental Impact', href: '#', desc: 'Trees, soil and water' }, { label: 'Social Impact', href: '#', desc: 'Communities and livelihoods' }, { label: 'Economic Impact', href: '#', desc: 'Cost-effectiveness data' }, { label: 'Climate Impact', href: '#', desc: 'Carbon and resilience' }] }, { heading: 'Evidence', links: [{ label: 'Research papers', href: '#', desc: 'Peer-reviewed studies' }, { label: 'Case studies', href: '#', desc: 'On-the-ground stories' }] }],
+                featured: { img: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&q=75&fit=crop', label: '2025 Report', heading: '24 million hectares restored', href: '#' } },
+            fund: { eyebrow: 'Funding', viewAll: 'All funding options', viewAllHref: '#',
+                cols: [{ heading: 'Ways to Give', links: [{ label: 'Donate now', href: '#', desc: 'One-off or recurring' }, { label: 'Fundraise for FMNR', href: '#', desc: 'Create your campaign' }, { label: 'Corporate giving', href: '#', desc: 'Aligned to your ESG goals' }, { label: 'Major gifts', href: '#', desc: 'Significant impact' }] }, { heading: 'Transparency', links: [{ label: 'Where funds go', href: '#', desc: 'Full accountability' }, { label: 'Annual reports', href: '#', desc: 'Impact per dollar' }] }],
+                featured: { img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&q=75&fit=crop', label: 'Donate', heading: 'Restore one hectare for $12', href: '#' } },
+            what: { eyebrow: 'About FMNR', viewAll: 'About us', viewAllHref: '#',
+                cols: [{ heading: 'Our Story', links: [{ label: 'What is FMNR?', href: '#', desc: 'The technique explained' }, { label: 'Tony Rinaudo', href: '#', desc: "The founder's journey" }, { label: 'Where we work', href: '#', desc: '27 countries and growing' }, { label: 'Our team', href: '#', desc: 'The people behind FMNR' }] }, { heading: 'More', links: [{ label: 'Media & Press', href: '#', desc: 'News and coverage' }, { label: 'Contact us', href: '#', desc: 'Get in touch' }] }],
+                featured: { img: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=75&fit=crop', label: 'Story', heading: 'From one field in Niger to 27 countries', href: '#' } }
+        };
+
+        var menu = document.getElementById('mega-menu');
+        var backdrop = document.getElementById('mega-backdrop');
+        var eyebrowEl = document.getElementById('mega-eyebrow');
+        var viewAllEl = document.getElementById('mega-view-all');
+        var colsEl = document.getElementById('mega-cols');
+        var featuredEl = document.getElementById('mega-featured');
+        var activeKey = null;
+        var closeTimer = null;
+
+        function renderMenu(key) {
+            var d = megaData[key]; if (!d) return;
+            eyebrowEl.textContent = d.eyebrow;
+            viewAllEl.textContent = d.viewAll;
+            viewAllEl.href = d.viewAllHref;
+            colsEl.innerHTML = d.cols.map(function(c) {
+                return '<div class="mega-col"><p class="mega-col-heading">' + c.heading + '</p><ul>' + c.links.map(function(l) {
+                    return '<li><a href="' + l.href + '"><span class="mega-link-label">' + l.label + '</span><span class="mega-link-desc">' + l.desc + '</span></a></li>';
+                }).join('') + '</ul></div>';
+            }).join('');
+            featuredEl.innerHTML = d.featured ? '<a class="mega-card" href="' + d.featured.href + '"><img src="' + d.featured.img + '" alt=""><span class="mega-card-label">' + d.featured.label + '</span><p class="mega-card-heading">' + d.featured.heading + '</p></a>' : '';
+        }
+
+        function openMenu(key) {
+            if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+            activeKey = key;
+            renderMenu(key);
+            menu.classList.add('open');
+            backdrop.classList.add('open');
+            document.querySelectorAll('.nav-links a').forEach(function(a) {
+                a.classList.toggle('active', a.getAttribute('data-mega') === key);
+            });
+            document.querySelectorAll('.nav-pill').forEach(function(p) {
+                p.classList.toggle('active', p.getAttribute('data-key') === key);
+            });
+        }
+
+        function closeMenu() {
+            activeKey = null;
+            menu.classList.remove('open');
+            backdrop.classList.remove('open');
+            document.querySelectorAll('.nav-links a').forEach(function(a) { a.classList.remove('active'); });
+        }
+
+        // Nav link interactions
+        document.querySelectorAll('.nav-links a[data-mega]').forEach(function(a) {
+            a.addEventListener('mouseenter', function() { openMenu(a.getAttribute('data-mega')); });
+            a.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (activeKey === a.getAttribute('data-mega') && menu.classList.contains('open')) { closeMenu(); }
+                else { openMenu(a.getAttribute('data-mega')); }
+            });
+        });
+
+        // Pill buttons
+        document.querySelectorAll('.nav-pill').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                openMenu(btn.getAttribute('data-key'));
+            });
+        });
+
+        // Close on backdrop click
+        backdrop.addEventListener('click', closeMenu);
+
+        // Close on mouseleave from menu
+        menu.addEventListener('mouseleave', function() {
+            closeTimer = setTimeout(closeMenu, 300);
+        });
+        menu.addEventListener('mouseenter', function() {
+            if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+        });
+
+        // Open partner by default
+        openMenu('partner');
+    })();
+    </script>
+</body>
+</html>

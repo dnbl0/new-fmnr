@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search Results — FMNR</title>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); margin: 0; background: #fafafa; }
+
+        .search-page-header { background: #fff; border-bottom: 1px solid #e8e8e8; padding: 24px 40px; display: flex; align-items: center; gap: 24px; position: sticky; top: 0; z-index: 100; }
+        .search-page-header .logo img { height: 33px; display: block; }
+        .search-page-header .logo { text-decoration: none; }
+        .search-page-form { flex: 1; max-width: 640px; display: flex; align-items: center; border: 2px solid #e0e0e0; border-radius: 8px; padding: 0 16px; transition: border-color 0.2s; background: #fff; }
+        .search-page-form:focus-within { border-color: var(--color-green); }
+        .search-page-form svg { width: 20px; height: 20px; color: #999; flex-shrink: 0; }
+        .search-page-form input { flex: 1; border: none; outline: none; font-family: var(--font-body); font-size: 18px; padding: 12px; background: transparent; }
+        .search-page-form input::placeholder { color: #bbb; }
+        .search-page-form button { background: var(--color-green); color: #fff; border: none; border-radius: 5px; padding: 8px 20px; font-family: var(--font-body); font-weight: 600; font-size: 14px; cursor: pointer; text-transform: uppercase; }
+        .search-page-form button:hover { background: #065e42; }
+
+        .search-results-container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+        .search-results-summary { font-size: 14px; color: #999; margin-bottom: 24px; }
+        .search-results-summary strong { color: var(--color-charcoal); }
+
+        .search-result-item { background: #fff; border-radius: 8px; border: 1px solid #e8e8e8; padding: 24px; margin-bottom: 16px; transition: box-shadow 0.2s, transform 0.2s; }
+        .search-result-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .search-result-item a { text-decoration: none; color: inherit; display: block; }
+        .search-result-item .result-category { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; }
+        .search-result-item h3 { font-family: var(--font-heading); font-size: 22px; margin: 0 0 8px; line-height: 1.2; text-transform: uppercase; }
+        .search-result-item h3 .search-match { color: var(--color-green); }
+        .search-result-item p { font-size: 15px; line-height: 1.6; color: #666; margin: 0; }
+        .search-result-item .result-url { font-size: 13px; color: #999; margin-top: 8px; }
+
+        .search-no-results-page { text-align: center; padding: 80px 24px; }
+        .search-no-results-page h2 { font-family: var(--font-heading); font-size: 32px; text-transform: uppercase; margin: 0 0 16px; }
+        .search-no-results-page p { font-size: 16px; color: #999; margin: 0 0 24px; }
+        .search-no-results-page a { color: var(--color-green); text-decoration: none; font-weight: 600; }
+        .search-no-results-page a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .search-page-header { padding: 16px; gap: 12px; flex-wrap: wrap; }
+            .search-page-form { max-width: 100%; }
+            .search-results-container { padding: 24px 16px; }
+        }
+    </style>
+    <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body>
+    <div class="search-page-header">
+        <a href="index.html" class="logo"><img src="fmnr-logo-figma.png" alt="FMNR"></a>
+        <form class="search-page-form" id="search-page-form" action="search.html" method="get">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>
+            <input type="text" id="search-page-input" name="q" placeholder="Search FMNR…" aria-label="Search">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="search-results-container" id="results-container"></div>
+
+    <script>
+    (function() {
+        var searchIndex = [
+            { title: 'Partner With Us', category: 'Partners', url: 'index.html#journeys', keywords: 'partner organization ngo faith corporate', description: 'For organizations ready to make a large-scale impact. Let\u2019s work together to restore our planet through FMNR partnerships.' },
+            { title: 'Why Partner With FMNR', category: 'Partners', url: 'index.html#journeys', keywords: 'why partner benefits impact', description: 'Discover the benefits of partnering with FMNR \u2014 scalable restoration, community empowerment, and measurable environmental impact.' },
+            { title: 'Faith Based Partners', category: 'Partners', url: 'index.html#journeys', keywords: 'faith church religious community', description: 'Faith communities play a vital role in FMNR adoption. Learn how churches and religious organizations are leading restoration.' },
+            { title: 'NGO Partners', category: 'Partners', url: 'index.html#journeys', keywords: 'ngo non-profit development aid', description: 'NGOs and development organizations can integrate FMNR into existing programs for sustainable land restoration.' },
+            { title: 'Corporate Partners', category: 'Partners', url: 'index.html#journeys', keywords: 'corporate business sustainability csr', description: 'Corporate sustainability programs can leverage FMNR for carbon offset, CSR, and environmental stewardship goals.' },
+            { title: 'What is FMNR?', category: 'About', url: 'index.html#main', keywords: 'what is fmnr farmer managed natural regeneration about', description: 'Farmer Managed Natural Regeneration (FMNR) is a low-cost, sustainable land restoration technique that regenerates trees from existing root systems.' },
+            { title: 'Impact Data & Statistics', category: 'Impact', url: 'index.html#data-viz', keywords: 'data statistics survival hectares cost reduction', description: 'Explore the measurable impact of FMNR: 78% tree survival rates, 24 million hectares restored, and 92% cost reduction compared to traditional methods.' },
+            { title: '78% Tree Survival Rate', category: 'Impact', url: 'index.html#data-viz', keywords: 'survival rate trees seedlings', description: 'FMNR achieves a 78% tree survival rate, significantly higher than conventional tree planting approaches.' },
+            { title: '24 Million Hectares Restored', category: 'Impact', url: 'index.html#data-viz', keywords: 'hectares restored land area', description: 'Over 24 million hectares of degraded land have been restored through FMNR practices worldwide.' },
+            { title: '92% Cost Reduction', category: 'Impact', url: 'index.html#data-viz', keywords: 'cost reduction cheaper affordable', description: 'FMNR costs 92% less than conventional reforestation, making it accessible to communities with limited resources.' },
+            { title: 'Interactive Map', category: 'Regions', url: 'index.html#map', keywords: 'map countries regions africa asia', description: 'Explore where FMNR is making an impact across Africa, Asia, and beyond with our interactive map.' },
+            { title: 'Ethiopia', category: 'Regions', url: 'index.html#map', keywords: 'ethiopia east africa humbo', description: 'Ethiopia\u2019s Humbo region is one of the most successful FMNR implementation sites, restoring thousands of hectares.' },
+            { title: 'Niger', category: 'Regions', url: 'index.html#map', keywords: 'niger west africa sahel maradi zinder', description: 'Niger has restored over 5 million hectares through farmer-led FMNR, transforming the Sahel landscape.' },
+            { title: 'How FMNR Works', category: 'About', url: 'index.html#main', keywords: 'how works process steps technique pruning', description: 'FMNR works by systematically pruning and managing the regrowth of trees from living stumps and root systems.' },
+            { title: 'Donate', category: 'Support', url: 'index.html#donate', keywords: 'donate give support fund contribution', description: 'Support FMNR by donating. Your contribution helps restore degraded lands and empower farming communities.' },
+            { title: 'Adopt a Practice', category: 'Action', url: 'index.html', keywords: 'adopt practice implement start begin', description: 'Ready to start? Learn how to adopt FMNR practices in your community or organization.' },
+            { title: 'Fund FMNR', category: 'Support', url: 'index.html', keywords: 'fund funding financial support grant', description: 'Explore funding opportunities and grants available for FMNR implementation projects.' },
+            { title: 'Decision Making Guide', category: 'Resources', url: 'index.html#main', keywords: 'decision making guide tree classification', description: 'A visual guide to FMNR decision-making: when to prune, which trees to select, and how to manage natural regeneration.' },
+            { title: 'Training Resources', category: 'Resources', url: 'index.html', keywords: 'training resources education learning', description: 'Access training materials, field guides, and educational resources for FMNR practitioners.' }
+        ];
+
+        var params = new URLSearchParams(window.location.search);
+        var query = (params.get('q') || '').trim();
+        var inputEl = document.getElementById('search-page-input');
+        var container = document.getElementById('results-container');
+        inputEl.value = query;
+
+        function highlightMatch(text, q) {
+            if (!q) return text;
+            var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+            return text.replace(re, '<span class="search-match">$1</span>');
+        }
+
+        function render() {
+            if (!query) {
+                container.innerHTML = '<div class="search-no-results-page"><h2>Search FMNR</h2><p>Enter a search term to find resources, topics, and regions.</p><a href="index.html">\u2190 Back to Home</a></div>';
+                return;
+            }
+            var q = query.toLowerCase();
+            var results = searchIndex.filter(function(item) {
+                return item.title.toLowerCase().indexOf(q) !== -1 ||
+                       item.keywords.toLowerCase().indexOf(q) !== -1 ||
+                       item.category.toLowerCase().indexOf(q) !== -1 ||
+                       item.description.toLowerCase().indexOf(q) !== -1;
+            });
+            results.sort(function(a, b) {
+                var aTitle = a.title.toLowerCase().indexOf(q) !== -1 ? 0 : 1;
+                var bTitle = b.title.toLowerCase().indexOf(q) !== -1 ? 0 : 1;
+                return aTitle - bTitle;
+            });
+
+            if (results.length === 0) {
+                container.innerHTML = '<div class="search-no-results-page"><h2>No Results Found</h2><p>We couldn\u2019t find anything for \u201c' + query.replace(/</g, '&lt;') + '\u201d. Try a different search term.</p><a href="index.html">\u2190 Back to Home</a></div>';
+                return;
+            }
+
+            var html = '<p class="search-results-summary">Showing <strong>' + results.length + '</strong> result' + (results.length !== 1 ? 's' : '') + ' for \u201c<strong>' + query.replace(/</g, '&lt;') + '</strong>\u201d</p>';
+            results.forEach(function(item) {
+                html += '<div class="search-result-item"><a href="' + item.url + '">' +
+                    '<span class="result-category">' + item.category + '</span>' +
+                    '<h3>' + highlightMatch(item.title, query) + '</h3>' +
+                    '<p>' + highlightMatch(item.description, query) + '</p>' +
+                    '<span class="result-url">' + item.url + '</span>' +
+                    '</a></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        render();
+        inputEl.focus();
+        // Move cursor to end
+        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+    })();
+    </script>
+</body>
+</html>

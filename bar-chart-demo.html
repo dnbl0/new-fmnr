@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bar Chart — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: #111; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 80px 48px; }
+        .container { max-width: 900px; width: 100%; }
+        .section-eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--color-teal); margin-bottom: 32px; }
+        .bar-chart { display: flex; flex-direction: column; gap: 16px; }
+        .bar-row { display: flex; align-items: center; gap: 16px; }
+        .bar-label { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7); width: 160px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.04em; }
+        .bar-track { flex: 1; height: 10px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 999px; background: var(--color-teal); width: 0; transition: width 1.2s cubic-bezier(0.25,1,0.5,1); }
+        .bar-value { font-family: var(--font-heading); font-size: 18px; color: var(--color-teal); width: 64px; text-align: right; flex-shrink: 0; }
+        .source { font-size: 12px; color: rgba(255,255,255,0.2); margin-top: 24px; line-height: 1.5; }
+        @media (max-width: 768px) {
+            body { padding: 48px 24px; }
+            .bar-label { width: 100px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="section-eyebrow">FMNR adoption rate by country</span>
+        <div class="bar-chart" id="bar-chart">
+            <div class="bar-row">
+                <div class="bar-label">Timor-Leste</div>
+                <div class="bar-track"><div class="bar-fill" data-width="98"></div></div>
+                <div class="bar-value">98%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Uganda</div>
+                <div class="bar-track"><div class="bar-fill" data-width="87"></div></div>
+                <div class="bar-value">87%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Kenya</div>
+                <div class="bar-track"><div class="bar-fill" data-width="85"></div></div>
+                <div class="bar-value">85%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Ethiopia</div>
+                <div class="bar-track"><div class="bar-fill" data-width="85"></div></div>
+                <div class="bar-value">85%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Ghana</div>
+                <div class="bar-track"><div class="bar-fill" data-width="84"></div></div>
+                <div class="bar-value">84%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Rwanda</div>
+                <div class="bar-track"><div class="bar-fill" data-width="76"></div></div>
+                <div class="bar-value">76%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Tanzania</div>
+                <div class="bar-track"><div class="bar-fill" data-width="73"></div></div>
+                <div class="bar-value">73%</div>
+            </div>
+        </div>
+        <p class="source">% of households in project areas who had heard of FMNR and went on to practise it. Source: World Vision meta-analysis, 2019.</p>
+    </div>
+
+    <script>
+    // Animate bars on load
+    setTimeout(function() {
+        document.querySelectorAll('.bar-fill').forEach(function(bar) {
+            bar.style.width = bar.getAttribute('data-width') + '%';
+        });
+    }, 300);
+    </script>
+</body>
+</html>

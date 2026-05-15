@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FMNR – Restoring the Earth</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'lato', sans-serif; color: #464646; background: #fff; -webkit-font-smoothing: antialiased; }
+
+        /* ===== Header ===== */
+        .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(0,0,0,0.06); }
+        .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 40px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+        .header-logo img { height: 32px; display: block; }
+        .header-nav { display: flex; gap: 32px; }
+        .header-nav a { font-family: 'lato', sans-serif; font-size: 16px; font-weight: 700; color: #464646; text-decoration: none; transition: color 0.2s; }
+        .header-nav a:hover { color: #077d57; }
+        .header-nav a.active { color: #077d57; }
+        .header-cta { font-family: 'lato', sans-serif; font-size: 16px; font-weight: 700; color: #fff; background: #077d57; padding: 10px 24px; border-radius: 5px; text-decoration: none; text-transform: uppercase; transition: background 0.2s; }
+        .header-cta:hover { background: #065e42; }
+        @media (max-width: 768px) {
+            .header-nav { display: none; }
+        }
+
+        /* ===== Hero ===== */
+        .hero { position: relative; height: 100vh; min-height: 600px; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+        .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+        .hero-overlay-bg { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.5) 100%); z-index: 1; }
+        .hero-content { position: relative; z-index: 2; }
+        .hero-icon { width: 120px; height: 120px; margin: 0 auto 32px; }
+        .hero-icon img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); }
+        .hero-tagline { font-family: 'fat-frank', sans-serif; font-size: 56px; font-weight: 900; text-transform: uppercase; color: #fff; line-height: 1; margin-bottom: 0; }
+        .hero-tagline span { display: block; }
+
+        /* ===== Intro ===== */
+        .intro { position: relative; text-align: center; padding: 100px 40px; max-width: 1280px; margin: 0 auto; }
+        .intro h2 { font-family: 'lato', sans-serif; font-size: 36px; font-weight: 900; line-height: 1; max-width: 720px; margin: 0 auto 20px; color: #000; }
+        .intro p { font-family: 'lato', sans-serif; font-size: 20px; line-height: 1.2; color: rgba(0,0,0,0.6); max-width: 640px; margin: 0 auto; }
+        .hero-image { width: 100%; max-width: 1280px; margin: 0 auto; border-radius: 0; overflow: hidden; }
+        .hero-image img { width: 100%; height: 560px; object-fit: cover; display: block; }
+
+        /* ===== Carousel Section ===== */
+        .carousel-section { background: #f5f5f7; padding: 100px 0 80px; overflow: hidden; }
+        .carousel-section h2 { font-family: 'fat-frank', sans-serif; font-size: 56px; font-weight: 900; line-height: 1; text-transform: uppercase; max-width: 1280px; padding: 0 40px; margin: 0 0 48px; }
+        .carousel-track-wrap { position: relative; }
+        .carousel-track { display: flex; gap: 20px; padding: 0 calc(50vw - 420px); transition: transform 0.6s cubic-bezier(0.25,1,0.5,1); cursor: grab; }
+        .carousel-track.dragging { transition: none; cursor: grabbing; }
+        .carousel-slide { flex: 0 0 840px; border-radius: 20px; overflow: hidden; position: relative; min-height: 480px; display: flex; flex-direction: column; justify-content: flex-start; background: #fff; }
+        .carousel-slide img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+        .carousel-slide-body { position: relative; z-index: 2; padding: 32px 36px; }
+        .carousel-slide-body h4 { font-family: 'lato', sans-serif; font-size: 17px; font-weight: 900; color: #000; margin-bottom: 4px; display: inline; }
+        .carousel-slide-body p { font-family: 'lato', sans-serif; font-size: 17px; font-weight: 400; color: rgba(0,0,0,0.6); display: inline; }
+        .carousel-slide--dark .carousel-slide-body h4 { color: #fff; }
+        .carousel-slide--dark .carousel-slide-body p { color: rgba(255,255,255,0.7); }
+        .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 40px; }
+        .carousel-dots { display: flex; align-items: center; gap: 6px; background: #e8e8ed; border-radius: 980px; padding: 8px 16px; }
+        .carousel-dot { width: 8px; height: 8px; border-radius: 4px; background: #86868b; border: none; cursor: pointer; transition: all 0.3s; padding: 0; }
+        .carousel-dot.active { width: 24px; background: #1d1d1f; }
+        .carousel-play { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #d2d2d7; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s; }
+        .carousel-play:hover { border-color: #86868b; }
+        .carousel-play svg { width: 14px; height: 14px; color: #1d1d1f; margin-left: 2px; }
+        @media (max-width: 900px) {
+            .carousel-section h2 { font-size: 32px; }
+            .carousel-slide { flex: 0 0 85vw; min-height: 380px; }
+            .carousel-track { padding: 0 24px; gap: 12px; }
+        }
+
+        /* ===== Section Base ===== */
+        .section { padding: 120px 40px; max-width: 1280px; margin: 0 auto; }
+        .section-full { padding: 120px 0; }
+        .section-bg-light { background: #fbfbfd; }
+        .section-bg-green { background: #077d57; }
+
+        /* ===== Approach Tabs ===== */
+        .approach { text-align: center; padding: 100px 40px 0; max-width: 1280px; margin: 0 auto; }
+        .approach h2 { font-family: 'fat-frank', sans-serif; font-size: 56px; font-weight: 900; line-height: 1; text-transform: uppercase; max-width: 700px; margin: 0 auto 16px; }
+        .approach h2 .green { color: #077d57; }
+        .approach .subtitle { font-family: 'lato', sans-serif; font-size: 20px; line-height: 1.2; color: rgba(0,0,0,0.6); margin-bottom: 48px; }
+        .tab-nav { display: flex; justify-content: center; gap: 8px; margin-bottom: 60px; flex-wrap: wrap; }
+        .tab-nav button { font-family: 'lato', sans-serif; font-size: 16px; font-weight: 700; padding: 12px 24px; border: none; background: #f5f5f7; border-radius: 980px; cursor: pointer; color: #464646; transition: all 0.3s; }
+        .tab-nav button.active { background: #077d57; color: #fff; }
+        .tab-nav button:hover:not(.active) { background: #e8e8ed; }
+        .tab-content { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+        .tab-panel { display: none; animation: fadeUp 0.6s ease; }
+        .tab-panel.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== Feature Row ===== */
+        .feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: center; background: #fbfbfd; border-radius: 24px; overflow: hidden; margin-bottom: 48px; }
+        .feature-row.reverse { direction: rtl; }
+        .feature-row.reverse > * { direction: ltr; }
+        .feature-img { width: 100%; height: 100%; min-height: 400px; }
+        .feature-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .feature-body { padding: 60px 48px; }
+        .feature-body h3 { font-family: 'fat-frank', sans-serif; font-size: 36px; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 12px; color: #000; }
+        .feature-body p { font-family: 'lato', sans-serif; font-size: 16px; line-height: 1.2; color: rgba(0,0,0,0.6); margin-bottom: 24px; }
+        .feature-link { font-family: 'lato', sans-serif; font-size: 16px; font-weight: 700; color: #077d57; text-decoration: none; }
+        .feature-link:hover { text-decoration: underline; }
+
+        /* ===== Stats Row ===== */
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; padding: 100px 40px; max-width: 1280px; margin: 0 auto; }
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'fat-frank', sans-serif; font-size: 96px; font-weight: 900; line-height: 1; color: #077d57; display: block; margin-bottom: 8px; text-transform: uppercase; }
+        .stat-label { font-family: 'lato', sans-serif; font-size: 16px; color: rgba(0,0,0,0.6); line-height: 1.2; }
+
+        /* ===== Big Statement ===== */
+        .big-statement { text-align: center; padding: 160px 40px; background: #000; }
+        .big-statement h2 { font-family: 'fat-frank', sans-serif; font-size: 72px; font-weight: 900; line-height: 1; text-transform: uppercase; color: #fff; max-width: 900px; margin: 0 auto 24px; }
+        .big-statement h2 .green { color: #0ffbab; }
+        .big-statement p { font-family: 'lato', sans-serif; font-size: 20px; line-height: 1.2; color: rgba(255,255,255,0.6); max-width: 640px; margin: 0 auto; }
+
+        /* ===== Process Grid ===== */
+        .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; padding: 0 40px 120px; }
+        .process-card { background: #fff; border-radius: 16px; padding: 40px 28px; text-align: center; border: 1px solid rgba(0,0,0,0.06); transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; }
+        .process-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+        .process-card-icon { width: 64px; height: 64px; margin: 0 auto 20px; }
+        .process-card-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .process-card h4 { font-family: 'fat-frank', sans-serif; font-size: 22px; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 10px; color: #000; }
+        .process-card p { font-family: 'lato', sans-serif; font-size: 14px; line-height: 1.2; color: rgba(0,0,0,0.6); }
+
+        /* ===== Parallax Image ===== */
+        .parallax-section { position: relative; height: 600px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .parallax-section img { position: absolute; top: -15%; left: 0; width: 100%; height: 130%; object-fit: cover; will-change: transform; }
+        .parallax-overlay { position: relative; z-index: 2; text-align: center; padding: 40px; }
+        .parallax-overlay h2 { font-family: 'fat-frank', sans-serif; font-size: 72px; font-weight: 900; text-transform: uppercase; color: #fff; line-height: 1; text-shadow: 0 2px 40px rgba(0,0,0,0.4); }
+        .parallax-overlay p { font-family: 'lato', sans-serif; font-size: 20px; color: rgba(255,255,255,0.9); margin-top: 12px; text-shadow: 0 1px 20px rgba(0,0,0,0.4); }
+
+        /* ===== Impact Cards ===== */
+        .impact-section { padding: 120px 40px; max-width: 1280px; margin: 0 auto; }
+        .impact-section h2 { font-family: 'fat-frank', sans-serif; font-size: 56px; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 16px; line-height: 1; }
+        .impact-section h2 .green { color: #077d57; }
+        .impact-section > p { text-align: center; font-family: 'lato', sans-serif; font-size: 20px; line-height: 1.2; color: rgba(0,0,0,0.6); margin-bottom: 60px; }
+        .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .impact-card { position: relative; border-radius: 20px; overflow: hidden; min-height: 320px; display: flex; flex-direction: column; justify-content: flex-end; }
+        .impact-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .impact-card-body { position: relative; z-index: 2; padding: 32px; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%); }
+        .impact-card-body h4 { font-family: 'fat-frank', sans-serif; font-size: 28px; font-weight: 900; text-transform: uppercase; color: #fff; margin-bottom: 6px; line-height: 1; }
+        .impact-card-body p { font-family: 'lato', sans-serif; font-size: 14px; line-height: 1.2; color: rgba(255,255,255,0.8); }
+
+        /* ===== CTA Banner ===== */
+        .cta-banner { background: #077d57; padding: 120px 40px; text-align: center; }
+        .cta-banner h2 { font-family: 'fat-frank', sans-serif; font-size: 56px; font-weight: 900; text-transform: uppercase; color: #fff; margin-bottom: 16px; line-height: 1; }
+        .cta-banner p { font-family: 'lato', sans-serif; font-size: 20px; line-height: 1.2; color: rgba(255,255,255,0.7); margin-bottom: 32px; max-width: 560px; margin-left: auto; margin-right: auto; }
+        .cta-btn { display: inline-block; padding: 16px 36px; background: #fa6b01; color: #fff; font-family: 'lato', sans-serif; font-weight: 700; font-size: 16px; text-transform: uppercase; border-radius: 5px; text-decoration: none; transition: transform 0.3s, box-shadow 0.3s; }
+        .cta-btn:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+
+        /* ===== Values Row (Apple bottom section) ===== */
+        .values-section { padding: 100px 40px; border-top: 1px solid rgba(0,0,0,0.08); }
+        .values-section h2 { font-family: 'fat-frank', sans-serif; font-size: 36px; font-weight: 900; text-transform: uppercase; text-align: center; margin-bottom: 48px; color: #000; line-height: 1; }
+        .values-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto; }
+        .value-card { text-align: center; padding: 20px 12px; }
+        .value-card-icon { width: 40px; height: 40px; margin: 0 auto 12px; border-radius: 50%; background: #f5f5f7; display: flex; align-items: center; justify-content: center; }
+        .value-card-icon svg { width: 20px; height: 20px; color: #077d57; }
+        .value-card h4 { font-family: 'lato', sans-serif; font-size: 16px; font-weight: 900; margin-bottom: 6px; color: #000; }
+        .value-card p { font-family: 'lato', sans-serif; font-size: 14px; line-height: 1.2; color: rgba(0,0,0,0.6); }
+        .value-card a { font-family: 'lato', sans-serif; font-size: 14px; font-weight: 700; color: #077d57; text-decoration: none; }
+        .value-card a:hover { text-decoration: underline; }
+
+        /* ===== Footer ===== */
+        .footer { background: #000; padding: 60px 40px 24px; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; }
+        .footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; margin-bottom: 32px; }
+        .footer-col h5 { font-family: 'fat-frank', sans-serif; font-size: 14px; font-weight: 900; color: #fff; margin-bottom: 14px; text-transform: uppercase; }
+        .footer-col a { display: block; font-family: 'lato', sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); text-decoration: none; padding: 3px 0; transition: color 0.2s; }
+        .footer-col a:hover { color: #0ffbab; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .footer-bottom p { font-family: 'lato', sans-serif; font-size: 12px; color: rgba(255,255,255,0.35); }
+        .footer-bottom a { font-family: 'lato', sans-serif; font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; margin-left: 16px; }
+        .footer-bottom a:hover { color: #0ffbab; }
+
+        /* ===== Scroll Animations ===== */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.25,1,0.5,1), transform 0.8s cubic-bezier(0.25,1,0.5,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.95); transition: opacity 1s cubic-bezier(0.25,1,0.5,1), transform 1s cubic-bezier(0.25,1,0.5,1); }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .hero { padding: 120px 24px 40px; }
+            .hero-icon { width: 80px; height: 80px; }
+            .hero-tagline { font-size: 20px; }
+            .hero-image img { height: 300px; }
+            .approach h2 { font-size: 32px; }
+            .feature-row { grid-template-columns: 1fr; }
+            .feature-row.reverse { direction: ltr; }
+            .feature-img { min-height: 240px; }
+            .feature-body { padding: 32px 24px; }
+            .stats-row { grid-template-columns: 1fr; gap: 40px; }
+            .stat-number { font-size: 56px; }
+            .big-statement h2 { font-size: 32px; }
+            .process-grid { grid-template-columns: 1fr; }
+            .parallax-section { height: 400px; }
+            .parallax-overlay h2 { font-size: 36px; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .cta-banner h2 { font-size: 32px; }
+        }
+    </style>
+    <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index2.html" class="header-logo"><img src="fmnr-logo-figma.png" alt="FMNR"></a>
+            <nav class="header-nav">
+                <a href="#" class="active">Environment</a>
+                <a href="#">Partner</a>
+                <a href="#">Adopt</a>
+                <a href="#">Impact</a>
+                <a href="#">Resources</a>
+            </nav>
+            <a href="#donate" class="header-cta">Donate</a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="forest.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay-bg"></div>
+        <div class="hero-content">
+            <div class="hero-icon reveal">
+                <img src="icons/sprout.svg" alt="FMNR">
+            </div>
+            <p class="hero-tagline reveal">
+                <span>Our land deserves</span>
+                <span>our best thinking.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Intro -->
+    <section class="intro reveal">
+        <h2>Restoration is up. Degradation is down.</h2>
+        <p>We're closer than ever to reversing desertification — through farmer-managed natural regeneration, the world's most scalable, lowest-cost land restoration method.</p>
+    </section>
+
+    <!-- Hero Image -->
+    <div class="hero-image reveal-scale">
+        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1920&q=80" alt="Aerial forest landscape">
+    </div>
+
+    <!-- Carousel Section -->
+    <section class="carousel-section">
+        <h2 class="reveal">A comprehensive approach.<br>From seed to landscape.</h2>
+        <div class="carousel-track-wrap">
+            <div class="carousel-track" id="carousel-track">
+                <div class="carousel-slide">
+                    <div class="carousel-slide-body">
+                        <h4>Identify.</h4>
+                        <p>Farmers locate dormant root systems beneath degraded fields — the starting point for regeneration without planting.</p>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=900&q=80" alt="Identify">
+                </div>
+                <div class="carousel-slide carousel-slide--dark">
+                    <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&q=80" alt="Prune">
+                    <div class="carousel-slide-body">
+                        <h4>Prune.</h4>
+                        <p>The strongest stems are selected and competing growth is cleared — one decisive act that changes the trajectory of the land.</p>
+                    </div>
+                </div>
+                <div class="carousel-slide carousel-slide--dark">
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900&q=80" alt="Protect">
+                    <div class="carousel-slide-body">
+                        <h4>Protect.</h4>
+                        <p>Communities shield young trees from grazing, fire and over-harvesting through collective land management agreements.</p>
+                    </div>
+                </div>
+                <div class="carousel-slide carousel-slide--dark">
+                    <img src="https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=900&q=80" alt="Grow">
+                    <div class="carousel-slide-body">
+                        <h4>Grow.</h4>
+                        <p>Within 3–5 years, regenerated trees provide firewood, fodder, food and timber — the land repays its community.</p>
+                    </div>
+                </div>
+                <div class="carousel-slide carousel-slide--dark">
+                    <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=900&q=80" alt="Scale">
+                    <div class="carousel-slide-body">
+                        <h4>Scale.</h4>
+                        <p>Trees flower, seed and spread naturally. Regeneration becomes self-sustaining — carried by wind and wildlife across landscapes.</p>
+                    </div>
+                </div>
+                <div class="carousel-slide carousel-slide--dark">
+                    <img src="https://images.unsplash.com/photo-1501004318776-cd1345e43a49?w=900&q=80" alt="Impact">
+                    <div class="carousel-slide-body">
+                        <h4>Impact.</h4>
+                        <p>24 million hectares restored across 27 countries — biodiversity recovered, carbon sequestered, livelihoods transformed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <div class="carousel-dots" id="carousel-dots">
+                <button class="carousel-dot active" data-index="0"></button>
+                <button class="carousel-dot" data-index="1"></button>
+                <button class="carousel-dot" data-index="2"></button>
+                <button class="carousel-dot" data-index="3"></button>
+                <button class="carousel-dot" data-index="4"></button>
+                <button class="carousel-dot" data-index="5"></button>
+            </div>
+            <button class="carousel-play" id="carousel-play">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- Approach Section -->
+    <section class="approach">
+        <h2 class="reveal">A comprehensive approach.<br><span class="green">From seed to landscape.</span></h2>
+        <p class="subtitle reveal">FMNR transforms degraded land through every stage of the restoration journey.</p>
+        <nav class="tab-nav reveal">
+            <button class="active" data-tab="identify">Identify</button>
+            <button data-tab="prune">Prune</button>
+            <button data-tab="protect">Protect</button>
+            <button data-tab="grow">Grow</button>
+            <button data-tab="harvest">Harvest</button>
+            <button data-tab="scale">Scale</button>
+        </nav>
+    </section>
+
+    <div class="tab-content">
+        <div class="tab-panel active" data-panel="identify">
+            <div class="feature-row reveal">
+                <div class="feature-img"><img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80" alt="Identify"></div>
+                <div class="feature-body">
+                    <h3>Identify living stumps</h3>
+                    <p>Beneath every degraded field, ancient root systems lie dormant. Farmers learn to recognise viable stumps that can regenerate into full trees without planting a single seed.</p>
+                    <a href="#" class="feature-link">Learn about the science ›</a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" data-panel="prune">
+            <div class="feature-row reverse reveal">
+                <div class="feature-img"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80" alt="Prune"></div>
+                <div class="feature-body">
+                    <h3>The decisive cut</h3>
+                    <p>Farmers select the strongest shoots and clear away competition. One deliberate act, guided by generational knowledge and patience, that changes everything.</p>
+                    <a href="#" class="feature-link">See pruning techniques ›</a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" data-panel="protect">
+            <div class="feature-row reveal">
+                <div class="feature-img"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80" alt="Protect"></div>
+                <div class="feature-body">
+                    <h3>Standing guard</h3>
+                    <p>Young stems are shielded from grazing herds and wildfire. The community holds the line between destruction and renewal, season after season.</p>
+                    <a href="#" class="feature-link">Community protection models ›</a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" data-panel="grow">
+            <div class="feature-row reverse reveal">
+                <div class="feature-img"><img src="https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=800&q=80" alt="Grow"></div>
+                <div class="feature-body">
+                    <h3>First light</h3>
+                    <p>Leaves unfurl. Photosynthesis begins. The tree draws carbon from the air and breathes life back into the soil beneath it. Growth accelerates year on year.</p>
+                    <a href="#" class="feature-link">Growth timelines ›</a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" data-panel="harvest">
+            <div class="feature-row reveal">
+                <div class="feature-img"><img src="https://images.unsplash.com/photo-1590012314607-cda9d9b699ae?w=800&q=80" alt="Harvest"></div>
+                <div class="feature-body">
+                    <h3>The early harvest</h3>
+                    <p>Within 3–5 years, firewood, fodder, fruit and timber become available. The land begins its quiet and steady economic repayment to the communities who restored it.</p>
+                    <a href="#" class="feature-link">Economic outcomes ›</a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" data-panel="scale">
+            <div class="feature-row reverse reveal">
+                <div class="feature-img"><img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&q=80" alt="Scale"></div>
+                <div class="feature-body">
+                    <h3>Nature takes over</h3>
+                    <p>Trees flower, set seed, and spread without human intervention. Regeneration becomes self-sustaining — carried by wind and wildlife across entire landscapes.</p>
+                    <a href="#" class="feature-link">Scaling strategies ›</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-item reveal">
+            <span class="stat-number" data-count="24">0</span>
+            <span class="stat-label">million hectares restored across 27 countries</span>
+        </div>
+        <div class="stat-item reveal">
+            <span class="stat-number" data-count="92">0</span>
+            <span class="stat-label">per cent lower cost than traditional reforestation</span>
+        </div>
+        <div class="stat-item reveal">
+            <span class="stat-number" data-count="5">0</span>
+            <span class="stat-label">million farming families benefiting directly</span>
+        </div>
+    </div>
+
+    <!-- Big Statement -->
+    <section class="big-statement reveal">
+        <h2>Designed, grown<br><span class="green">and made to last.</span></h2>
+        <p>FMNR works because it harnesses what's already there — dormant root systems, local knowledge, and nature's own regenerative power.</p>
+    </section>
+
+    <!-- Process Grid -->
+    <section style="padding: 100px 0 0; text-align: center; max-width: 1280px; margin: 0 auto;">
+        <h2 class="reveal" style="font-family: 'fat-frank', sans-serif; font-size: 56px; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 48px; padding: 0 40px;">The 9-Step Process</h2>
+    </section>
+    <div class="process-grid">
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/sprout.svg" alt=""></div>
+            <h4>Roots Below</h4>
+            <p>Ancient root systems lie dormant beneath degraded soil, ready to regenerate.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/prune.svg" alt=""></div>
+            <h4>Decisive Cut</h4>
+            <p>Farmers select the strongest shoots and clear competition.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/protect.svg" alt=""></div>
+            <h4>Standing Guard</h4>
+            <p>Young stems are shielded from grazing and fire.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/leaf.svg" alt=""></div>
+            <h4>First Light</h4>
+            <p>Photosynthesis begins, drawing carbon from the atmosphere.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/wheat.svg" alt=""></div>
+            <h4>Early Harvest</h4>
+            <p>Firewood, fodder and food become available within 3–5 years.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/clover.svg" alt=""></div>
+            <h4>Ground Recovered</h4>
+            <p>Soil fertility rebuilds as ground cover spreads.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/petals.svg" alt=""></div>
+            <h4>Life Returns</h4>
+            <p>Pollinators, birds and animals repopulate the landscape.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/seeds.svg" alt=""></div>
+            <h4>Self-Sustaining</h4>
+            <p>Trees flower, seed and spread without human intervention.</p>
+        </div>
+        <div class="process-card reveal">
+            <div class="process-card-icon"><img src="icons/bud.svg" alt=""></div>
+            <h4>Living Landscape</h4>
+            <p>A fully regenerated ecosystem — resilient and productive.</p>
+        </div>
+    </div>
+
+    <!-- Parallax Image -->
+    <div class="parallax-section">
+        <img src="https://images.unsplash.com/photo-1559827291-baf2e390d35c?w=1920&q=80" alt="African landscape" class="parallax-img">
+        <div class="parallax-overlay">
+            <h2>Where We Work</h2>
+            <p>27 countries across Africa, Asia-Pacific and Latin America.</p>
+        </div>
+    </div>
+
+    <!-- Impact Section -->
+    <section class="impact-section">
+        <h2 class="reveal">Use. <span class="green">Recover.</span> Restore.</h2>
+        <p class="reveal">Building resilient landscapes and livelihoods through community-led restoration.</p>
+        <div class="impact-grid">
+            <div class="impact-card reveal">
+                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80" alt="Communities">
+                <div class="impact-card-body">
+                    <h4>Community Impact</h4>
+                    <p>Food security, income generation and climate resilience for millions.</p>
+                </div>
+            </div>
+            <div class="impact-card reveal">
+                <img src="https://images.unsplash.com/photo-1501004318776-cd1345e43a49?w=600&q=80" alt="Biodiversity">
+                <div class="impact-card-body">
+                    <h4>Biodiversity</h4>
+                    <p>Species recovery across restored FMNR landscapes worldwide.</p>
+                </div>
+            </div>
+            <div class="impact-card reveal">
+                <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=80" alt="Carbon">
+                <div class="impact-card-body">
+                    <h4>Carbon Sequestration</h4>
+                    <p>Millions of tonnes of CO₂ captured through tree regeneration.</p>
+                </div>
+            </div>
+            <div class="impact-card reveal">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80" alt="Training">
+                <div class="impact-card-body">
+                    <h4>Knowledge Transfer</h4>
+                    <p>Training programmes spreading FMNR expertise globally.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner" id="donate">
+        <h2 class="reveal">Join the Movement</h2>
+        <p class="reveal">Support farmer-managed natural regeneration and help restore millions of hectares of degraded land.</p>
+        <a href="#" class="cta-btn reveal">Get Involved</a>
+    </section>
+
+    <!-- Values (Apple-style bottom row) -->
+    <section class="values-section">
+        <h2>Our values lead the way.</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                <h4>Sustainability</h4>
+                <p>Long-term ecological and economic resilience.</p>
+                <a href="#">Learn more</a>
+            </div>
+            <div class="value-card">
+                <div class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <h4>Community</h4>
+                <p>Farmer-led, community-driven at every level.</p>
+                <a href="#">Learn more</a>
+            </div>
+            <div class="value-card">
+                <div class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                <h4>Equity</h4>
+                <p>Empowering marginalised communities worldwide.</p>
+                <a href="#">Learn more</a>
+            </div>
+            <div class="value-card">
+                <div class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+                <h4>Evidence</h4>
+                <p>Rigorous research underpins every programme.</p>
+                <a href="#">Learn more</a>
+            </div>
+            <div class="value-card">
+                <div class="value-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+                <h4>Global Scale</h4>
+                <p>From one field in Niger to 27 countries and counting.</p>
+                <a href="#">Learn more</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h5>Partner</h5>
+                    <a href="#">Why Partner with FMNR</a>
+                    <a href="#">Faith Based Partners</a>
+                    <a href="#">NGO & Restoration Partners</a>
+                    <a href="#">Corporate Partnerships</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Adopt</h5>
+                    <a href="#">FMNR Basics</a>
+                    <a href="#">Training Programs</a>
+                    <a href="#">Community Engagement</a>
+                    <a href="#">Implementation Guide</a>
+                </div>
+                <div class="footer-col">
+                    <h5>Impact</h5>
+                    <a href="#">Environmental Impact</a>
+                    <a href="#">Social Impact</a>
+                    <a href="#">Case Studies</a>
+                    <a href="#">Annual Reports</a>
+                </div>
+                <div class="footer-col">
+                    <h5>About</h5>
+                    <a href="#">About FMNR</a>
+                    <a href="#">Where We Work</a>
+                    <a href="resources.html">Resources</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 FMNR Hub. All rights reserved.</p>
+                <div>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Site Map</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // ===== Scroll Reveal =====
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+
+    // ===== Tab Navigation =====
+    document.querySelectorAll('.tab-nav button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelector(`[data-panel="${tab}"]`).classList.add('active');
+        });
+    });
+
+    // ===== Parallax =====
+    const parallaxImg = document.querySelector('.parallax-img');
+    if (parallaxImg) {
+        window.addEventListener('scroll', () => {
+            const section = parallaxImg.parentElement;
+            const rect = section.getBoundingClientRect();
+            if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+                parallaxImg.style.transform = `translateY(${(progress - 0.5) * -80}px)`;
+            }
+        }, { passive: true });
+    }
+
+    // ===== Counting Animation =====
+    const countObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const target = parseInt(el.dataset.count);
+                let current = 0;
+                const duration = 2000;
+                const step = target / (duration / 16);
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    el.textContent = Math.round(current);
+                }, 16);
+                countObserver.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+
+    // ===== Carousel =====
+    const track = document.getElementById('carousel-track');
+    const dots = document.querySelectorAll('.carousel-dot');
+    let currentSlide = 0;
+    let autoplayTimer = null;
+    let isPlaying = false;
+
+    function getSlideWidth() {
+        const slide = track.querySelector('.carousel-slide');
+        return slide.offsetWidth + 20; // gap
+    }
+
+    function goToSlide(index) {
+        const total = dots.length;
+        currentSlide = ((index % total) + total) % total;
+        track.style.transform = `translateX(-${currentSlide * getSlideWidth()}px)`;
+        dots.forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+    }
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            goToSlide(parseInt(dot.dataset.index));
+            stopAutoplay();
+        });
+    });
+
+    function startAutoplay() {
+        isPlaying = true;
+        autoplayTimer = setInterval(() => goToSlide(currentSlide + 1), 3000);
+    }
+    function stopAutoplay() {
+        isPlaying = false;
+        clearInterval(autoplayTimer);
+    }
+
+    document.getElementById('carousel-play').addEventListener('click', () => {
+        if (isPlaying) stopAutoplay(); else startAutoplay();
+    });
+
+    // Drag support
+    let startX = 0, dragDelta = 0, isDragging = false;
+    track.addEventListener('pointerdown', (e) => {
+        isDragging = true; startX = e.clientX; dragDelta = 0;
+        track.classList.add('dragging');
+        track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        dragDelta = e.clientX - startX;
+        track.style.transform = `translateX(${-currentSlide * getSlideWidth() + dragDelta}px)`;
+    });
+    track.addEventListener('pointerup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        track.classList.remove('dragging');
+        if (dragDelta < -60) goToSlide(currentSlide + 1);
+        else if (dragDelta > 60) goToSlide(currentSlide - 1);
+        else goToSlide(currentSlide);
+    });
+    </script>
+</body>
+</html>

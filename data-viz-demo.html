@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Data Visualisation — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: #111; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .impact-inner { max-width: 1280px; margin: 0 auto; padding: 120px 48px; }
+        .impact-intro { max-width: 640px; margin-bottom: 72px; }
+        .impact-intro .eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--color-teal); margin-bottom: 16px; }
+        .impact-intro h2 { font-family: var(--font-heading); font-size: clamp(36px, 4.5vw, 64px); text-transform: uppercase; color: #fff; line-height: 1; }
+        .impact-intro h2 em { color: var(--color-teal); font-style: normal; }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.08); }
+        .stat-item { padding: 52px 36px 52px 0; border-right: 1px solid rgba(255,255,255,.08); }
+        .stat-item:last-child { border-right: none; }
+        .stat-val { display: block; font-family: var(--font-heading); font-size: clamp(52px, 5.5vw, 80px); color: var(--color-teal); line-height: 1; letter-spacing: -.02em; }
+        .stat-desc { display: block; font-size: 12px; color: rgba(255,255,255,.38); margin-top: 12px; text-transform: uppercase; letter-spacing: .07em; line-height: 1.4; }
+        .impact-foot { margin-top: 56px; }
+        .impact-foot a { font-weight: 700; font-size: 15px; color: var(--color-teal); text-decoration: none; border-bottom: 1px solid rgba(15,251,171,.3); padding-bottom: 2px; }
+        @media (max-width: 900px) {
+            .impact-inner { padding: 72px 24px; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .stat-item:nth-child(2) { border-right: none; }
+            .stat-item { padding: 40px 20px 40px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="impact-inner">
+        <div class="impact-intro">
+            <span class="eyebrow">FMNR Impact</span>
+            <h2>Numbers that <em>speak</em><br>for themselves</h2>
+        </div>
+        <div class="stats-row">
+            <div class="stat-item">
+                <span class="stat-val" data-target="78" data-suffix="%">0%</span>
+                <span class="stat-desc">Average tree survival rate</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-val" data-target="24" data-suffix="M+">0</span>
+                <span class="stat-desc">Hectares restored globally</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-val" data-target="92" data-suffix="%">0%</span>
+                <span class="stat-desc">Lower cost vs conventional reforestation</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-val" data-target="27" data-suffix="">0</span>
+                <span class="stat-desc">Countries practicing FMNR</span>
+            </div>
+        </div>
+        <div class="impact-foot">
+            <a href="impact.html">See the full evidence base ›</a>
+        </div>
+    </div>
+
+    <script>
+    // Animated counter
+    function animateCounters() {
+        document.querySelectorAll('.stat-val').forEach(function(el) {
+            var target = parseInt(el.getAttribute('data-target'));
+            var suffix = el.getAttribute('data-suffix') || '';
+            var duration = 1800;
+            var start = performance.now();
+            function step(now) {
+                var progress = Math.min((now - start) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var current = Math.round(eased * target);
+                el.textContent = current + suffix;
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        });
+    }
+    // Run on load
+    animateCounters();
+    </script>
+</body>
+</html>

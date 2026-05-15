@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Partner Cards — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; }
+        .max-w { max-width: 1280px; width: 100%; margin: 0 auto; }
+        .section-row-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; gap: 24px; }
+        .section-row-header .eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--color-green); margin-bottom: 10px; }
+        .section-row-header h2 { font-family: var(--font-heading); font-size: clamp(28px, 3.2vw, 44px); text-transform: uppercase; line-height: 1; color: #1d1d1f; margin: 0; }
+        .section-row-header h2 em { color: var(--color-green); font-style: normal; }
+        .section-row-link { font-weight: 700; font-size: 14px; color: var(--color-green); text-decoration: none; white-space: nowrap; border-bottom: 1px solid rgba(7,125,87,.3); padding-bottom: 2px; flex-shrink: 0; }
+        .partner-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+        .p-card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; color: #fff; border-radius: 12px; overflow: hidden; height: 440px; transition: box-shadow .25s, transform .25s; }
+        .p-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.18); transform: translateY(-3px); }
+        .p-card-img { position: absolute; inset: 0; }
+        .p-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+        .p-card:hover .p-card-img img { transform: scale(1.05); }
+        .p-card-body { position: relative; z-index: 2; padding: 24px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.6) 60%, transparent 100%); }
+        .p-card-title { font-family: var(--font-heading); font-size: 20px; text-transform: uppercase; line-height: 1.1; color: #fff; }
+        .p-card-cta { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; color: #fff; margin-top: 6px; }
+        @media (max-width: 900px) { .partner-cards-grid { grid-template-columns: 1fr 1fr; gap: 12px; } .section-row-header { flex-direction: column; align-items: flex-start; } }
+        @media (max-width: 560px) { .partner-cards-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="max-w">
+        <div class="section-row-header">
+            <div>
+                <span class="eyebrow">Partnership</span>
+                <h2>Partner with <em>purpose</em></h2>
+            </div>
+            <a href="partner.html" class="section-row-link">View all partnerships ›</a>
+        </div>
+        <div class="partner-cards-grid">
+            <a href="partner.html#faith" class="p-card">
+                <div class="p-card-img">
+                    <img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_18_Image_0003.jpg" alt="Faith Partners">
+                </div>
+                <div class="p-card-body">
+                    <p class="p-card-title">Faith Communities</p>
+                    <span class="p-card-cta">Explore ›</span>
+                </div>
+            </a>
+            <a href="partner.html#ngo" class="p-card">
+                <div class="p-card-img">
+                    <img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_04_Image_0001.jpg" alt="NGO Partners">
+                </div>
+                <div class="p-card-body">
+                    <p class="p-card-title">NGOs & Development</p>
+                    <span class="p-card-cta">Explore ›</span>
+                </div>
+            </a>
+            <a href="partner.html#corporate" class="p-card">
+                <div class="p-card-img">
+                    <img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_22_Image_0001.jpg" alt="Corporate Partners">
+                </div>
+                <div class="p-card-body">
+                    <p class="p-card-title">Corporate Partners</p>
+                    <span class="p-card-cta">Explore ›</span>
+                </div>
+            </a>
+            <a href="partner.html#government" class="p-card">
+                <div class="p-card-img">
+                    <img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_20_Image_0001.jpg" alt="Government Partners">
+                </div>
+                <div class="p-card-body">
+                    <p class="p-card-title">Government Partners</p>
+                    <span class="p-card-cta">Explore ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deliverables — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; }
+
+        .page-header { padding: 80px 48px 48px; max-width: 1280px; margin: 0 auto; }
+        .page-header h1 { font-family: var(--font-heading); font-size: clamp(40px, 5vw, 64px); text-transform: uppercase; color: #1d1d1f; line-height: 1; margin-bottom: 12px; }
+        .page-header p { font-size: 17px; color: #6e6e73; max-width: 560px; line-height: 1.5; }
+
+        .category { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+        .category + .category { margin-top: 64px; }
+        .category-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6e6e73; margin-bottom: 16px; }
+
+        .showcase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+        .showcase-card { text-decoration: none; color: inherit; display: block; border-radius: 12px; border: 1px solid #e5e5e5; overflow: hidden; transition: box-shadow 0.25s, border-color 0.25s; padding: 24px; }
+        .showcase-card:hover { border-color: #d1d1d6; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+        .showcase-card__title { font-size: 16px; font-weight: 700; color: #1d1d1f; margin-bottom: 6px; }
+        .showcase-card__desc { font-size: 13px; color: #86868b; line-height: 1.5; margin-bottom: 12px; }
+        .showcase-card__link { font-size: 13px; font-weight: 600; color: var(--color-green); display: inline-flex; align-items: center; gap: 4px; }
+        .showcase-card__link svg { width: 12px; height: 12px; }
+
+        .page-footer { max-width: 1280px; margin: 80px auto 0; padding: 32px 48px; border-top: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; }
+        .page-footer p { font-size: 13px; color: #86868b; }
+        .page-footer a { font-size: 14px; font-weight: 700; color: var(--color-green); text-decoration: none; }
+
+        /* ── Modal ── */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+        .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+        .modal-container { width: 100%; height: 95vh; background: #fff; border-radius: 20px 20px 0 0; overflow: hidden; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -8px 60px rgba(0,0,0,0.25); }
+        .modal-backdrop.open .modal-container { transform: translateY(0); }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0; background: #fff; }
+        .modal-header h3 { font-size: 15px; font-weight: 700; }
+        .modal-header .modal-url { font-size: 13px; color: rgba(0,0,0,0.35); margin-left: 16px; }
+        .modal-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: #f0f0f0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .modal-close:hover { background: #e0e0e0; }
+        .modal-close svg { width: 14px; height: 14px; }
+        .modal-body { flex: 1; overflow: hidden; display: flex; justify-content: center; background: #f5f5f7; }
+        .modal-body iframe { height: 100%; border: none; display: block; transition: width 0.3s ease; }
+        .modal-body iframe.desktop-view { width: 100%; }
+        .modal-body iframe.mobile-view { width: 390px; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; background: #fff; }
+        .modal-actions { display: flex; align-items: center; gap: 12px; }
+        .modal-open-btn { font-size: 13px; font-weight: 700; color: var(--color-green); background: rgba(7,125,87,0.08); border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; }
+        .modal-open-btn:hover { background: rgba(7,125,87,0.14); }
+
+        /* Device toggle */
+        .device-toggle { display: flex; background: #f0f0f0; border-radius: 8px; padding: 3px; gap: 2px; }
+        .device-toggle button { border: none; background: transparent; border-radius: 6px; padding: 6px 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, color 0.2s; color: #86868b; }
+        .device-toggle button.active { background: #fff; color: #1d1d1f; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .device-toggle button svg { width: 16px; height: 16px; }
+
+        body.modal-open { overflow: hidden; }
+
+        @media (max-width: 1100px) { .showcase-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) {
+            .showcase-grid { grid-template-columns: repeat(2, 1fr); }
+            .page-header, .category { padding-left: 24px; padding-right: 24px; }
+            .page-footer { padding-left: 24px; padding-right: 24px; flex-direction: column; gap: 12px; }
+        }
+        @media (max-width: 500px) { .showcase-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <h1>Deliverables</h1>
+        <p>All blocks and pages delivered for the FMNR website — a living reference for design and development.</p>
+    </header>
+
+    <!-- BLOCKS -->
+    <section class="category">
+        <p class="category-label">Blocks</p>
+        <div class="showcase-grid">
+
+            <a href="index.html" class="showcase-card" data-title="Video Hero Banner">
+                <h3 class="showcase-card__title">Video Hero Banner</h3>
+                <p class="showcase-card__desc">Full-viewport autoplay video with gradient overlay and text toggle</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="mega-menu-demo.html" class="showcase-card" data-title="Mega Menu">
+                <h3 class="showcase-card__title">Mega Menu</h3>
+                <p class="showcase-card__desc">Desktop mega dropdown & mobile hamburger navigation</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="search-demo.html" class="showcase-card" data-title="Search">
+                <h3 class="showcase-card__title">Search</h3>
+                <p class="showcase-card__desc">Predictive search overlay with results page</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="contact-demo.html" class="showcase-card" data-title="Contact & Newsletter">
+                <h3 class="showcase-card__title">Contact & Newsletter</h3>
+                <p class="showcase-card__desc">Form layout with newsletter sign-up</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="data-viz-demo.html" class="showcase-card" data-title="Data Visualisation">
+                <h3 class="showcase-card__title">Data Visualisation</h3>
+                <p class="showcase-card__desc">Animated counters and SVG donut charts</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="map-demo.html" class="showcase-card" data-title="Interactive Map">
+                <h3 class="showcase-card__title">Interactive Map</h3>
+                <p class="showcase-card__desc">Leaflet map with country cards and mobile carousel</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="index.html" class="showcase-card" data-title="Partner Cards">
+                <h3 class="showcase-card__title">Partner Cards</h3>
+                <p class="showcase-card__desc">4-column grid with bento tile layout</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="index.html" class="showcase-card" data-title="Scroll Animations">
+                <h3 class="showcase-card__title">Scroll Animations</h3>
+                <p class="showcase-card__desc">GSAP ScrollTrigger & IntersectionObserver patterns</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- PAGES -->
+    <section class="category">
+        <p class="category-label">Pages</p>
+        <div class="showcase-grid">
+
+            <a href="index.html" class="showcase-card" data-title="Homepage">
+                <h3 class="showcase-card__title">Homepage</h3>
+                <p class="showcase-card__desc">Main FMNR landing page with video hero and all sections</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-rinaudo.html" class="showcase-card" data-title="Tony Rinaudo">
+                <h3 class="showcase-card__title">Tony Rinaudo</h3>
+                <p class="showcase-card__desc">Profile page — timeline, biography & awards</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="resources.html" class="showcase-card" data-title="Resources">
+                <h3 class="showcase-card__title">Resources</h3>
+                <p class="showcase-card__desc">Apple Newsroom-style content hub with filters</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="impact.html" class="showcase-card" data-title="Impact & Evidence">
+                <h3 class="showcase-card__title">Impact & Evidence</h3>
+                <p class="showcase-card__desc">Statistics, charts & evidence-based outcomes</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="partner.html" class="showcase-card" data-title="Partner With Us">
+                <h3 class="showcase-card__title">Partner With Us</h3>
+                <p class="showcase-card__desc">Partnership tiers, benefits grid & contact form</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="index2.html" class="showcase-card" data-title="Alt Homepage">
+                <h3 class="showcase-card__title">Alt Homepage</h3>
+                <p class="showcase-card__desc">Apple Environment-inspired alternative layout</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <footer class="page-footer">
+        <p>FMNR Deliverables — Internal design & development reference</p>
+        <a href="index.html">← Back to Homepage</a>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-backdrop" id="modal-backdrop">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div style="display:flex;align-items:center;">
+                    <h3 id="modal-title">Component</h3>
+                    <span class="modal-url" id="modal-url"></span>
+                </div>
+                <div class="modal-actions">
+                    <!-- Text layer toggle (banner only) -->
+                    <button class="device-toggle" id="text-toggle" style="padding:6px 12px;gap:6px;display:none;" title="Toggle text layer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+                    </button>
+                    <!-- Device toggle -->
+                    <div class="device-toggle" id="device-toggle">
+                        <button class="active" data-view="desktop" aria-label="Desktop view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                        </button>
+                        <button data-view="mobile" aria-label="Mobile view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+                        </button>
+                    </div>
+                    <a class="modal-open-btn" id="modal-open-link" href="#" target="_blank">Open in new tab ↗</a>
+                    <button class="modal-close" id="modal-close" aria-label="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <iframe id="modal-iframe" class="desktop-view" src="about:blank"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var backdrop = document.getElementById('modal-backdrop');
+        var iframe = document.getElementById('modal-iframe');
+        var titleEl = document.getElementById('modal-title');
+        var urlEl = document.getElementById('modal-url');
+        var openLink = document.getElementById('modal-open-link');
+        var closeBtn = document.getElementById('modal-close');
+        var deviceToggle = document.getElementById('device-toggle');
+        var toggleBtns = deviceToggle.querySelectorAll('button');
+
+        // Device toggle
+        toggleBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                toggleBtns.forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                var view = btn.getAttribute('data-view');
+                iframe.className = view + '-view';
+            });
+        });
+
+        // Text layer toggle (for banner)
+        var textToggle = document.getElementById('text-toggle');
+        var textVisible = true;
+        textToggle.addEventListener('click', function() {
+            textVisible = !textVisible;
+            textToggle.classList.toggle('active', textVisible);
+            try {
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+                var style = doc.getElementById('hide-text-layer');
+                if (!textVisible) {
+                    if (!style) {
+                        style = doc.createElement('style');
+                        style.id = 'hide-text-layer';
+                        style.textContent = '.hero-content, .hero h1, .hero h2, .hero p, .hero-text, [class*="hero"] h1, [class*="hero"] h2, [class*="hero"] p, [class*="hero"] .btn, [class*="banner"] h1, [class*="banner"] p { opacity: 0 !important; transition: opacity 0.3s; }';
+                        doc.head.appendChild(style);
+                    }
+                } else if (style) {
+                    style.remove();
+                }
+            } catch(e) {}
+        });
+
+        function openModal(href, title) {
+            titleEl.textContent = title || 'Component';
+            urlEl.textContent = href;
+            openLink.href = href;
+            iframe.src = href;
+            iframe.className = 'desktop-view';
+            toggleBtns.forEach(function(b) { b.classList.remove('active'); });
+            toggleBtns[0].classList.add('active');
+            // Show text toggle only for banner
+            textVisible = true;
+            textToggle.classList.add('active');
+            textToggle.style.display = (title === 'Video Hero Banner') ? 'flex' : 'none';
+            backdrop.classList.add('open');
+            document.body.classList.add('modal-open');
+        }
+        function closeModal() {
+            backdrop.classList.remove('open');
+            document.body.classList.remove('modal-open');
+            setTimeout(function() { iframe.src = 'about:blank'; }, 400);
+        }
+        closeBtn.addEventListener('click', closeModal);
+        backdrop.addEventListener('click', function(e) { if (e.target === backdrop) closeModal(); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+        document.querySelectorAll('.showcase-card').forEach(function(card) {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                var href = card.getAttribute('href');
+                var title = card.getAttribute('data-title') || card.querySelector('.showcase-card__title').textContent;
+                openModal(href, title);
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

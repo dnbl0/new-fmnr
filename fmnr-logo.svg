@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 80" width="270" height="80">
+  <!-- F -->
+  <path d="M0,78 L0,2 L40,2 L40,18 L18,18 L18,34 L36,34 L36,50 L18,50 L18,78 Z" fill="#007A3D"/>
+  <!-- M -->
+  <path d="M50,78 L50,2 L68,2 L82,40 L96,2 L114,2 L114,78 L98,78 L98,32 L84,68 L80,68 L66,32 L66,78 Z" fill="#007A3D"/>
+  <!-- N -->
+  <path d="M124,78 L124,2 L140,2 L168,54 L168,2 L184,2 L184,78 L168,78 L140,26 L140,78 Z" fill="#007A3D"/>
+  <!-- R -->
+  <path d="M194,78 L194,2 L230,2 Q248,2 248,20 Q248,34 236,38 L252,78 L234,78 L220,42 L212,42 L212,78 Z M212,18 L212,30 L228,30 Q232,30 232,24 Q232,18 228,18 Z" fill="#007A3D"/>
+  <!-- Leaf on F -->
+  <ellipse cx="36" cy="8" rx="10" ry="7" fill="#F58220" transform="rotate(-30, 36, 8)"/>
+  <!-- Leaf on N -->
+  <ellipse cx="180" cy="8" rx="10" ry="7" fill="#F58220" transform="rotate(-30, 180, 8)"/>
+  <!-- Dot -->
+  <circle cx="262" cy="72" r="8" fill="#F58220"/>
+</svg>
