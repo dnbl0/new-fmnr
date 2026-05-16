@@ -1,272 +1,70 @@
-# WordPress Block Implementation Guide
-## FMNR Design System → fmnrhub.com.au
+# FMNR Block Implementation Guide
+## No-dev approach — everything through the WordPress Admin
 
-Practical developer guide for applying the blocks in `components.html` to the existing WordPress site.
+All blocks from `components.html` can be implemented through the WordPress admin interface alone. No SFTP, no file editing, no command line, no developer required for initial build.
 
----
-
-## 1. What We Know About the Existing Site
-
-Extracted from live page source on fmnrhub.com.au.
-
-### Theme
-
-| Item | Value |
-|------|-------|
-| **Parent theme** | `twentytwentyfour` (Twenty Twenty-Four) |
-| **Child theme slug** | `fmnr` |
-| **Child theme path** | `wp-content/themes/fmnr/` |
-| **Theme type** | **Block theme (FSE)** — Site Editor is available |
-| **WordPress version** | 6.9.4 |
-| **Content width** | 620px |
-| **Wide width** | 1280px |
-
-The child theme `fmnr` already exists. All changes go there.
-
-### Fonts — already self-hosted, no external service needed
-
-All fonts are loaded via `@font-face` from `wp-content/uploads/fonts/`. **Do not add Adobe Typekit or Google Fonts links** — they are already handled.
-
-| Font | File | Weight(s) |
-|------|------|-----------|
-| **FatFrank** | `uploads/fonts/fatfrank.otf` | 900 |
-| **Lato** | `uploads/fonts/S6uyw4BMUTPHvxw6XweuBCY.woff2` etc. | 400, 700, 900 (normal + italic) |
-| **Archivo Black** | Loaded from `54.252.190.200` (server IP) | 400 |
-| Inter | From TT4 parent theme | 300–900 |
-| Cardo | From TT4 parent theme | 400, 700 |
-
-> ⚠️ **Archivo Black is loading from a bare IP address (`54.252.190.200`), not a domain.** This will break if the server IP changes. The font file should be copied into `wp-content/uploads/fonts/` and the `@font-face` in `theme.json` updated to a proper path.
-
-### Existing `theme.json` tokens
-
-The FMNR colour palette and font families **are already registered**. These `--wp--preset--*` variables are live on the site:
-
-**Colours (already in theme.json):**
-
-| Slug | Value | Matches design token |
-|------|-------|----------------------|
-| `custom-orange-fmnr` | `#ff6600` | Close to `--color-orange: #FA6B01` |
-| `custom-dark-green-fmnr` | `#00552f` | Close to `--color-green: #077D57` — used for buttons |
-| `custom-lime` | `#b8fa1a` | Exact match — `--color-lime` |
-| `custom-teal` | `#0dfaab` | Close to `--color-teal: #0FFBAB` |
-| `custom-light-green` | `#d0ffef` | New — not in design tokens file |
-| `custom-green` | `#2da57f` | Mid green — used for GenerateBlocks cards |
-
-**Standard WP palette also present:** `base` (#f9f9f9), `base-2` (#ffffff), `contrast` (#111111), `contrast-2` (#636363), `contrast-3` (#A4A4A4), and accent colours from TT4.
-
-**Font families (already registered):**
-
-| Slug | Font | CSS variable |
-|------|------|-------------|
-| `fatfrank` | FatFrank | `--wp--preset--font-family--fatfrank` |
-| `lato` | Lato | `--wp--preset--font-family--lato` |
-| `archivo-black` | Archivo Black | `--wp--preset--font-family--archivo-black` |
-| `body` | Inter (TT4 default) | `--wp--preset--font-family--body` |
-| `heading` | Cardo (TT4 default) | `--wp--preset--font-family--heading` |
-
-**Global styles already applied:**
-- `body`: font-family Lato, font-size medium (1.05rem), line-height 1.5
-- `h1–h6`: font-family FatFrank, font-weight 400, line-height 0.9
-- Buttons: background `custom-dark-green-fmnr` (#00552f), border-radius 0.33rem
-- Links (non-button): font-family Archivo Black, no underline
-
-### Active plugins confirmed in source
-
-| Plugin | Evidence in source |
-|--------|--------------------|
-| Essential Blocks 6.0.6 | `eb-style/frontend/frontend-*.min.css`, `eb-reusable-block-style-661`, `eb-fse-style-636` |
-| GenerateBlocks 2.2.1 | `.gb-container-*`, `.gb-headline-*` inline CSS |
-| Stackable 3.19.7 | `stackable-ultimate-gutenberg-blocks/dist/frontend_blocks.css` |
-| All in One SEO 4.9.5.1 | Meta tags, schema JSON-LD |
-| MonsterInsights 10.1.3 | GA tracking script (ID: G-68QWYTD0RR) |
-| WPForms Lite 1.10.0.2 | Admin bar CSS |
-| jQuery 3.7.1 | Loaded from wp-includes |
+The only "code" layer is **WPCode Lite**, which lets you paste CSS, JS, and PHP snippets directly in the admin — the same things that would otherwise require editing `functions.php` or theme files.
 
 ---
 
-## 2. Plugin Stack Reference
+## 1. One-Time Setup (do this first)
 
-| Plugin | Status | Role in this project |
-|--------|--------|---------------------|
-| **Gutenberg** (core) | Active | Block editor |
-| **Templately** 3.5.2 | Active | Pattern / page template cloud — save and share reusable sections |
-| **Essential Blocks** 6.0.6 | Active | Counter, Info Box, Feature Card, Post Grid, and ~65 more blocks |
-| **GenerateBlocks** 2.2.1 | Active | Already in use — Container, Grid, Text, Button, Image primitives |
-| **Stackable** 3.19.7 | Active | Carousel, Accordion, Count Up, Icon Box, Columns |
-| **WPForms Lite** 1.10.0.2 | Active | Contact forms — basic fields only (see Section 8) |
-| **Safe SVG** 2.4.0 | Active | SVG uploads to Media Library are allowed |
-| **All in One SEO** 4.9.5.1 | Active | SEO meta |
-| **MonsterInsights** 10.1.3 | Active | GA4 (ID: G-68QWYTD0RR) |
-| **Post SMTP** 3.9.1 | Active | Email delivery for form submissions |
-| **FileBird Lite** 6.4.9 | Active | Media library folder organisation |
-| **OptinMonster** 2.16.22 | Active | Newsletter popups and inline forms |
-| **Genesis Blocks** 3.1.8 | Inactive | Skip — covered by EB + Stackable |
-| **Twentig** 2.0 | Inactive | Can activate for additional core block style options |
-| **Document Library Lite** | Inactive | Activate for Resources page file download listings |
+### 1.1 Install WPCode Lite
 
-### Two free plugins to add
+1. **Plugins → Add New Plugin**
+2. Search: `WPCode`
+3. Install and activate **WPCode – Insert Headers and Footers + Custom Code Snippets**
+4. It appears in the left menu as **Code Snippets**
 
-```
-WPCode Lite   — wordpress.org/plugins/insert-headers-and-footers
-Icon Block    — wordpress.org/plugins/icon-block
-```
+### 1.2 Install Icon Block
 
-- **WPCode Lite** — inject FMNR CSS/JS globally without editing `functions.php` directly. Safer for deployments where direct file access is restricted.
-- **Icon Block** (Nick Diego) — proper SVG icon picker in the editor. Works with Safe SVG uploads.
+1. **Plugins → Add New Plugin**
+2. Search: `Icon Block`
+3. Install and activate **Icon Block** by Nick Diego
+4. This gives editors a proper SVG icon picker in the block editor
 
----
+### 1.3 Upload FMNR SVG icons
 
-## 3. Child Theme Setup
+1. **Media → Add New**
+2. Upload all SVG files from the `/icons/` folder in this repo
+3. Safe SVG is already active — SVGs are automatically sanitised on upload
+4. Organise into a FileBird folder called "FMNR Icons" for easy finding
 
-The child theme `fmnr` already exists at `wp-content/themes/fmnr/`. Do not create a new one. All work goes into this directory.
+### 1.4 Fix Archivo Black font (urgent)
 
-### 3.1 Verify the child theme is active
+The Archivo Black font is currently loading from a bare server IP (`54.252.190.200`). This will break if the server changes.
 
-In **Appearance → Themes**, confirm **FMNR** (or similar name) is the active theme, not Twenty Twenty-Four directly.
-
-### 3.2 Child theme file structure
-
-Add the following structure inside the existing `fmnr` child theme:
-
-```
-wp-content/themes/fmnr/
-  style.css          ← already exists
-  functions.php      ← already exists or create it
-  theme.json         ← already exists — edit carefully (see Section 4)
-  assets/
-    css/
-      fmnr-blocks.css     ← NEW — all FMNR block overrides
-      decision-tree.css   ← copy from repo
-    js/
-      scroll-animations.js
-      timeline.js
-      carousel.js
-      map.js
-      mega-menu.js
-      search.js
-      video-hero.js
-      decision-trees-part-1-main.js
-      decision-trees-part-1-helpers.js
-      decision-trees-part-1-rAF-polyfill.js
-    icons/              ← copy /icons/ from repo
-    images/             ← copy /images/ from repo
-    data/
-      countries.json    ← map section country data
-```
-
-> **Do not copy `design-tokens.css` or `styles.css` wholesale into the theme.** The existing site already has its own `theme.json` tokens and global styles. Instead, create `fmnr-blocks.css` as a targeted override file that only adds what's missing (see Section 5).
-
-### 3.3 Copy assets from repo
-
-```bash
-# Run from the repo root. Replace /path/to/wp/ with the actual WP root.
-THEME="/path/to/wp/wp-content/themes/fmnr"
-
-cp decision-tree.css   "$THEME/assets/css/"
-cp -r icons/           "$THEME/assets/icons/"
-cp -r images/          "$THEME/assets/images/"
-
-# JS files (copy existing standalone files directly)
-cp decision-trees-part-1-main.js      "$THEME/assets/js/"
-cp decision-trees-part-1-helpers.js   "$THEME/assets/js/"
-cp decision-trees-part-1-rAF-polyfill.js "$THEME/assets/js/"
-```
-
-### 3.4 Extract JavaScript from demo HTML files
-
-Each demo file has its JS in a `<script>` tag at the bottom. Cut-and-paste each into a standalone file:
-
-| Target file | Source demo file | What to extract |
-|-------------|-----------------|----------------|
-| `assets/js/scroll-animations.js` | `scroll-animations-demo.html` | Full `<script>` block — IntersectionObserver for all animation types |
-| `assets/js/timeline.js` | `timeline-demo.html` | Expand/collapse accordion logic |
-| `assets/js/carousel.js` | `stories-carousel-demo.html` | Horizontal scroll + prev/next controls |
-| `assets/js/map.js` | `map-demo.html` | Leaflet init + country data handlers |
-| `assets/js/mega-menu.js` | `mega-menu-demo.html` | Open/close + keyboard nav |
-| `assets/js/search.js` | `search-demo.html` | Overlay open/close + predictive results |
-| `assets/js/video-hero.js` | `video-hero-demo.html` | Play/pause, mute toggle, progress bar, scroll hint |
-
-### 3.5 Guard animations against the block editor
-
-At the top of `scroll-animations.js`, add:
-
-```js
-document.addEventListener('DOMContentLoaded', function () {
-    // Do not run animations inside the Gutenberg block editor
-    if (
-        document.body.classList.contains('block-editor-page') ||
-        (window.wp && window.wp.blocks)
-    ) return;
-
-    // ... rest of scroll-animations init code
-});
-```
-
-Apply the same guard to `timeline.js`, `carousel.js`, and `video-hero.js`.
+1. **Appearance → Editor → Styles** (top right: pencil icon) → **Typography → Manage fonts**
+2. Find Archivo Black — click the source URL
+3. Download the font file from that IP and re-upload it via the font manager
+4. Or: go to **Appearance → Editor** → open `theme.json` via the editor and update the Archivo Black `src` to use the proper uploaded path
 
 ---
 
-## 4. theme.json — What to Add vs What Already Exists
+## 2. CSS — Paste Once via WPCode
 
-> **Do not replace the existing `theme.json`** — it already has working font registrations, colour tokens, and global styles. Only add what is missing.
+This adds all FMNR block styles on top of the existing site theme without touching any files.
 
-Open `wp-content/themes/fmnr/theme.json` and make the following targeted additions:
-
-### 4.1 Add missing FMNR colours
-
-The existing palette has `custom-orange-fmnr`, `custom-dark-green-fmnr`, `custom-lime`, `custom-teal`, `custom-light-green`, `custom-green`. The following are **not yet registered** and should be added to the `settings.color.palette` array:
-
-```json
-{ "slug": "fmnr-pear",    "color": "#DDEB4A", "name": "FMNR Pear" },
-{ "slug": "fmnr-olive",   "color": "#5C7D0D", "name": "FMNR Olive" },
-{ "slug": "fmnr-cedar",   "color": "#7D3600", "name": "FMNR Cedar" },
-{ "slug": "fmnr-amber",   "color": "#F2AA00", "name": "FMNR Amber" },
-{ "slug": "fmnr-sand",    "color": "#E0CAA0", "name": "FMNR Sand" },
-{ "slug": "fmnr-cream",   "color": "#EFE9DC", "name": "FMNR Cream" },
-{ "slug": "fmnr-charcoal","color": "#464646", "name": "FMNR Charcoal" }
-```
-
-### 4.2 Colour token mapping — use existing slugs
-
-When referencing colours in block settings or CSS, use the **existing slug names**, not the ones from `design-tokens.css`:
-
-| Design token | Existing WP preset slug | CSS variable |
-|-------------|------------------------|-------------|
-| `--color-green` (#077D57) | `custom-dark-green-fmnr` | `--wp--preset--color--custom-dark-green-fmnr` |
-| `--color-orange` (#FA6B01) | `custom-orange-fmnr` | `--wp--preset--color--custom-orange-fmnr` |
-| `--color-teal` (#0FFBAB) | `custom-teal` | `--wp--preset--color--custom-teal` |
-| `--color-lime` (#B8FA1A) | `custom-lime` | `--wp--preset--color--custom-lime` |
-| `--color-green` (mid) | `custom-green` | `--wp--preset--color--custom-green` |
-| `--font-heading` | `fatfrank` | `--wp--preset--font-family--fatfrank` |
-| `--font-body` | `lato` | `--wp--preset--font-family--lato` |
-
-### 4.3 Fix Archivo Black font source
-
-The current `theme.json` loads Archivo Black from a bare IP address. Update it to use the uploaded font file:
-
-1. Upload `Archivo Black` woff2 to `wp-content/uploads/fonts/` via **Appearance → Editor → Styles → Typography → Manage fonts**
-2. Or edit `theme.json` directly — find the `ArchivoBlack` font face entry and change the `src` to a proper URL: `https://fmnrhub.com.au/wp-content/uploads/fonts/archivo-black.woff2`
-
----
-
-## 5. FMNR Block CSS — fmnr-blocks.css
-
-Create `wp-content/themes/fmnr/assets/css/fmnr-blocks.css`. This file adds FMNR design system styles on top of the existing theme without conflicting with it.
+1. Go to **Code Snippets → + Add Snippet**
+2. Click **Add Your Custom Code (New Snippet)**
+3. Name it: `FMNR Block Styles`
+4. Set type to: **CSS Snippet**
+5. Set location to: **Site Wide Header** (or Frontend only)
+6. Paste the following into the code box:
 
 ```css
 /* ============================================================
-   FMNR Block Overrides
-   Loaded on: front-end + editor (via add_editor_style)
+   FMNR Block Styles
    ============================================================ */
 
-/* --- Headings: ensure FatFrank is uppercase where FMNR design requires it --- */
+/* Heading — uppercase variant */
 .fmnr-heading {
     font-family: var(--wp--preset--font-family--fatfrank);
     text-transform: uppercase;
     line-height: 0.9;
 }
 
-/* --- Tag / Pill label --- */
+/* Tag / Pill label */
 .wp-block-paragraph.is-style-fmnr-tag,
 .fmnr-tag {
     display: inline-block;
@@ -279,79 +77,92 @@ Create `wp-content/themes/fmnr/assets/css/fmnr-blocks.css`. This file adds FMNR 
     padding: 4px 12px;
     border-radius: 100px;
     line-height: 1.6;
+    margin-bottom: 8px;
 }
 
-/* --- Button variants --- */
+/* Button — Primary */
 .wp-block-button.is-style-primary .wp-block-button__link {
-    background-color: var(--wp--preset--color--custom-dark-green-fmnr);
-    color: #fff;
-    border: none;
+    background-color: var(--wp--preset--color--custom-dark-green-fmnr) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px;
+    font-weight: 700;
+    padding: 14px 28px;
+    transition: background 0.2s;
 }
 .wp-block-button.is-style-primary .wp-block-button__link:hover {
-    background-color: var(--wp--preset--color--custom-green);
+    background-color: var(--wp--preset--color--custom-green) !important;
 }
+
+/* Button — Secondary (outline) */
 .wp-block-button.is-style-secondary .wp-block-button__link {
-    background: transparent;
-    border: 2px solid currentColor;
-    color: var(--wp--preset--color--custom-dark-green-fmnr);
-    padding: calc(0.6rem - 2px) calc(1rem - 2px);
+    background: transparent !important;
+    border: 2px solid var(--wp--preset--color--custom-dark-green-fmnr) !important;
+    color: var(--wp--preset--color--custom-dark-green-fmnr) !important;
+    border-radius: 4px;
+    font-weight: 700;
+    padding: 12px 26px;
+    transition: all 0.2s;
 }
 .wp-block-button.is-style-secondary .wp-block-button__link:hover {
-    background: var(--wp--preset--color--custom-dark-green-fmnr);
-    color: #fff;
+    background: var(--wp--preset--color--custom-dark-green-fmnr) !important;
+    color: #fff !important;
 }
+
+/* Button — Ghost */
 .wp-block-button.is-style-ghost .wp-block-button__link {
-    background: transparent;
-    border: none;
-    color: inherit;
-    text-decoration: underline;
+    background: transparent !important;
+    border: none !important;
+    color: inherit !important;
+    text-decoration: underline !important;
+    padding: 0 !important;
 }
 
-/* --- Dividers --- */
-.wp-block-separator.is-style-fmnr-green { border-color: var(--wp--preset--color--custom-dark-green-fmnr); }
-.wp-block-separator.is-style-fmnr-orange { border-color: var(--wp--preset--color--custom-orange-fmnr); }
+/* Dividers */
+.wp-block-separator.is-style-fmnr-green { border-color: var(--wp--preset--color--custom-dark-green-fmnr) !important; }
+.wp-block-separator.is-style-fmnr-orange { border-color: var(--wp--preset--color--custom-orange-fmnr) !important; }
 
-/* --- Ken Burns image animation --- */
+/* Ken Burns image animation */
 .fmnr-ken-burns img,
 .fmnr-ken-burns .wp-block-cover__image-background {
-    animation: fmnr-ken-burns 20s ease-in-out infinite alternate;
+    animation: fmnr-kb 20s ease-in-out infinite alternate;
     transform-origin: center center;
 }
-@keyframes fmnr-ken-burns {
-    0%   { transform: scale(1)    translateX(0)    translateY(0); }
-    100% { transform: scale(1.12) translateX(-2%)  translateY(-1%); }
+@keyframes fmnr-kb {
+    from { transform: scale(1)    translateX(0)   translateY(0); }
+    to   { transform: scale(1.12) translateX(-2%) translateY(-1%); }
 }
 
-/* --- Parallax cover --- */
-.fmnr-cover--parallax .wp-block-cover__image-background,
-.fmnr-cover--parallax .wp-block-cover__video-background {
+/* Parallax cover */
+.fmnr-cover--parallax .wp-block-cover__image-background {
     background-attachment: fixed;
 }
 
-/* --- Pull Quote band --- */
+/* Pull Quote band */
 .fmnr-pull-quote {
-    padding: 64px var(--wp--preset--spacing--40);
+    padding: 64px clamp(24px, 5vw, 96px);
     text-align: center;
 }
 .fmnr-pull-quote .wp-block-quote p {
     font-family: var(--wp--preset--font-family--fatfrank);
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-size: clamp(1.4rem, 4vw, 2.5rem);
     line-height: 1.1;
     text-transform: uppercase;
+    margin-bottom: 16px;
 }
 .fmnr-pull-quote cite {
     font-size: 0.9rem;
-    opacity: 0.7;
+    opacity: 0.65;
     font-style: normal;
 }
 
-/* --- CTA Band --- */
+/* CTA Band */
 .fmnr-cta-band {
-    padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--40);
+    padding: clamp(48px, 8vw, 96px) clamp(24px, 5vw, 96px);
     text-align: center;
 }
 
-/* --- Stat number (count-up target) --- */
+/* Stat number (count-up span) */
 .fmnr-stat-number {
     font-family: var(--wp--preset--font-family--fatfrank);
     font-size: clamp(3rem, 8vw, 6rem);
@@ -360,244 +171,350 @@ Create `wp-content/themes/fmnr/assets/css/fmnr-blocks.css`. This file adds FMNR 
     display: block;
 }
 
-/* --- Photo grid overlay captions --- */
-.fmnr-photo-grid figure { position: relative; overflow: hidden; }
+/* Photo grid — hover caption reveal */
+.fmnr-photo-grid figure { position: relative; overflow: hidden; margin: 0; }
 .fmnr-photo-grid figcaption {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    background: linear-gradient(transparent, rgba(0,0,0,0.75));
     color: #fff;
-    padding: 24px 16px 12px;
+    padding: 32px 16px 14px;
     transform: translateY(100%);
     transition: transform 0.3s ease;
+    font-size: 0.85rem;
 }
 .fmnr-photo-grid figure:hover figcaption { transform: translateY(0); }
 
-/* --- Progress bar (scroll indicator) --- */
+/* Progress bar (injected by JS) */
 .fmnr-progress-bar {
     position: fixed;
     top: 0; left: 0;
-    height: 3px;
-    width: 0%;
+    height: 3px; width: 0%;
     background: var(--wp--preset--color--custom-lime);
-    z-index: 9999;
-    transform-origin: left;
+    z-index: 99999;
     transition: width 0.1s linear;
 }
 
-/* --- WPForms styling to match FMNR --- */
+/* Scroll hint chevron (injected by JS) */
+.fmnr-scroll-hint {
+    position: absolute;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%);
+    color: #fff; opacity: 0.8;
+    animation: fmnr-bounce 1.5s ease-in-out infinite;
+    cursor: pointer;
+}
+@keyframes fmnr-bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(8px); }
+}
+
+/* Hero video controls (injected by JS) */
+.fmnr-hero-controls {
+    position: absolute;
+    bottom: 32px; right: 32px;
+    display: flex; gap: 8px; z-index: 10;
+}
+.fmnr-hero-controls button {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; border-radius: 50%;
+    width: 40px; height: 40px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+}
+.fmnr-hero-controls button:hover { background: rgba(255,255,255,0.3); }
+
+/* Pillar card */
+.fmnr-pillar-card { padding: 32px; border-radius: 8px; }
+.fmnr-pillar-card .fmnr-number {
+    font-family: var(--wp--preset--font-family--fatfrank);
+    font-size: 4rem; line-height: 1;
+    color: var(--wp--preset--color--custom-dark-green-fmnr);
+    margin-bottom: 8px; display: block;
+}
+
+/* Horizontal card layout */
+.fmnr-card--horizontal {
+    display: flex !important;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+}
+.fmnr-card--horizontal .wp-block-column:first-child { flex: 0 0 40%; }
+.fmnr-card--horizontal .wp-block-column:last-child  { flex: 1; }
+@media (max-width: 600px) { .fmnr-card--horizontal { flex-direction: column; } }
+
+/* WPForms styling */
 .wpforms-field input[type="text"],
 .wpforms-field input[type="email"],
 .wpforms-field input[type="number"],
 .wpforms-field textarea,
 .wpforms-field select {
-    border: 1px solid #464646;
-    border-radius: 4px;
-    font-family: var(--wp--preset--font-family--lato);
-    font-size: 1rem;
-    padding: 12px 16px;
-    width: 100%;
-    background: #fff;
+    border: 1px solid #464646 !important;
+    border-radius: 4px !important;
+    font-family: var(--wp--preset--font-family--lato) !important;
+    font-size: 1rem !important;
+    padding: 12px 16px !important;
+    width: 100% !important;
+    background: #fff !important;
     transition: border-color 0.2s;
 }
 .wpforms-field input:focus,
-.wpforms-field textarea:focus,
-.wpforms-field select:focus {
-    outline: none;
-    border-color: var(--wp--preset--color--custom-dark-green-fmnr);
+.wpforms-field textarea:focus {
+    outline: none !important;
+    border-color: var(--wp--preset--color--custom-dark-green-fmnr) !important;
 }
 .wpforms-field label { font-weight: 700; font-size: 0.875rem; margin-bottom: 6px; display: block; }
 .wpforms-submit-container .wpforms-submit {
-    background: var(--wp--preset--color--custom-dark-green-fmnr);
-    color: #fff;
-    font-family: var(--wp--preset--font-family--lato);
-    font-weight: 700;
-    border: none;
-    border-radius: 4px;
-    padding: 14px 28px;
-    cursor: pointer;
-    font-size: 1rem;
+    background: var(--wp--preset--color--custom-dark-green-fmnr) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 14px 28px !important;
+    cursor: pointer !important;
+    font-size: 1rem !important;
     transition: background 0.2s;
 }
 .wpforms-submit-container .wpforms-submit:hover {
-    background: var(--wp--preset--color--custom-green);
+    background: var(--wp--preset--color--custom-green) !important;
 }
 
-/* --- Pillar card --- */
-.fmnr-pillar-card {
-    padding: 32px;
-    border-radius: 8px;
-}
-.fmnr-pillar-card__number {
-    font-family: var(--wp--preset--font-family--fatfrank);
-    font-size: 4rem;
-    color: var(--wp--preset--color--custom-dark-green-fmnr);
-    line-height: 1;
-    margin-bottom: 8px;
-}
-
-/* --- Hero video controls (injected by video-hero.js) --- */
-.fmnr-hero-controls {
-    position: absolute;
-    bottom: 32px;
-    right: 32px;
-    display: flex;
-    gap: 8px;
-    z-index: 10;
-}
-.fmnr-hero-controls button {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-}
-.fmnr-hero-controls button:hover { background: rgba(255,255,255,0.3); }
-
-/* --- Scroll hint (animated chevron) --- */
-.fmnr-scroll-hint {
-    position: absolute;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: fmnr-bounce 1.5s ease-in-out infinite;
-    color: #fff;
-    opacity: 0.8;
-}
-@keyframes fmnr-bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50%       { transform: translateX(-50%) translateY(8px); }
+/* Scroll animation base states */
+[data-animate] { transition: opacity 0.6s ease, transform 0.6s ease; }
+[data-animate="fade-up"]  { opacity: 0; transform: translateY(40px); }
+[data-animate="scale-in"] { opacity: 0; transform: scale(0.92); }
+[data-animate="slide-in"] { opacity: 0; transform: translateX(-40px); }
+[data-animate].fmnr-animated {
+    opacity: 1 !important;
+    transform: none !important;
 }
 ```
 
+7. Toggle the snippet to **Active**
+8. Click **Save Snippet**
+
 ---
 
-## 6. Enqueue Assets in functions.php
+## 3. JavaScript — Paste via WPCode
 
-Open `wp-content/themes/fmnr/functions.php` and add (or merge with existing content):
+Create one WPCode snippet per JS file. For each:
+
+1. **Code Snippets → + Add Snippet → Add Your Custom Code**
+2. Type: **JavaScript Snippet**
+3. Location: **Footer**
+4. Toggle **Active** and save
+
+### Snippet 1: Scroll Animations
+
+Name: `FMNR Scroll Animations`
+
+Paste the full contents of `scroll-animations-demo.html`'s `<script>` block, wrapped in:
+
+```js
+(function() {
+    // Do not run inside the Gutenberg block editor
+    if (document.body.classList.contains('block-editor-page')) return;
+
+    // ... paste the scroll-animations script content here ...
+})();
+```
+
+### Snippet 2: Video Hero Controls
+
+Name: `FMNR Video Hero`
+
+Paste the contents of `video-hero-demo.html`'s `<script>` block, wrapped in the same editor guard above.
+
+### Snippet 3: Mega Menu
+
+Name: `FMNR Mega Menu`
+
+Paste the contents of `mega-menu-demo.html`'s `<script>` block.
+
+### Snippet 4: Search Overlay
+
+Name: `FMNR Search`
+
+Paste the contents of `search-demo.html`'s `<script>` block.
+
+### Snippet 5: Timeline
+
+Name: `FMNR Timeline`
+
+Paste the contents of `timeline-demo.html`'s `<script>` block.
+
+### Snippet 6: Stories Carousel
+
+Name: `FMNR Carousel`
+
+Paste the contents of `stories-carousel-demo.html`'s `<script>` block.
+
+### Snippet 7: Map (Leaflet)
+
+Name: `FMNR Map`
+
+```js
+(function() {
+    // Only initialise if the map element exists on this page
+    var mapEl = document.getElementById('fmnr-leaflet-map');
+    if (!mapEl) return;
+
+    // Load Leaflet CSS
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+
+    // Load Leaflet JS then initialise
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = function() {
+        // Paste map.js initialisation code here
+    };
+    document.head.appendChild(script);
+})();
+```
+
+> This self-installs Leaflet only when a `#fmnr-leaflet-map` element is found on the page — no server file access needed, and Leaflet won't load on pages that don't have a map.
+
+---
+
+## 4. PHP — Block Styles via WPCode
+
+This registers the button, divider, and tag pill styles so they appear in the block editor's **Styles** panel.
+
+1. **Code Snippets → + Add Snippet → Add Your Custom Code**
+2. Name: `FMNR Block Style Registration`
+3. Type: **PHP Snippet**
+4. Location: **Run Everywhere**
+5. Paste:
 
 ```php
-<?php
-/**
- * FMNR child theme asset enqueue
- */
-add_action( 'wp_enqueue_scripts', 'fmnr_enqueue_assets' );
-function fmnr_enqueue_assets() {
+// Button variants
+register_block_style('core/button', ['name' => 'primary',   'label' => 'Primary (Green)']);
+register_block_style('core/button', ['name' => 'secondary', 'label' => 'Secondary (Outline)']);
+register_block_style('core/button', ['name' => 'ghost',     'label' => 'Ghost']);
 
-    // FMNR block CSS overrides
-    wp_enqueue_style(
-        'fmnr-blocks',
-        get_stylesheet_directory_uri() . '/assets/css/fmnr-blocks.css',
-        [],
-        '1.0'
-    );
+// Divider colours
+register_block_style('core/separator', ['name' => 'fmnr-green',  'label' => 'FMNR Green']);
+register_block_style('core/separator', ['name' => 'fmnr-orange', 'label' => 'FMNR Orange']);
 
-    // Core JS — load on every page
-    wp_enqueue_script( 'fmnr-scroll-animations',
-        get_stylesheet_directory_uri() . '/assets/js/scroll-animations.js', [], '1.0', true );
-    wp_enqueue_script( 'fmnr-mega-menu',
-        get_stylesheet_directory_uri() . '/assets/js/mega-menu.js', [], '1.0', true );
-    wp_enqueue_script( 'fmnr-search',
-        get_stylesheet_directory_uri() . '/assets/js/search.js', [], '1.0', true );
-    wp_enqueue_script( 'fmnr-video-hero',
-        get_stylesheet_directory_uri() . '/assets/js/video-hero.js', [], '1.0', true );
+// Tag pill on paragraph
+register_block_style('core/paragraph', ['name' => 'fmnr-tag', 'label' => 'Tag / Pill']);
 
-    // Conditional: only enqueue JS when the page content needs it
-    if ( is_singular() && has_blocks() ) {
-        $content = get_post()->post_content ?? '';
+// FMNR pattern category
+register_block_pattern_category('fmnr', ['label' => 'FMNR Design System']);
+```
 
-        if ( strpos( $content, 'fmnr-timeline' ) !== false ) {
-            wp_enqueue_script( 'fmnr-timeline',
-                get_stylesheet_directory_uri() . '/assets/js/timeline.js', [], '1.0', true );
-        }
+6. Toggle **Active** and save
 
-        if ( strpos( $content, 'fmnr-carousel' ) !== false ) {
-            wp_enqueue_script( 'fmnr-carousel',
-                get_stylesheet_directory_uri() . '/assets/js/carousel.js', [], '1.0', true );
-        }
+Once saved, open any page in the editor — `core/button` blocks will now show Primary / Secondary / Ghost in the right-hand Styles panel.
 
-        if ( strpos( $content, 'fmnr-map' ) !== false ) {
-            wp_enqueue_style(  'leaflet',
-                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4' );
-            wp_enqueue_script( 'leaflet',
-                'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true );
-            wp_enqueue_script( 'fmnr-map',
-                get_stylesheet_directory_uri() . '/assets/js/map.js', ['leaflet'], '1.0', true );
-            wp_localize_script( 'fmnr-map', 'fmnrMapData', [
-                'countriesUrl' => get_stylesheet_directory_uri() . '/assets/data/countries.json',
-                'mapCentre'    => [ -5.0, 25.0 ],
-                'mapZoom'      => 3,
-            ]);
-        }
-    }
+---
+
+## 5. Missing Colour Tokens — Add via Site Editor
+
+The existing `theme.json` already has the main FMNR colours registered. A few are missing. Add them without touching any files:
+
+1. **Appearance → Editor** (Site Editor)
+2. Click **Styles** (circle icon, top right)
+3. Click the three-dot menu → **Edit CSS** — or use **Styles → Colors → Palette → Custom**
+4. Add each missing colour to the custom palette:
+
+| Name to add | Hex value |
+|-------------|-----------|
+| FMNR Pear | `#DDEB4A` |
+| FMNR Olive | `#5C7D0D` |
+| FMNR Cedar | `#7D3600` |
+| FMNR Amber | `#F2AA00` |
+| FMNR Sand | `#E0CAA0` |
+| FMNR Cream | `#EFE9DC` |
+| FMNR Charcoal | `#464646` |
+
+Alternatively, add them directly in **Appearance → Editor → Styles → CSS** as CSS custom properties (this requires no file access):
+
+```css
+:root {
+    --color-pear:    #DDEB4A;
+    --color-olive:   #5C7D0D;
+    --color-cedar:   #7D3600;
+    --color-amber:   #F2AA00;
+    --color-sand:    #E0CAA0;
+    --color-cream:   #EFE9DC;
+    --color-charcoal:#464646;
 }
-
-// Editor stylesheet — makes blocks look right inside the WP editor too
-add_action( 'after_setup_theme', function() {
-    add_editor_style( 'assets/css/fmnr-blocks.css' );
-} );
-
-// Register FMNR block styles (button variants, divider colours, tag pill)
-add_action( 'init', 'fmnr_register_block_styles' );
-function fmnr_register_block_styles() {
-    register_block_style( 'core/button',    [ 'name' => 'primary',      'label' => 'Primary (Green)' ] );
-    register_block_style( 'core/button',    [ 'name' => 'secondary',    'label' => 'Secondary (Outline)' ] );
-    register_block_style( 'core/button',    [ 'name' => 'ghost',        'label' => 'Ghost' ] );
-    register_block_style( 'core/separator', [ 'name' => 'fmnr-green',   'label' => 'FMNR Green' ] );
-    register_block_style( 'core/separator', [ 'name' => 'fmnr-orange',  'label' => 'FMNR Orange' ] );
-    register_block_style( 'core/paragraph', [ 'name' => 'fmnr-tag',     'label' => 'Tag / Pill' ] );
-}
-
-// Register FMNR block pattern category
-add_action( 'init', function() {
-    register_block_pattern_category( 'fmnr', [ 'label' => 'FMNR Design System' ] );
-} );
 ```
 
 ---
 
-## 7. Block-by-Block Implementation
+## 6. Existing Token Reference
 
-### 7A. Core Blocks (Atoms)
+When choosing colours in the block editor colour picker, use these — they are **already registered** in the site's `theme.json`:
 
-All are native Gutenberg blocks. Styling is handled by `fmnr-blocks.css` and the existing `theme.json`.
+| FMNR design token | Block editor palette name | CSS variable |
+|-------------------|--------------------------|-------------|
+| Primary green | **Custom Dark Green FMNR** | `--wp--preset--color--custom-dark-green-fmnr` |
+| Orange | **Custom Orange FMNR** | `--wp--preset--color--custom-orange-fmnr` |
+| Teal | **Custom Teal** | `--wp--preset--color--custom-teal` |
+| Lime | **Custom Lime** | `--wp--preset--color--custom-lime` |
+| Mid green | **Custom Green** | `--wp--preset--color--custom-green` |
+| Light green | **Custom Light Green** | `--wp--preset--color--custom-light-green` |
 
-| Block | Gutenberg Block | How to apply FMNR style |
-|-------|----------------|------------------------|
-| **Heading** | `core/heading` | Font is already FatFrank globally via `theme.json`. Add class `fmnr-heading` for uppercase. |
-| **Body Text** | `core/paragraph` | Lato already applied globally. Use classes `fmnr-body--small` / `fmnr-body--caption` as needed. |
-| **Button** | `core/button` | In Styles panel select Primary / Secondary / Ghost (registered in `functions.php`). |
-| **Icon** | **Icon Block** plugin | Install Icon Block. Upload SVGs from repo `/icons/` via Media Library (Safe SVG is active). |
-| **Image** | `core/image` | Add class `fmnr-ken-burns` for Ken Burns animation on scroll. |
-| **Video** | `core/video` | Enable Autoplay, Mute, Loop in block settings. Add class `fmnr-video`. |
-| **Tag** | `core/paragraph` | In Styles panel select **Tag / Pill**. |
-| **Stat Number** | **Essential Blocks → Counter** | Provides count-up natively. Style with class `fmnr-stat-number` or override `.eb-counter-wrapper`. |
-| **Divider** | `core/separator` | In Styles panel select **FMNR Green** or **FMNR Orange**. |
-| **Spacer** | `core/spacer` | Set height using spacing token values (16, 32, 64px). |
-| **Form Field** | **WPForms Lite** field | Styled automatically by `fmnr-blocks.css`. |
-| **List Item** | `core/list` | Add class `fmnr-list-item`. For icon lists, use Icon Block + `core/paragraph` in a `core/group`. |
+FatFrank and Lato are already set as global heading and body fonts — **no font setup needed**.
 
 ---
 
-### 7B. Custom Blocks (Molecules)
+## 7. Block-by-Block: How to Build Each One
 
-#### Pull Quote
+### Core Blocks (Atoms)
+
+| Block | How to build | Where the style comes from |
+|-------|-------------|---------------------------|
+| **Heading** | `core/heading` | FatFrank already applied globally. Add class `fmnr-heading` for uppercase. |
+| **Body Text** | `core/paragraph` | Lato already applied globally. |
+| **Button — Primary** | `core/button` → Styles panel → **Primary (Green)** | WPCode CSS snippet |
+| **Button — Secondary** | `core/button` → Styles panel → **Secondary (Outline)** | WPCode CSS snippet |
+| **Button — Ghost** | `core/button` → Styles panel → **Ghost** | WPCode CSS snippet |
+| **Icon** | **Icon Block** plugin → upload SVG from `/icons/` | Safe SVG + Icon Block plugin |
+| **Image with Ken Burns** | `core/image` → Additional CSS class: `fmnr-ken-burns` | WPCode CSS snippet |
+| **Video** | `core/video` → Settings: enable Autoplay, Mute, Loop | Core |
+| **Tag / Pill** | `core/paragraph` → Styles panel → **Tag / Pill** | WPCode CSS + PHP snippet |
+| **Stat Number (count-up)** | **Essential Blocks → Counter** — enable count-up on scroll | EB built-in |
+| **Divider — green** | `core/separator` → Styles panel → **FMNR Green** | WPCode CSS + PHP snippet |
+| **Divider — orange** | `core/separator` → Styles panel → **FMNR Orange** | WPCode CSS + PHP snippet |
+| **Spacer** | `core/spacer` — set height | Core |
+| **Form Field** | **WPForms** → create form → embed block | WPCode CSS for styling |
+| **List Item** | `core/list` → add class `fmnr-list-item`, or Icon Block + paragraph | Core |
+
+---
+
+### Custom Blocks (Molecules)
+
+#### Pull Quote Band
+
+In the block editor:
 
 ```
 core/group
-  class: fmnr-pull-quote
-  background: custom-cream or custom-teal token
-  └── core/quote (large italic text)
-  └── core/paragraph (attribution — small, dimmed)
+  ↳ Background colour: Custom Cream (or Teal, or Lime)
+  ↳ Padding: Large (use spacing preset)
+  ↳ Additional CSS class: fmnr-pull-quote
+  ↳ Text align: center
+
+  core/quote
+    ↳ Type quote text here
+    ↳ Font: FatFrank (set in Typography panel)
+    ↳ Text size: X-Large or XX-Large
+
+  core/paragraph (attribution)
+    ↳ Colour: Contrast 2 (dimmed)
+    ↳ Font size: Small
 ```
 
-Save to Templately as "FMNR Pull Quote — Cream", "FMNR Pull Quote — Teal" etc.
+Save to Templately as: **FMNR Pull Quote — Cream / Teal / Lime**
 
 ---
 
@@ -605,439 +522,409 @@ Save to Templately as "FMNR Pull Quote — Cream", "FMNR Pull Quote — Teal" et
 
 ```
 core/group
-  class: fmnr-cta-band
-  background: #000 (contrast token)
-  color: white
-  └── core/heading  (FatFrank, white, text-align center)
-  └── core/paragraph (body, white 70% opacity)
-  └── core/buttons
-        ├── core/button (style: primary)
-        └── core/button (style: secondary)
+  ↳ Background: Black (#000) or Contrast token
+  ↳ Text colour: White (Base 2)
+  ↳ Padding: XL
+  ↳ Additional CSS class: fmnr-cta-band
+  ↳ Align: Full width
+
+  core/heading (H2)
+    ↳ Colour: White
+    ↳ Text align: center
+
+  core/paragraph
+    ↳ Colour: white 70% — use Custom CSS: `opacity: 0.7`
+    ↳ Text align: center
+
+  core/buttons
+    ↳ Justification: center
+    ↳ core/button → style: Primary (Green)
+    ↳ core/button → style: Secondary (Outline) — set text colour to white
 ```
 
 ---
 
-#### Card (all variants)
+#### Card (Image variant)
 
-**Image / Blog / Icon variants:** Use **Essential Blocks → Feature Card**. Configure, then save each variant to Templately.
+Use **Essential Blocks → Feature Card**:
+- Image at top
+- Heading (FatFrank)
+- Body text (Lato)
+- Button (link to post/page)
+- Set card colours using the FMNR palette
 
-**Award variant:** Use **Stackable → Icon Box** or **Essential Blocks → Info Box**.
+Save each variant (Image, Blog, Icon, Award) to Templately as individual molecules.
 
-**Horizontal variant:**
+**Card — Horizontal variant:**
+
 ```
-core/columns (2-col, no-stack-on-mobile)
-  class: fmnr-card--horizontal
-  ├── core/column (40% — image)
-  └── core/column (60% — tag + heading + body + button)
+core/columns (2-col, do not stack on mobile)
+  ↳ Additional CSS class: fmnr-card--horizontal
+  core/column (40% width)
+    ↳ core/image
+  core/column (60% width)
+    ↳ core/paragraph (style: Tag / Pill)
+    ↳ core/heading (H3)
+    ↳ core/paragraph (body)
+    ↳ core/button (style: Ghost)
 ```
 
-**Media card (video/image thumbnail):**
-```
-core/group (link via GenerateBlocks Container with href)
-  ├── core/image or core/video
-  ├── core/paragraph (style: Tag / Pill)
-  └── core/heading (H4)
-```
+**Card — Award variant:**
+
+Use **Stackable → Icon Box**:
+- Upload icon SVG via Icon Block or media picker
+- Heading: FatFrank
+- Body: Lato
 
 ---
 
 #### Bar Chart
 
-No plugin equivalent. Use `core/html` — paste the bar chart HTML directly from `bar-chart-demo.html`. `scroll-animations.js` targets `.fmnr-bar` elements for the `bar-fill` animation.
+No plugin is needed. In the editor, add a **Custom HTML** block and paste the bar chart HTML from `bar-chart-demo.html`. The WPCode scroll-animations snippet handles the `bar-fill` animation targeting `.fmnr-bar` elements.
 
-To edit values later: open the Custom HTML block in **Code Editor view** and update `data-fill` percentages and label text.
+To update chart values later: click the Custom HTML block → **Edit as HTML** → change the `data-fill` percentage values and label text.
 
 ---
 
 #### Stat Tile
 
-Use **Essential Blocks → Counter** or **Stackable → Count Up**. Both animate on scroll.
-
-EB Counter configuration:
-- Number colour: choose `custom-teal` or `custom-lime` from the palette
-- Font: FatFrank
-- Enable "Count Up on Scroll"
+Use **Essential Blocks → Counter**:
+- Set number, prefix, suffix
+- Enable **Count Up on Scroll**
+- Set number colour to Custom Teal or Custom Lime from the palette
+- Set font to FatFrank (Typography panel)
 
 ---
 
-#### Scroll Animation
+#### Scroll Animation Wrapper
 
-**No separate block needed.** Apply animations by adding a CSS class to any block via the **Additional CSS class(es)** field.
+Any block can be given a scroll animation. The WPCode JS snippet watches for `data-animate` attributes.
 
-Available animations (handled by `scroll-animations.js`):
+**How to add a data attribute without touching code:**
 
-| Animation | Class / attribute needed |
-|-----------|------------------------|
-| Fade up | class `fmnr-animate`, attribute `data-animate="fade-up"` |
-| Stagger children | class `fmnr-animate`, attribute `data-animate="stagger"` |
-| Parallax | class `fmnr-animate`, attribute `data-animate="parallax"` |
-| Scale in | class `fmnr-animate`, attribute `data-animate="scale-in"` |
-| Slide in | class `fmnr-animate`, attribute `data-animate="slide-in"` |
-| Bar fill | class `fmnr-animate`, attribute `data-animate="bar-fill"` |
-| Count up | handled by EB Counter or `fmnr-stat-number` + JS |
+Use a **GenerateBlocks → Container** as the wrapper block (already installed and in use on the site):
+1. Add **GenerateBlocks → Container**
+2. Place your content blocks inside it
+3. In the Container's right-hand panel → **Advanced → HTML Attributes**
+4. Add attribute: `data-animate` = `fade-up` (or `stagger`, `scale-in`, `slide-in`, `parallax`)
 
-**Problem:** The standard block inspector only accepts CSS class names — not `data-*` attributes. Two solutions:
+Available animation values:
 
-**Option A — GenerateBlocks Container (already installed, recommended):**
-Wrap content in a **GenerateBlocks → Container**. In the Container's **Advanced** tab, add an HTML Attribute:
-- Name: `data-animate`
-- Value: `fade-up` (or whichever type)
-
-**Option B — Code Editor view:**
-Press `Ctrl+Shift+Alt+M` (Mac: `⌘+Shift+Option+M`) to open Code Editor, then manually add `data-animate="fade-up"` to the block's opening tag.
+| Value | Effect |
+|-------|--------|
+| `fade-up` | Fades in from below |
+| `stagger` | Each child block fades in one by one |
+| `scale-in` | Scales up from 92% |
+| `slide-in` | Slides in from the left |
+| `parallax` | Slow parallax scroll on images |
+| `bar-fill` | Animates bar chart fills |
 
 ---
 
 #### Timeline
 
-Use `core/html` for pixel-accurate FMNR output. Paste the full timeline markup from `timeline-demo.html`. Ensure the wrapper has class `fmnr-timeline` so `timeline.js` is conditionally enqueued.
+Add a **Custom HTML** block and paste the full timeline markup from `timeline-demo.html`. The WPCode timeline JS snippet handles expand/collapse.
 
-Alternatively, **Stackable → Accordion** approximates the layout — override its CSS to match FMNR's timeline style (year + tag + expand/collapse).
+Ensure the outer container has `class="fmnr-timeline"` in the HTML — this is already in the demo markup.
 
 ---
 
-#### Pillar Card / Numbered Pillars
+#### Pillar Card
 
 ```
 core/group
-  class: fmnr-pillar-card
-  ├── core/paragraph  (number "01" — FatFrank, large, green)
-  ├── core/paragraph  (stat — EB Counter or fmnr-stat-number span)
-  ├── core/heading    (H3)
-  └── core/paragraph  (body)
+  ↳ Additional CSS class: fmnr-pillar-card
+  ↳ Background: Light (cream or white)
+  ↳ Padding: Large
+
+  core/paragraph
+    ↳ Text: "01" (or 02, 03...)
+    ↳ Additional CSS class: fmnr-number
+    ↳ Font: FatFrank
+    ↳ Colour: Custom Dark Green FMNR
+
+  core/heading (H3)
+    ↳ Heading text
+
+  core/paragraph
+    ↳ Body text
 ```
 
-For the Numbered Pillars pattern, wrap three in `core/columns` (3-col):
-```
-core/columns (3-col, unwrap on mobile)
-  ├── core/column → fmnr-pillar-card
-  ├── core/column → fmnr-pillar-card
-  └── core/column → fmnr-pillar-card
-```
+Wrap three in `core/columns` (3-col) for the Numbered Pillars pattern.
 
 ---
 
 #### Award Card
 
-Use **Essential Blocks → Info Box** or **Stackable → Icon Box**. Upload the relevant icon SVG from `/icons/` via Media Library (Safe SVG allows it).
+Use **Stackable → Icon Box** or **Essential Blocks → Info Box**:
+- Icon: upload SVG from Media Library (Safe SVG active)
+- Heading: FatFrank
+- Description: Lato
+- No background
 
 ---
 
 #### Media Card
 
-Manual (static content):
 ```
-core/group (class: fmnr-media-card)
-  ├── core/image or core/video (thumbnail)
-  ├── core/paragraph (style: Tag / Pill)
-  └── core/heading (H4)
+core/group (set as a link — use GenerateBlocks Container with href attribute)
+  core/image or core/video (thumbnail, aspect ratio 16:9)
+  core/paragraph → style: Tag / Pill
+  core/heading (H4, FatFrank)
 ```
 
-Dynamic (pulls from posts): **Essential Blocks → Post Grid** — configure post type, category filters, and card template.
+For auto-populated media from posts: use **Essential Blocks → Post Grid** and configure the card template.
 
 ---
 
-#### Video Controls / Progress Bar / Scroll Hint
+#### Video Controls, Progress Bar, Scroll Hint
 
-These are injected at runtime by `video-hero.js` — not editor-placed blocks.
+These are automatically injected by the WPCode **FMNR Video Hero** JS snippet. They appear on any `core/cover` block (with video) that has the CSS class `fmnr-video-hero`.
 
-- **Progress Bar:** `video-hero.js` appends a `<div class="fmnr-progress-bar">` to `<body>` on load and updates its width on scroll.
-- **Video Controls:** Injected adjacent to the `<video>` element inside any `core/cover` block that has the class `fmnr-video-hero`.
-- **Scroll Hint:** Appended inside any `.fmnr-hero` container.
-
-When building the Hero Video block, add class `fmnr-video-hero` to the outer `core/cover` block so `video-hero.js` knows to target it.
+When building the Hero Video pattern, add `fmnr-video-hero` to the `core/cover` block's **Additional CSS class** field.
 
 ---
 
-### 7C. Block Patterns (Organisms)
+### Block Patterns (Organisms)
 
-Build each pattern in the editor, then save to Templately workspace **FMNR Patterns**. Also register in `functions.php` via `register_block_pattern()` (paste serialised block markup from Code Editor view into the `content` field).
+Build each pattern using the blocks above, then save to Templately. Use the insert pattern button (the `/` command in the editor) to drop them into any page.
 
-| Pattern | Block composition | Plugin(s) |
-|---------|-----------------|-----------|
-| **Card Grid** | `core/columns` (1–4 col) → EB Feature Card per col | Essential Blocks |
-| **Hero Video** | `core/cover` (video bg, full-height, class `fmnr-video-hero`) → heading + para + buttons | Core |
-| **Hero Image** | `core/cover` (image, class `fmnr-ken-burns`) → tag + heading + button | Core |
-| **Split Bio** | `core/columns` 2-col → `core/image` + `core/group` (tags + heading + body) | Core |
-| **Timeline** | `core/html` (paste from `timeline-demo.html`, class `fmnr-timeline` on wrapper) | Core |
-| **Numbered Pillars** | `core/columns` 3-col → `core/group` (fmnr-pillar-card) per col | Core |
-| **Awards Grid** | `core/columns` 3-col → EB Info Box or Stackable Icon Box per col | EB or Stackable |
-| **Media Grid** | `core/columns` 4-col → `core/group` (image/video + tag + heading) per col | Core |
-| **Contact Form** | `core/group` → WPForms block | WPForms Lite |
-| **Map Section** | `core/html` (Leaflet map div, class `fmnr-map`) — `map.js` initialises on load | Core |
-| **Stat Stack** | `core/columns` → EB Counter per col | Essential Blocks |
-| **Search Overlay** | `core/html` (search trigger button) — overlay rendered by `search.js` | Core |
-| **Intro Strip** | `core/columns` 2-col → large heading left + body group right | Core |
-| **Editorial Band** | `core/cover` (fixed/parallax, class `fmnr-cover--parallax`) → eyebrow + heading + body | Core |
-| **Twin Panels** | `core/columns` 2-col → `core/cover` per col (overlay text + tag + link) | Core |
-| **Photo Grid** | `core/gallery` 3-col (class `fmnr-photo-grid`) | Core |
-| **Hub Section** | `core/columns` 2-col → media + `core/group` (heading + icon list) | Core, Icon Block |
-| **Stories Carousel** | **Stackable → Carousel** + FMNR CSS overrides, or `core/html` + `carousel.js` | Stackable |
-| **Story Block** | `core/cover` (parallax, `fmnr-cover--parallax`) → `core/quote` + `core/button` | Core |
-| **Growth Steps** | `core/columns` 4-col → step number + image + heading + body per col | Core |
-| **Newsletter** | `core/group` (centred, bg colour) → heading + para + WPForms or OptinMonster | WPForms / OptinMonster |
+| Pattern | How to build |
+|---------|-------------|
+| **Card Grid** | `core/group` → `core/columns` (1–4 col) → EB Feature Card in each column |
+| **Hero Video** | `core/cover` (video bg, full height, class `fmnr-video-hero`) → group with heading + body + buttons |
+| **Hero Image** | `core/cover` (image, class `fmnr-ken-burns`) → tag + heading + button |
+| **Split Bio** | `core/columns` 2-col → `core/image` (left) + group with tag + heading + body (right) |
+| **Timeline** | Custom HTML block — paste from `timeline-demo.html` |
+| **Numbered Pillars** | `core/columns` 3-col → fmnr-pillar-card group in each column |
+| **Awards Grid** | `core/columns` 3-col → Stackable Icon Box per column |
+| **Media Grid** | `core/columns` 4-col → fmnr-media-card group per column |
+| **Contact Form** | `core/group` → WPForms block |
+| **Map Section** | Custom HTML block: `<div class="fmnr-map" id="fmnr-leaflet-map" style="height:500px"></div>` |
+| **Stat Stack** | `core/columns` → EB Counter per column |
+| **Search Overlay** | Custom HTML block — paste trigger button from `search-demo.html` |
+| **Intro Strip** | `core/columns` 2-col → large heading (left) + body group (right) |
+| **Editorial Band** | `core/cover` (class `fmnr-cover--parallax`, fixed bg) → eyebrow tag + heading + body |
+| **Twin Panels** | `core/columns` 2-col → `core/cover` per column with overlay content |
+| **Photo Grid** | `core/gallery` 3-col + Additional CSS class: `fmnr-photo-grid` |
+| **Hub Section** | `core/columns` 2-col → media (left) + group with heading + icon list (right) |
+| **Stories Carousel** | **Stackable → Carousel** — apply FMNR colours in Stackable's style panel |
+| **Story Block** | `core/cover` (class `fmnr-cover--parallax`) → `core/quote` + `core/button` |
+| **Growth Steps** | `core/columns` 4-col → step number + `core/image` + heading + body per column |
+| **Newsletter** | `core/group` (centred, coloured bg) → heading + paragraph + WPForms or OptinMonster |
 
 ---
 
-### 7D. Header & Footer — Template Parts
+### Template Parts — Header & Footer
 
-The site is FSE (block theme). Manage template parts in **Appearance → Editor → Template Parts**.
+Go to **Appearance → Editor → Template Parts**.
 
 #### Header
 
-The existing header template part (ID 636 is referenced in EB styles — confirm in **Editor → Template Parts**) should already exist. Modify it to match the FMNR mega menu design:
+Edit the existing header template part. The site already has one (referenced in the page source as template part 636).
 
-```
-core/group (sticky, z-index:10, white bg)   ← already exists per core-block-supports CSS
-  ├── core/site-logo (FMNR SVG)
-  ├── core/navigation (main nav)
-  └── core/group (right actions — flex-end layout)
-        ├── core/search trigger (Custom HTML button)
-        └── core/button (style: primary — "Get Involved")
-```
+**Mega Menu — two options:**
 
-**Mega menu:** `core/navigation` cannot natively render icon+description panel menus. Two options:
+**Option A — Custom HTML block (no new plugin):**
+Replace the existing `core/navigation` with a Custom HTML block containing the full header markup from `mega-menu-demo.html`. The WPCode mega-menu JS snippet handles all open/close behaviour. Links must be edited directly inside the HTML block.
 
-**Option A — Custom HTML block (no new plugin, recommended to start):**
-Replace the `core/navigation` block in the header template part with a Custom HTML block containing the full header + mega menu HTML from `mega-menu-demo.html`. `mega-menu.js` handles all open/close and keyboard interactions. Editors cannot update links via the WP menus admin — a developer must edit the HTML block directly.
-
-**Option B — Use a free mega menu plugin:**
-Install **Responsive Menu** (free) or similar. Style its output using classes from `fmnr-blocks.css` to match the three FMNR mega menu layouts. Editors can then manage links via **Appearance → Menus**.
+**Option B — Use the existing `core/navigation` with sub-menus:**
+For a simpler menu without icon+description panels, keep `core/navigation` and use WordPress's built-in sub-menu dropdowns, styled with the existing FMNR CSS. Not pixel-perfect to the design but requires zero custom code.
 
 #### Footer
 
-Edit or create the footer template part:
+Edit the existing footer template part:
 
 ```
-core/group  (bg: contrast/#000, class: fmnr-footer)
-  core/group  (max-width 1280px, centred)
-    core/columns  (4-col desktop, stacked mobile)
-      core/group  (logo + tagline)
-        core/site-logo
-        core/paragraph
-      core/group  (nav col 1)
-        core/navigation
-      core/group  (nav col 2)
-        core/navigation
-      core/group  (newsletter)
-        core/heading
-        WPForms block  (email-only form)
-    core/group  (bottom bar — flex, space-between)
-      core/paragraph  (© copyright)
-      core/social-links
+core/group (bg: Contrast / Black, class: fmnr-footer)
+  core/columns (4-col)
+    col 1: core/site-logo + core/paragraph (tagline)
+    col 2: core/navigation (footer links set 1)
+    col 3: core/navigation (footer links set 2)
+    col 4: core/heading (Sign up) + WPForms block (email-only form)
+  core/group (bottom bar)
+    core/paragraph (© 2025 FMNR Hub)
+    core/social-links
 ```
 
 ---
 
-### 7E. Page Templates
+### Page Templates
 
-Build in the Site Editor (**Appearance → Editor → Templates**) or as full-page Gutenberg content, then save to Templately.
+Build each page in the editor using patterns from Templately, then save the finished page as a Templately template for reuse.
 
-| Page | Template | Block composition summary |
-|------|----------|--------------------------|
-| **Homepage** | `front-page.html` | Hero Video → Intro Strip → Stat Stack → Card Grid → Story Block → CTA Band |
+Go to **Appearance → Editor → Templates** to create or assign:
+
+| Page | Template to create/assign | Pattern assembly |
+|------|--------------------------|-----------------|
+| **Homepage** | `front-page` | Hero Video → Intro Strip → Stat Stack → Card Grid → Story Block → CTA Band |
 | **Tony Rinaudo** | Standard page | Hero Image → Split Bio → Timeline → Awards Grid → CTA Band |
-| **Resources** | `page-resources.html` or `page-resources.php` | Filter bar + Card Grid. Activate **Document Library Lite** for file listings. |
+| **Resources** | `page-resources` | Activate Document Library Lite for file listings. Or: filter bar (custom HTML) + Card Grid |
 | **Impact & Evidence** | Standard page | Hero Image → Stat Stack → Bar Charts → Editorial Band → Card Grid |
 | **Partner With Us** | Standard page | Hero Image → Numbered Pillars → Media Grid → Contact Form |
-| **Blog Listing** | `home.html` | Featured post (`core/cover`) → EB Post Grid |
-| **Blog Post** | `single.html` | Hero Image → `core/post-content` → Related (`core/query`) |
-| **Search Results** | `search.html` | Search bar → `core/query` loop styled as List Items |
+| **Blog Listing** | `home` | Featured post (Cover block) → EB Post Grid (auto) |
+| **Blog Post** | `single` | Hero Image → Post Content block → Related (Query Loop block) |
+| **Search Results** | `search` | Search bar → Query Loop styled as list items |
 
 ---
 
-## 8. WPForms Lite — Scope & Limits
+## 8. Templately Workspace Setup
 
-WPForms Lite (installed) supports:
-- ✅ Text, email, textarea, dropdown, checkbox, radio, number fields
-- ✅ Honeypot spam protection
-- ✅ Email notifications via Post SMTP
-- ✅ Gutenberg block embed
+1. Go to **Templately → My Templates → Cloud**
+2. Create workspace: **FMNR Design System**
+3. Invite all content editors to the workspace
+4. Build and save in this order:
 
-Does **not** support (requires WPForms Pro):
-- ❌ File upload fields
-- ❌ Conditional logic (show/hide fields based on answers)
-- ❌ Multi-step forms
-- ❌ reCAPTCHA / Cloudflare Turnstile
-
-For the Contact Form pattern (name + email + subject + message), Lite is sufficient. If the Partnership inquiry form needs conditional logic or file uploads, either upgrade to WPForms Pro or install the free **Forminator** plugin.
-
----
-
-## 9. Map Section Setup
-
-```
-core/html
-  <div class="fmnr-map" id="fmnr-leaflet-map" style="height: 500px; width: 100%;"></div>
-```
-
-`map.js` initialises Leaflet on `#fmnr-leaflet-map`. The `fmnr-map` class in page content triggers conditional Leaflet enqueue (see `functions.php` in Section 6).
-
-Country data is stored in `assets/data/countries.json` and passed to JS via `wp_localize_script` as `fmnrMapData.countriesUrl`.
-
----
-
-## 10. Templately Workspace
-
-1. **Appearance → Templately → My Templates → Cloud** — create workspace: **FMNR Design System**
-2. Invite all content editors
-3. Build and save in this order (dependencies first):
-
-| Order | Template | Folder |
-|-------|----------|--------|
+| Order | Save as | Folder |
+|-------|---------|--------|
 | 1 | CTA Band | FMNR / Molecules |
-| 2 | Pull Quote (cream, teal, orange) | FMNR / Molecules |
-| 3 | Card — Image | FMNR / Molecules |
-| 4 | Card — Blog | FMNR / Molecules |
-| 5 | Card — Icon | FMNR / Molecules |
-| 6 | Card — Award | FMNR / Molecules |
-| 7 | Card — Horizontal | FMNR / Molecules |
-| 8 | Stat Tile | FMNR / Molecules |
-| 9 | Stat Stack | FMNR / Patterns |
-| 10 | Card Grid | FMNR / Patterns |
-| 11 | Hero Video | FMNR / Patterns |
-| 12 | Hero Image | FMNR / Patterns |
-| 13 | Numbered Pillars | FMNR / Patterns |
-| 14 | Editorial Band | FMNR / Patterns |
-| 15 | Contact Form | FMNR / Patterns |
-| 16 | Newsletter | FMNR / Patterns |
-| 17 | Timeline | FMNR / Patterns |
-| 18 | Full page — Homepage | FMNR / Pages |
-| 19 | Full page — Blog Post | FMNR / Pages |
-| 20 | Full page — Resources | FMNR / Pages |
-| 21 | Full page — Impact & Evidence | FMNR / Pages |
+| 2 | Pull Quote — Cream | FMNR / Molecules |
+| 3 | Pull Quote — Teal | FMNR / Molecules |
+| 4 | Card — Image | FMNR / Molecules |
+| 5 | Card — Blog | FMNR / Molecules |
+| 6 | Card — Icon | FMNR / Molecules |
+| 7 | Card — Award | FMNR / Molecules |
+| 8 | Card — Horizontal | FMNR / Molecules |
+| 9 | Stat Tile | FMNR / Molecules |
+| 10 | Stat Stack | FMNR / Patterns |
+| 11 | Card Grid — 3col | FMNR / Patterns |
+| 12 | Card Grid — 4col | FMNR / Patterns |
+| 13 | Hero Video | FMNR / Patterns |
+| 14 | Hero Image | FMNR / Patterns |
+| 15 | Numbered Pillars | FMNR / Patterns |
+| 16 | Editorial Band | FMNR / Patterns |
+| 17 | Contact Form Section | FMNR / Patterns |
+| 18 | Newsletter Section | FMNR / Patterns |
+| 19 | Timeline | FMNR / Patterns |
+| 20 | Full page — Homepage | FMNR / Pages |
+| 21 | Full page — Blog Post | FMNR / Pages |
+| 22 | Full page — Resources | FMNR / Pages |
+| 23 | Full page — Impact & Evidence | FMNR / Pages |
+
+Once saved, any editor can insert a pattern by clicking the **+** icon in the editor → **Patterns** tab → **FMNR Design System**.
 
 ---
 
-## 11. Custom CSS Classes Reference
+## 9. Implementation Checklist
 
-Apply via the **Additional CSS class(es)** field in the block inspector sidebar.
+### Phase 1 — One-time setup (2–3 hours)
 
-| Class | Block | Effect |
-|-------|-------|--------|
-| `fmnr-heading` | `core/heading` | FatFrank + uppercase |
-| `fmnr-body--small` | `core/paragraph` | Smaller body text |
-| `fmnr-body--caption` | `core/paragraph` | Caption text |
-| `fmnr-ken-burns` | `core/image`, `core/cover` | Pan/zoom animation |
-| `fmnr-cover--parallax` | `core/cover` | Fixed-attachment parallax |
-| `fmnr-video-hero` | `core/cover` (video) | Signals `video-hero.js` to inject controls |
-| `fmnr-pull-quote` | `core/group` | Full-width quote band |
-| `fmnr-cta-band` | `core/group` | CTA band layout |
-| `fmnr-pillar-card` | `core/group` | Numbered pillar card layout |
-| `fmnr-card--horizontal` | `core/group` | Horizontal card layout |
-| `fmnr-photo-grid` | `core/gallery` | Hover overlay captions |
-| `fmnr-timeline` | `core/html` wrapper | Signals `timeline.js` to load |
-| `fmnr-carousel` | `core/html` wrapper | Signals `carousel.js` to load |
-| `fmnr-map` | `core/html` | Signals Leaflet + `map.js` to load |
-| `fmnr-stat-number` | `<span>` inside `core/html` | Count-up animation target |
+- [ ] Install **WPCode Lite** plugin
+- [ ] Install **Icon Block** plugin
+- [ ] Fix Archivo Black font — copy file to uploads, update source in Site Editor font manager
+- [ ] Upload all SVGs from `/icons/` to Media Library → organise in FileBird folder "FMNR Icons"
+- [ ] Create WPCode snippet: **FMNR Block Styles** (CSS — Section 2)
+- [ ] Create WPCode snippet: **FMNR Scroll Animations** (JS — Section 3)
+- [ ] Create WPCode snippet: **FMNR Video Hero** (JS — Section 3)
+- [ ] Create WPCode snippet: **FMNR Mega Menu** (JS — Section 3)
+- [ ] Create WPCode snippet: **FMNR Search** (JS — Section 3)
+- [ ] Create WPCode snippet: **FMNR Timeline** (JS — Section 3)
+- [ ] Create WPCode snippet: **FMNR Carousel** (JS — Section 3)
+- [ ] Create WPCode snippet: **FMNR Map** (JS — Section 3)
+- [ ] Create WPCode snippet: **FMNR Block Style Registration** (PHP — Section 4)
+- [ ] Add missing colour tokens via Site Editor Styles (Section 5)
+- [ ] Verify: open any page editor → `core/button` block → Styles panel shows Primary / Secondary / Ghost
+- [ ] Verify: FatFrank loads on headings (check Network tab — `fatfrank.otf`)
+- [ ] Verify: FMNR CSS snippet loads (check Network tab or DevTools — look for `.fmnr-tag` rule)
 
----
+### Phase 2 — Header & Footer (2–4 hours)
 
-## 12. Implementation Checklist
+- [ ] Open **Appearance → Editor → Template Parts → Header**
+- [ ] Choose mega menu approach (Option A: HTML block / Option B: nav block + sub-menus)
+- [ ] Build header: logo + navigation + search + CTA button
+- [ ] Open **Appearance → Editor → Template Parts → Footer**
+- [ ] Build footer: 4-column layout + newsletter form + social links + copyright
+- [ ] Test: mega menu opens/closes, keyboard ESC works, mobile hamburger toggles
+- [ ] Test: footer form submits — confirm email in **Post SMTP → Email Log**
 
-### Phase 1 — Environment & Assets (Day 1)
+### Phase 3 — Molecule blocks (3–4 hours)
 
-- [ ] **1.1** SSH or SFTP into the server — navigate to `wp-content/themes/fmnr/`
-- [ ] **1.2** Create `assets/css/`, `assets/js/`, `assets/icons/`, `assets/images/`, `assets/data/` directories
-- [ ] **1.3** Copy assets from repo (see Section 3.3)
-- [ ] **1.4** Extract JS from demo HTML files into `assets/js/` (see Section 3.4)
-- [ ] **1.5** Add block editor guards to `scroll-animations.js` and other JS files (see Section 3.5)
-- [ ] **1.6** Create `assets/css/fmnr-blocks.css` (copy from Section 5)
-- [ ] **1.7** Add enqueue code and block style registrations to `functions.php` (Section 6)
-- [ ] **1.8** Install **WPCode Lite** and **Icon Block** plugins
-- [ ] **1.9** Fix Archivo Black font — copy woff2 to `uploads/fonts/` and update `theme.json` src from the bare IP
-- [ ] **1.10** Open `theme.json` — add missing FMNR colour tokens (Section 4.1)
-- [ ] **1.11** Verify on front end: open DevTools → check `--wp--preset--color--fmnr-pear` exists in `:root`
-- [ ] **1.12** Verify: FatFrank renders on `h1`–`h6` (already configured — check it works)
-- [ ] **1.13** Verify: `fmnr-blocks.css` is loading (Network tab)
-- [ ] **1.14** Verify: no console errors on homepage
+Build each, verify appearance, save to Templately:
 
-### Phase 2 — Header & Footer (Day 1–2)
+- [ ] CTA Band
+- [ ] Pull Quote (Cream + Teal variants)
+- [ ] Card — Image (EB Feature Card)
+- [ ] Card — Blog (EB Feature Card with date/tag)
+- [ ] Card — Icon (EB Feature Card with icon)
+- [ ] Card — Award (Stackable Icon Box)
+- [ ] Card — Horizontal
+- [ ] Stat Tile (EB Counter — verify count-up fires)
+- [ ] Bar Chart (Custom HTML — verify bar-fill animation fires)
+- [ ] Timeline (Custom HTML — verify expand/collapse works)
 
-- [ ] **2.1** Open **Appearance → Editor → Template Parts** — identify existing header template part
-- [ ] **2.2** Choose mega menu approach (Option A: HTML block / Option B: plugin)
-- [ ] **2.3** Build header: logo + nav/mega menu + search + CTA button
-- [ ] **2.4** Build footer: nav columns + newsletter form + social links + copyright
-- [ ] **2.5** Test mega menu: open/close on click, keyboard ESC closes, mobile hamburger works
-- [ ] **2.6** Test footer form: submit a test entry, verify email arrives via Post SMTP
+### Phase 4 — Patterns (4–6 hours)
 
-### Phase 3 — Molecule Blocks (Day 2–3)
+- [ ] Card Grid (2-col, 3-col, 4-col variants)
+- [ ] Hero Video — test: autoplay, controls inject, progress bar shows, scroll hint shows
+- [ ] Hero Image — test: Ken Burns animation
+- [ ] Stat Stack — test: count-up fires on scroll
+- [ ] Numbered Pillars
+- [ ] Awards Grid
+- [ ] Intro Strip
+- [ ] Editorial Band — test: parallax effect
+- [ ] Story Block
+- [ ] Twin Panels
+- [ ] Photo Grid — test: caption reveals on hover
+- [ ] Hub Section
+- [ ] Growth Steps
+- [ ] Newsletter section
+- [ ] Contact Form section
+- [ ] Map Section — test: Leaflet loads, map renders, does NOT load on homepage (check Network tab)
+- [ ] Search Overlay — test: opens, results populate, ESC closes
+- [ ] Stories Carousel — test: scroll, prev/next buttons
 
-Build, check, save to Templately:
+### Phase 5 — Page templates (4–8 hours)
 
-- [ ] **3.1** CTA Band (dark bg + heading + 2 buttons)
-- [ ] **3.2** Pull Quote — Cream variant
-- [ ] **3.3** Pull Quote — Teal variant
-- [ ] **3.4** Card — Image variant (EB Feature Card)
-- [ ] **3.5** Card — Blog variant
-- [ ] **3.6** Card — Icon variant
-- [ ] **3.7** Card — Award variant (Stackable Icon Box)
-- [ ] **3.8** Card — Horizontal variant
-- [ ] **3.9** Stat Tile (EB Counter — verify count-up fires on scroll)
-- [ ] **3.10** Bar Chart (`core/html` paste — verify bar-fill animation)
-- [ ] **3.11** Timeline (`core/html` paste — verify expand/collapse, `timeline.js` loads)
+- [ ] Homepage
+- [ ] Tony Rinaudo
+- [ ] Blog listing
+- [ ] Blog post single (assign as default single template)
+- [ ] Resources
+- [ ] Impact & Evidence
+- [ ] Partner With Us
+- [ ] Search results
 
-### Phase 4 — Patterns (Day 3–4)
+### Phase 6 — QA (2 hours)
 
-- [ ] **4.1** Card Grid (2, 3, 4 column variants)
-- [ ] **4.2** Hero Video — verify: video autoplays muted, controls inject, progress bar shows, scroll hint shows
-- [ ] **4.3** Hero Image — verify: Ken Burns animation on load
-- [ ] **4.4** Stat Stack — verify: count-up fires on scroll into view
-- [ ] **4.5** Numbered Pillars
-- [ ] **4.6** Awards Grid
-- [ ] **4.7** Intro Strip
-- [ ] **4.8** Editorial Band — verify: parallax effect on scroll
-- [ ] **4.9** Story Block
-- [ ] **4.10** Twin Panels
-- [ ] **4.11** Photo Grid — verify: caption reveals on hover
-- [ ] **4.12** Hub Section
-- [ ] **4.13** Growth Steps
-- [ ] **4.14** Newsletter section (WPForms or OptinMonster inline form)
-- [ ] **4.15** Contact Form section
-- [ ] **4.16** Map Section — verify: Leaflet only loads on pages with `fmnr-map` (check homepage Network tab — no Leaflet)
-- [ ] **4.17** Search Overlay — verify: overlay opens, results populate, ESC closes
-- [ ] **4.18** Stories Carousel — verify: scroll works, prev/next controls respond
-
-### Phase 5 — Page Templates (Day 4–6)
-
-- [ ] **5.1** Homepage — assemble from patterns, check desktop + mobile (390px)
-- [ ] **5.2** Tony Rinaudo profile page
-- [ ] **5.3** Blog listing page (EB Post Grid — test with real posts)
-- [ ] **5.4** Blog post single template (set as default via Site Editor)
-- [ ] **5.5** Resources page (activate Document Library Lite if using for downloads)
-- [ ] **5.6** Impact & Evidence page
-- [ ] **5.7** Partner With Us page
-- [ ] **5.8** Search results template
-
-### Phase 6 — QA (Day 6–7)
-
-- [ ] **6.1** All scroll animations fire correctly — none fire inside the WP block editor
-- [ ] **6.2** All count-up numbers animate when scrolled into view
-- [ ] **6.3** Bar charts animate on scroll
-- [ ] **6.4** Timeline accordion expands/collapses correctly
-- [ ] **6.5** Carousel scrolls and prev/next controls respond
-- [ ] **6.6** Leaflet map loads only on Impact/Resources page — not on homepage (confirm via Network tab)
-- [ ] **6.7** All WPForms submissions trigger email notification — check Post SMTP → Email Log
-- [ ] **6.8** FatFrank loads on all pages (check `/wp-content/uploads/fonts/fatfrank.otf` in Network tab)
-- [ ] **6.9** Archivo Black loads from correct path (not bare IP `54.252.190.200`)
-- [ ] **6.10** Mobile: all patterns responsive at 390px — no horizontal scroll
-- [ ] **6.11** No console errors on any page
-- [ ] **6.12** All Templately patterns saved and shared to FMNR workspace
+- [ ] All scroll animations fire — none fire inside the block editor
+- [ ] Count-up numbers animate on scroll
+- [ ] Bar chart bars animate on scroll
+- [ ] Timeline accordion works
+- [ ] Carousel prev/next buttons work
+- [ ] Leaflet does NOT load on pages without a map
+- [ ] WPForms submission → email received (Post SMTP log)
+- [ ] FatFrank on all headings, all pages
+- [ ] Archivo Black loading from correct uploaded path (not bare IP)
+- [ ] No horizontal scroll on mobile (390px)
+- [ ] No console errors on any page
 
 ---
 
-## 13. Known Complexity Areas
+## 10. WPForms Lite — What's Possible
 
-| Area | Issue | Resolution |
-|------|-------|-----------|
-| **Mega Menu** | `core/navigation` doesn't support icon+description panels | Option A: `core/html` block (no new plugin). Option B: free mega menu plugin with FMNR CSS override. |
-| **Bar Chart** | No plugin equivalent | `core/html` paste — editors must use Code Editor view to change values. |
-| **Timeline** | No plugin that matches FMNR design exactly | `core/html` paste. Stackable Accordion as a fallback with CSS overrides. |
-| **`data-animate` attribute** | Block inspector only accepts CSS classes | Use GenerateBlocks Container HTML Attributes field, or Code Editor view. |
-| **Video Hero controls** | `core/cover` doesn't expose native play/pause | `video-hero.js` injects controls — verify it targets `.wp-block-cover video` correctly after render. |
-| **Archivo Black loading from bare IP** | Will break if server IP changes | Copy font file to `uploads/fonts/` and update `theme.json` font src immediately. |
-| **Stories Carousel** | Stackable Carousel may need CSS overrides for progress bar + custom controls | Start with Stackable; fall back to `core/html` + `carousel.js` if controls don't match. |
-| **Resources page filtering** | No FacetWP installed | Use Document Library Lite (activate it) for file-based listings, or build a custom REST API + JS filter. |
-| **WPForms Lite limits** | No file uploads or conditional logic | Upgrade to Pro or swap in free Forminator plugin for complex forms. |
-| **Decision Tree** | Multi-file interactive JS requiring Backbone.js + underscore.js | Embed as `<iframe>` in a `core/html` block pointing to the standalone decision tree HTML page. |
-| **Animations in editor** | `scroll-animations.js` must not run inside the block editor | Guard all IntersectionObserver init with the `block-editor-page` class check (Section 3.5). |
+WPForms Lite (installed) is sufficient for the Contact Form and Newsletter patterns:
+- ✅ Text, email, textarea, dropdown, checkbox fields
+- ✅ Honeypot spam protection
+- ✅ Email notification on submit → delivered via Post SMTP
+
+Not available without upgrading to WPForms Pro:
+- ❌ File uploads
+- ❌ Conditional logic (show/hide fields)
+- ❌ Multi-step forms
+
+If the Partnership inquiry form needs file uploads or conditional fields, either upgrade to WPForms Pro or install the free **Forminator** plugin instead.
+
+---
+
+## 11. Known Constraints
+
+| Block | Constraint | Workaround |
+|-------|-----------|-----------|
+| **Bar Chart** | Not available as an editable UI block | Custom HTML block — edit values in Code Editor view |
+| **Timeline** | No plugin matches FMNR design exactly | Custom HTML block — edit content in Code Editor view |
+| **`data-animate` attribute** | Block inspector only accepts CSS classes | Use GenerateBlocks Container → Advanced → HTML Attributes |
+| **Mega Menu (icon+desc panels)** | `core/navigation` doesn't support this natively | Custom HTML block (Option A) or a simpler nav with sub-menus (Option B) |
+| **Map country data** | Needs a data source | Embed country data as a JSON object directly in the Map WPCode JS snippet |
+| **Decision Tree** | Multi-file Backbone.js tool — cannot run as a Gutenberg block | Embed as `<iframe>` in a Custom HTML block pointing to the standalone decision tree HTML page hosted on the same server |
+| **Stories Carousel controls** | Stackable Carousel may not match FMNR's custom progress bar | Use Stackable as base; override in WPCode CSS snippet if needed |
+| **Video Hero play/pause controls** | Injected by JS — target selector must match WP's rendered cover block HTML | In `video-hero.js`, target `.wp-block-cover video` (the class WordPress outputs for a cover block with video) |
