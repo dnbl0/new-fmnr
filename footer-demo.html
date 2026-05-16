@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Footer — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-bg-footer); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+        /* ── Footer ── */
+        #footer { background: var(--color-bg-footer); padding: 100px 0 48px; color: var(--color-white); width: 100%; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+        .footer-top { display: flex; gap: 80px; margin-bottom: 60px; }
+        .footer-brand { flex: 0 0 260px; display: flex; flex-direction: column; gap: 16px; }
+        .footer-brand img { height: 34px; filter: brightness(0) invert(1); }
+        .footer-brand p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.45); margin: 0; }
+        .footer-nav { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; }
+        .footer-nav-col h4 { font-family: var(--font-heading); font-size: 14px; text-transform: uppercase; color: var(--color-white); margin: 0 0 16px; letter-spacing: .04em; }
+        .footer-nav-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .footer-nav-col a { font-size: 13px; color: rgba(255,255,255,.38); text-decoration: none; transition: color .2s; }
+        .footer-nav-col a:hover { color: var(--color-teal); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.07); }
+        .footer-bottom p { font-size: 13px; color: rgba(255,255,255,.28); margin: 0; }
+        .footer-social { display: flex; gap: 16px; }
+        .footer-social a { color: rgba(255,255,255,.28); transition: color .2s; }
+        .footer-social a:hover { color: var(--color-teal); }
+        .footer-social svg { width: 20px; height: 20px; }
+
+        @media (max-width: 900px) {
+            #footer { padding: 60px 0 40px; }
+            .footer-inner { padding: 0 24px; }
+            .footer-top { flex-direction: column; gap: 40px; }
+            .footer-brand { flex: none; }
+            .footer-nav { grid-template-columns: repeat(2, 1fr); }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <footer id="footer">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html"><img src="fmnr-logo-figma.png" alt="FMNR"></a>
+                    <p>FMNR is a low-cost, scalable approach to restoring degraded land by encouraging natural tree regrowth.</p>
+                </div>
+                <nav class="footer-nav">
+                    <div class="footer-nav-col">
+                        <h4>Partner</h4>
+                        <ul>
+                            <li><a href="#">Why Partner with FMNR</a></li>
+                            <li><a href="#">Faith Based Partners</a></li>
+                            <li><a href="#">NGO &amp; Restoration</a></li>
+                            <li><a href="#">Government Partners</a></li>
+                            <li><a href="#">Corporate Partners</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-col">
+                        <h4>Adopt</h4>
+                        <ul>
+                            <li><a href="#">FMNR Basics</a></li>
+                            <li><a href="#">Training Programs</a></li>
+                            <li><a href="#">Community Engagement</a></li>
+                            <li><a href="#">Monitoring &amp; Evaluation</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-col">
+                        <h4>Impact</h4>
+                        <ul>
+                            <li><a href="#">Environmental Impact</a></li>
+                            <li><a href="#">Social Impact</a></li>
+                            <li><a href="#">Economic Impact</a></li>
+                            <li><a href="#">Case Studies</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-col">
+                        <h4>Fund</h4>
+                        <ul>
+                            <li><a href="#">Ways to Give</a></li>
+                            <li><a href="#">Fundraise for FMNR</a></li>
+                            <li><a href="#">Where Funds Go</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav-col">
+                        <h4>About</h4>
+                        <ul>
+                            <li><a href="#">About FMNR</a></li>
+                            <li><a href="#">Where We Work</a></li>
+                            <li><a href="#">Research &amp; Evidence</a></li>
+                            <li><a href="#">Media &amp; Resources</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 FMNR Hub. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+                    <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

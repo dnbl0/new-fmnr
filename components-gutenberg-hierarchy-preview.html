@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deliverables — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; }
+
+        .page-header { padding: 80px 48px 48px; max-width: 1280px; margin: 0 auto; }
+        .page-header h1 { font-family: var(--font-heading); font-size: clamp(40px, 5vw, 64px); text-transform: uppercase; color: #1d1d1f; line-height: 1; margin-bottom: 12px; }
+        .page-header p { font-size: 17px; color: #6e6e73; max-width: 560px; line-height: 1.5; }
+
+        .category { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+        .category + .category { margin-top: 64px; }
+        .category-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6e6e73; margin-bottom: 16px; }
+
+        .showcase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+        .showcase-card { text-decoration: none; color: inherit; display: block; border-radius: 12px; border: 1px solid #e5e5e5; overflow: hidden; transition: box-shadow 0.25s, border-color 0.25s; padding: 24px; }
+        .showcase-card:hover { border-color: #d1d1d6; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+        .showcase-card__title { font-size: 16px; font-weight: 700; color: #1d1d1f; margin-bottom: 6px; }
+        .showcase-card__desc { font-size: 13px; color: #86868b; line-height: 1.5; margin-bottom: 12px; }
+        .showcase-card__link { font-size: 13px; font-weight: 600; color: var(--color-green); display: inline-flex; align-items: center; gap: 4px; }
+        .showcase-card__link svg { width: 12px; height: 12px; }
+        .showcase-card__doc { font-size: 12px; color: #6e6e73; line-height: 1.5; margin-bottom: 12px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+
+        .page-footer { max-width: 1280px; margin: 80px auto 0; padding: 32px 48px; border-top: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; }
+        .page-footer p { font-size: 13px; color: #86868b; }
+        .page-footer a { font-size: 14px; font-weight: 700; color: var(--color-green); text-decoration: none; }
+
+        /* ── Modal ── */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
+        .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+        .modal-container { width: 100%; height: 95vh; background: #fff; border-radius: 20px 20px 0 0; overflow: hidden; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -8px 60px rgba(0,0,0,0.25); }
+        .modal-backdrop.open .modal-container { transform: translateY(0); }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0; background: #fff; }
+        .modal-header h3 { font-size: 15px; font-weight: 700; }
+        .modal-header .modal-url { font-size: 13px; color: rgba(0,0,0,0.35); margin-left: 16px; }
+        .modal-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: #f0f0f0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .modal-close:hover { background: #e0e0e0; }
+        .modal-close svg { width: 14px; height: 14px; }
+        .modal-body { flex: 1; overflow: hidden; display: flex; justify-content: center; background: #f5f5f7; position: relative; }
+        .modal-body iframe { height: 100%; border: none; display: block; transition: width 0.3s ease; }
+        .modal-body iframe.desktop-view { width: 100%; }
+        .modal-body iframe.mobile-view { width: 390px; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; background: #fff; }
+
+        /* Modal tabs */
+        .modal-tabs { display: flex; background: #f0f0f0; border-radius: 8px; padding: 3px; gap: 2px; }
+        .modal-tabs button { border: none; background: transparent; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 13px; font-weight: 600; color: #86868b; transition: background 0.2s, color 0.2s; }
+        .modal-tabs button.active { background: #fff; color: #1d1d1f; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* Docs panel & WP panel — shared base */
+        .modal-docs, .modal-wp { position: absolute; inset: 0; background: #fff; overflow-y: auto; padding: 64px 48px; display: none; }
+        .modal-docs.visible, .modal-wp.visible { display: block; }
+        .modal-docs .doc-label, .modal-wp .doc-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 16px; }
+        .modal-wp .doc-label { color: #21759b; background: rgba(33,117,155,0.1); }
+        .modal-docs .doc-title, .modal-wp .doc-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: #1d1d1f; margin-bottom: 8px; line-height: 1.1; }
+        .modal-docs .doc-desc, .modal-wp .doc-desc { font-size: 15px; color: #6e6e73; line-height: 1.6; margin-bottom: 32px; max-width: 600px; }
+        .modal-docs .doc-section, .modal-wp .doc-section { margin-bottom: 32px; }
+        .modal-docs .doc-section h4, .modal-wp .doc-section h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #1d1d1f; margin-bottom: 10px; }
+        .modal-docs .doc-section ul, .modal-wp .doc-section ul { list-style: none; padding: 0; }
+        .modal-docs .doc-section li, .modal-wp .doc-section li { font-size: 14px; color: #6e6e73; line-height: 1.6; padding: 6px 0; border-bottom: 1px solid #f0f0f0; padding-left: 16px; position: relative; }
+        .modal-docs .doc-section li::before { content: ""; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: var(--color-green); }
+        .modal-wp .doc-section li::before { content: ""; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: #21759b; }
+        .modal-docs .doc-where, .modal-wp .doc-where { font-size: 14px; color: #1d1d1f; font-weight: 600; margin-bottom: 4px; }
+        .modal-docs .doc-where span, .modal-wp .doc-where span { font-weight: 400; color: #6e6e73; }
+        .modal-wp .wp-plugin-tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #21759b; background: rgba(33,117,155,0.08); padding: 3px 8px; border-radius: 4px; margin-right: 6px; margin-bottom: 6px; }
+        .modal-actions { display: flex; align-items: center; gap: 12px; }
+        .modal-open-btn { font-size: 13px; font-weight: 700; color: var(--color-green); background: rgba(7,125,87,0.08); border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; }
+        .modal-open-btn:hover { background: rgba(7,125,87,0.14); }
+
+        /* Device toggle */
+        .device-toggle { display: flex; background: #f0f0f0; border-radius: 8px; padding: 3px; gap: 2px; }
+        .device-toggle button { border: none; background: transparent; border-radius: 6px; padding: 6px 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, color 0.2s; color: #86868b; }
+        .device-toggle button.active { background: #fff; color: #1d1d1f; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .device-toggle button svg { width: 16px; height: 16px; }
+
+        body.modal-open { overflow: hidden; }
+        /* WP screenshots gallery */
+        .modal-wp .wp-screenshots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 32px; }
+        .modal-wp .wp-screenshot-item { border-radius: 8px; overflow: hidden; border: 1px solid #e5e5e5; background: #fafafa; }
+        .modal-wp .wp-screenshot-item img { width: 100%; height: auto; display: block; }
+        .modal-wp .wp-screenshot-item figcaption { font-size: 11px; color: #86868b; padding: 6px 10px; border-top: 1px solid #f0f0f0; line-height: 1.4; }
+
+        @media (max-width: 1100px) { .showcase-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px) {
+            .showcase-grid { grid-template-columns: repeat(2, 1fr); }
+            .page-header, .category { padding-left: 24px; padding-right: 24px; }
+            .page-footer { padding-left: 24px; padding-right: 24px; flex-direction: column; gap: 12px; }
+        }
+        @media (max-width: 500px) { .showcase-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <h1>Gutenberg Block Hierarchy</h1>
+        <p>All FMNR components grouped by their closest Gutenberg editing model, from core primitives through composed patterns and page templates.</p>
+    </header>
+
+    <!-- CORE BLOCKS -->
+    <section class="category">
+        <p class="category-label">Core Blocks</p>
+        <div class="showcase-grid">
+
+            <a href="core-blocks-demo.html#heading" class="showcase-card" data-title="Heading">
+                <h3 class="showcase-card__title">Heading</h3>
+                <p class="showcase-card__desc">H1-H4 display styles mapped to responsive heading block settings</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#body-text" class="showcase-card" data-title="Body Text">
+                <h3 class="showcase-card__title">Body Text</h3>
+                <p class="showcase-card__desc">Paragraph, small text and caption styles for editorial content</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#button" class="showcase-card" data-title="Button">
+                <h3 class="showcase-card__title">Button</h3>
+                <p class="showcase-card__desc">Primary, secondary and ghost button styles for the Buttons block</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#icon" class="showcase-card" data-title="Icon">
+                <h3 class="showcase-card__title">Icon</h3>
+                <p class="showcase-card__desc">Inline SVG icons for feature rows, cards and navigation cues</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#tag" class="showcase-card" data-title="Tag">
+                <h3 class="showcase-card__title">Tag</h3>
+                <p class="showcase-card__desc">Pill labels for taxonomy terms, dates, highlights and status markers</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#list-item" class="showcase-card" data-title="List Item">
+                <h3 class="showcase-card__title">List Item</h3>
+                <p class="showcase-card__desc">Icon-led list rows for navigation, evidence and metadata summaries</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- DESIGN & LAYOUT BLOCKS -->
+    <section class="category">
+        <p class="category-label">Design & Layout Blocks</p>
+        <div class="showcase-grid">
+
+            <a href="core-blocks-demo.html#spacer" class="showcase-card" data-title="Spacer">
+                <h3 class="showcase-card__title">Spacer</h3>
+                <p class="showcase-card__desc">Token-based vertical spacing for consistent section rhythm</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#divider" class="showcase-card" data-title="Divider">
+                <h3 class="showcase-card__title">Divider</h3>
+                <p class="showcase-card__desc">Separator styles for editorial breaks and section boundaries</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#bio" class="showcase-card" data-title="Media & Text">
+                <h3 class="showcase-card__title">Media & Text</h3>
+                <p class="showcase-card__desc">Two-column image and copy layout matching Gutenberg Media & Text</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#pillars" class="showcase-card" data-title="Columns">
+                <h3 class="showcase-card__title">Columns</h3>
+                <p class="showcase-card__desc">Responsive multi-column content for values, steps and feature groups</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#quote" class="showcase-card" data-title="Quote Band">
+                <h3 class="showcase-card__title">Quote Band</h3>
+                <p class="showcase-card__desc">Quote block wrapped in a full-width Group or Cover block</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#cta" class="showcase-card" data-title="CTA Group">
+                <h3 class="showcase-card__title">CTA Group</h3>
+                <p class="showcase-card__desc">Group block composition with headings, copy and dual buttons</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- MEDIA BLOCKS -->
+    <section class="category">
+        <p class="category-label">Media Blocks</p>
+        <div class="showcase-grid">
+
+            <a href="core-blocks-demo.html#image" class="showcase-card" data-title="Image">
+                <h3 class="showcase-card__title">Image</h3>
+                <p class="showcase-card__desc">Responsive image block treatment with optional Ken Burns motion</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#video" class="showcase-card" data-title="Video">
+                <h3 class="showcase-card__title">Video</h3>
+                <p class="showcase-card__desc">Video block baseline for autoplay, muted and looped media</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="index.html" class="showcase-card" data-title="Video Cover">
+                <h3 class="showcase-card__title">Video Cover</h3>
+                <p class="showcase-card__desc">Full-viewport Cover block with video source, overlay and inner text</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#hero" class="showcase-card" data-title="Image Cover">
+                <h3 class="showcase-card__title">Image Cover</h3>
+                <p class="showcase-card__desc">Hero-style Cover block with image, gradient overlay and eyebrow label</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- CONTENT PATTERNS -->
+    <section class="category">
+        <p class="category-label">Content Patterns</p>
+        <div class="showcase-grid">
+
+            <a href="card-grid-demo.html" class="showcase-card" data-title="Card Grid">
+                <h3 class="showcase-card__title">Card Grid</h3>
+                <p class="showcase-card__desc">Reusable card variants for image, icon, blog, podcast and award content</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="partner-cards-demo.html" class="showcase-card" data-title="Partner Cards">
+                <h3 class="showcase-card__title">Partner Cards</h3>
+                <p class="showcase-card__desc">Image and video cards with 1-4 column layout options</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#timeline" class="showcase-card" data-title="Timeline Accordion">
+                <h3 class="showcase-card__title">Timeline Accordion</h3>
+                <p class="showcase-card__desc">Expandable chronological content pattern for profiles and stories</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#awards" class="showcase-card" data-title="Awards Grid">
+                <h3 class="showcase-card__title">Awards Grid</h3>
+                <p class="showcase-card__desc">Three-column card grid with icon badges for awards and milestones</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-blocks-demo.html#media-cards" class="showcase-card" data-title="Media Cards">
+                <h3 class="showcase-card__title">Media Cards</h3>
+                <p class="showcase-card__desc">Link-card grid for podcasts, articles and external resources</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- INTERACTIVE & EMBED BLOCKS -->
+    <section class="category">
+        <p class="category-label">Interactive & Embed Blocks</p>
+        <div class="showcase-grid">
+
+            <a href="mega-menu-v2-demo.html" class="showcase-card" data-title="Navigation">
+                <h3 class="showcase-card__title">Navigation</h3>
+                <p class="showcase-card__desc">Header navigation and mega-menu behaviour for WordPress menus</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="search-demo.html" class="showcase-card" data-title="Search">
+                <h3 class="showcase-card__title">Search</h3>
+                <p class="showcase-card__desc">Search overlay and results-page pattern for site search</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="core-blocks-demo.html#form-field" class="showcase-card" data-title="Form Field">
+                <h3 class="showcase-card__title">Form Field</h3>
+                <p class="showcase-card__desc">Input, select and textarea states for form plugin blocks</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="contact-demo.html" class="showcase-card" data-title="Contact & Newsletter">
+                <h3 class="showcase-card__title">Contact & Newsletter</h3>
+                <p class="showcase-card__desc">WPForms and newsletter block composition for lead capture</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="map-demo.html" class="showcase-card" data-title="Map Embed">
+                <h3 class="showcase-card__title">Map Embed</h3>
+                <p class="showcase-card__desc">Interactive map embed with country markers and mobile carousel</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="scroll-animations-demo.html" class="showcase-card" data-title="Animation Controls">
+                <h3 class="showcase-card__title">Animation Controls</h3>
+                <p class="showcase-card__desc">Entrance, stagger, parallax, scale, count-up and Ken Burns patterns</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- DATA & VISUALISATION BLOCKS -->
+    <section class="category">
+        <p class="category-label">Data & Visualisation Blocks</p>
+        <div class="showcase-grid">
+
+            <a href="core-blocks-demo.html#stat-number" class="showcase-card" data-title="Stat Number">
+                <h3 class="showcase-card__title">Stat Number</h3>
+                <p class="showcase-card__desc">Core numeric display block for counters and impact callouts</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="data-viz-demo.html" class="showcase-card" data-title="Impact Stats">
+                <h3 class="showcase-card__title">Impact Stats</h3>
+                <p class="showcase-card__desc">Animated counting numbers with suffix labels for evidence sections</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="bar-chart-demo.html" class="showcase-card" data-title="Bar Chart">
+                <h3 class="showcase-card__title">Bar Chart</h3>
+                <p class="showcase-card__desc">Animated horizontal bar graph for compact comparative datasets</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="stat-stack-demo.html" class="showcase-card" data-title="Stat Stack">
+                <h3 class="showcase-card__title">Stat Stack</h3>
+                <p class="showcase-card__desc">Vertical stack of headline statistics with count-up animation</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- QUERY & ARCHIVE TEMPLATES -->
+    <section class="category">
+        <p class="category-label">Query & Archive Templates</p>
+        <div class="showcase-grid">
+
+            <a href="resources.html" class="showcase-card" data-title="Resources Hub">
+                <h3 class="showcase-card__title">Resources Hub</h3>
+                <p class="showcase-card__desc">Query-loop style hub with filters, featured content and archive cards</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="blog.html" class="showcase-card" data-title="Blog Archive">
+                <h3 class="showcase-card__title">Blog Archive</h3>
+                <p class="showcase-card__desc">Article listing template for stories, updates and editorial content</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="blog-post.html" class="showcase-card" data-title="Single Post">
+                <h3 class="showcase-card__title">Single Post</h3>
+                <p class="showcase-card__desc">Single content template for long-form resource and story pages</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="resources-case-studies.html" class="showcase-card" data-title="Resource Category">
+                <h3 class="showcase-card__title">Resource Category</h3>
+                <p class="showcase-card__desc">Category archive template for case studies and resource collections</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- PAGE TEMPLATES -->
+    <section class="category">
+        <p class="category-label">Page Templates</p>
+        <div class="showcase-grid">
+
+            <a href="index.html" class="showcase-card" data-title="Homepage">
+                <h3 class="showcase-card__title">Homepage</h3>
+                <p class="showcase-card__desc">Front-page template composed from cover, content and CTA patterns</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="tony-rinaudo.html" class="showcase-card" data-title="Profile Page">
+                <h3 class="showcase-card__title">Profile Page</h3>
+                <p class="showcase-card__desc">Profile template with hero, timeline, biography, quote and awards</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="impact.html" class="showcase-card" data-title="Impact Page">
+                <h3 class="showcase-card__title">Impact Page</h3>
+                <p class="showcase-card__desc">Evidence template combining stats, charts, maps and narrative content</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="partner.html" class="showcase-card" data-title="Partner Page">
+                <h3 class="showcase-card__title">Partner Page</h3>
+                <p class="showcase-card__desc">Conversion template with cards, benefits, form and newsletter sections</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="index2.html" class="showcase-card" data-title="Alt Homepage">
+                <h3 class="showcase-card__title">Alt Homepage</h3>
+                <p class="showcase-card__desc">Alternative front-page template for exploratory homepage direction</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- INFORMATION ARCHITECTURE -->
+    <section class="category">
+        <p class="category-label">Information Architecture</p>
+        <div class="showcase-grid">
+
+            <a href="sitemap.html" class="showcase-card" data-title="Sitemap">
+                <h3 class="showcase-card__title">Sitemap</h3>
+                <p class="showcase-card__desc">Complete site structure showing all pages, hierarchy and navigation paths</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="journey-partners.html" class="showcase-card" data-title="User Journey — Partners">
+                <h3 class="showcase-card__title">User Journey — Partners</h3>
+                <p class="showcase-card__desc">How NGOs and implementation partners discover, evaluate and engage with FMNR</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="journey-adopters.html" class="showcase-card" data-title="User Journey — Adopters">
+                <h3 class="showcase-card__title">User Journey — Adopters</h3>
+                <p class="showcase-card__desc">How farmers and communities learn about, adopt and practise FMNR techniques</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="journey-funders.html" class="showcase-card" data-title="User Journey — Funders">
+                <h3 class="showcase-card__title">User Journey — Funders</h3>
+                <p class="showcase-card__desc">How donors and grant-makers assess impact, evidence and partnership opportunities</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="journey-public.html" class="showcase-card" data-title="User Journey — General Public">
+                <h3 class="showcase-card__title">User Journey — General Public</h3>
+                <p class="showcase-card__desc">How curious visitors learn what FMNR is, explore stories and share content</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <footer class="page-footer">
+        <p>FMNR Deliverables — Internal design & development reference</p>
+        <a href="index.html">← Back to Homepage</a>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-backdrop" id="modal-backdrop">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div style="display:flex;align-items:center;">
+                    <h3 id="modal-title">Component</h3>
+                    <span class="modal-url" id="modal-url"></span>
+                </div>
+                <div class="modal-actions">
+                    <!-- Modal tabs -->
+                    <div class="modal-tabs" id="modal-tabs">
+                        <button class="active" data-tab="preview">Preview</button>
+                        <button data-tab="docs">Docs</button>
+                        <button data-tab="wordpress">WordPress</button>
+                    </div>
+                    <!-- Text layer toggle (banner only) -->
+                    <button class="device-toggle" id="text-toggle" style="padding:6px 12px;gap:6px;display:none;" title="Toggle text layer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+                    </button>
+                    <!-- Device toggle -->
+                    <div class="device-toggle" id="device-toggle">
+                        <button class="active" data-view="desktop" aria-label="Desktop view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                        </button>
+                        <button data-view="mobile" aria-label="Mobile view">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+                        </button>
+                    </div>
+                    <a class="modal-open-btn" id="modal-open-link" href="#" target="_blank">Open in new tab ↗</a>
+                    <button class="modal-close" id="modal-close" aria-label="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <iframe id="modal-iframe" class="desktop-view" src="about:blank"></iframe>
+                <div class="modal-docs" id="modal-docs"></div>
+                <div class="modal-wp" id="modal-wp"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var backdrop = document.getElementById('modal-backdrop');
+        var iframe = document.getElementById('modal-iframe');
+        var titleEl = document.getElementById('modal-title');
+        var urlEl = document.getElementById('modal-url');
+        var openLink = document.getElementById('modal-open-link');
+        var closeBtn = document.getElementById('modal-close');
+        var deviceToggle = document.getElementById('device-toggle');
+        var toggleBtns = deviceToggle.querySelectorAll('button');
+        var docsPanel = document.getElementById('modal-docs');
+        var wpPanel = document.getElementById('modal-wp');
+        var modalTabs = document.getElementById('modal-tabs');
+        var tabBtns = modalTabs.querySelectorAll('button');
+
+        // Plugin screenshots (verified URLs from wordpress.org CDN)
+        var wpScreenshots = {
+            "Mega Menu": [
+                { url: "https://ps.w.org/megamenu/assets/banner-772x250.png", caption: "Max Mega Menu" },
+                { url: "https://ps.w.org/megamenu/assets/screenshot-3.png", caption: "Mega menu column configuration in the WordPress editor" }
+            ],
+            "Search": [
+                { url: "https://ps.w.org/searchwp-live-ajax-search/assets/banner-772x250.png", caption: "SearchWP Live Search" },
+                { url: "https://ps.w.org/searchwp-live-ajax-search/assets/screenshot-1.png", caption: "Live search results appearing as the user types" },
+                { url: "https://ps.w.org/searchwp-live-ajax-search/assets/screenshot-2.png", caption: "Configuring search in the WordPress admin" }
+            ],
+            "Contact & Newsletter": [
+                { url: "https://ps.w.org/wpforms-lite/assets/banner-772x250.png", caption: "WPForms Lite" },
+                { url: "https://ps.w.org/wpforms-lite/assets/screenshot-1.png", caption: "WPForms drag-and-drop form builder" },
+                { url: "https://ps.w.org/mailchimp-for-wp/assets/banner-772x250.png", caption: "Mailchimp for WordPress" },
+                { url: "https://ps.w.org/mailchimp-for-wp/assets/screenshot-1.png", caption: "Mailchimp form settings and list connection" }
+            ],
+            "Interactive Map": [
+                { url: "https://ps.w.org/wp-google-maps/assets/banner-772x250.png", caption: "WP Go Maps" }
+            ],
+            "Cards": [
+                { url: "https://ps.w.org/kadence-blocks/assets/banner-772x250.jpg", caption: "Kadence Blocks" },
+                { url: "https://ps.w.org/kadence-blocks/assets/screenshot-1.jpg", caption: "Kadence Blocks in the WordPress editor" },
+                { url: "https://ps.w.org/kadence-blocks/assets/screenshot-2.jpg", caption: "Card grid front-end output" }
+            ],
+            "Scroll Animations": [
+                { url: "https://ps.w.org/templately/assets/banner-772x250.jpg", caption: "Templately" },
+                { url: "https://ps.w.org/templately/assets/screenshot-1.jpg", caption: "Templately template library in the editor" },
+                { url: "https://ps.w.org/templately/assets/screenshot-2.jpg", caption: "Animation controls per block" }
+            ],
+            "Image Hero with Overlay": [
+                { url: "https://ps.w.org/kadence-blocks/assets/banner-772x250.jpg", caption: "Kadence Blocks" },
+                { url: "https://ps.w.org/kadence-blocks/assets/screenshot-1.jpg", caption: "Kadence Cover block with Ken Burns settings" }
+            ],
+            "Timeline Accordion": [
+                { url: "https://ps.w.org/essential-blocks/assets/screenshot-1.png", caption: "Essential Blocks library" },
+                { url: "https://ps.w.org/essential-blocks/assets/screenshot-2.png", caption: "Essential Blocks editor interface" }
+            ],
+            "Split Bio Panel": [
+                { url: "https://ps.w.org/kadence-blocks/assets/banner-772x250.jpg", caption: "Kadence Blocks — Row Layout handles the 50/50 split" }
+            ],
+            "Numbered Pillars": [
+                { url: "https://ps.w.org/kadence-blocks/assets/banner-772x250.jpg", caption: "Kadence Blocks" },
+                { url: "https://ps.w.org/kadence-blocks/assets/screenshot-1.jpg", caption: "Kadence Info Box block for numbered pillar cards" }
+            ],
+            "Awards Grid": [
+                { url: "https://ps.w.org/kadence-blocks/assets/banner-772x250.jpg", caption: "Kadence Blocks" },
+                { url: "https://ps.w.org/kadence-blocks/assets/screenshot-2.jpg", caption: "Kadence Row Layout with icon cards" }
+            ],
+            "Media Cards Grid": [
+                { url: "https://ps.w.org/kadence-blocks/assets/banner-772x250.jpg", caption: "Kadence Blocks" },
+                { url: "https://ps.w.org/kadence-blocks/assets/screenshot-1.jpg", caption: "Kadence Info Box with external link support" }
+            ],
+            "CTA Band": [
+                { url: "https://ps.w.org/templately/assets/banner-772x250.jpg", caption: "Templately — use for scroll-in animation on the CTA band" }
+            ],
+            "Impact Stats": [
+                { url: "https://ps.w.org/essential-blocks/assets/screenshot-1.png", caption: "Essential Blocks library" },
+                { url: "https://ps.w.org/essential-blocks/assets/screenshot-2.png", caption: "Counter block in the editor — set end value, suffix and duration" },
+                { url: "https://ps.w.org/essential-blocks/assets/screenshot-3.png", caption: "Animated counter front-end output" }
+            ],
+            "Bar Chart": [
+                { url: "https://ps.w.org/wpdatatables/assets/banner-772x250.png", caption: "wpDataTables" },
+                { url: "https://ps.w.org/wpdatatables/assets/screenshot-1.png", caption: "Table and chart creation in wpDataTables" },
+                { url: "https://ps.w.org/wpdatatables/assets/screenshot-2.png", caption: "Chart type and colour configuration" }
+            ],
+            "Stat Stack": [
+                { url: "https://ps.w.org/kadence-blocks/assets/banner-772x250.png", caption: "Kadence Blocks — used for layout and typography" },
+                { url: "https://ps.w.org/essential-blocks/assets/banner-772x250.png", caption: "Essential Blocks — optional for animated counters" }
+            ]
+        };
+
+                // Component documentation data
+        var docs = {
+            "Video Hero Banner": {
+                label: "Block",
+                desc: "Full-viewport autoplay video with gradient overlay, animated headline and dual CTA buttons.",
+                where: "Homepage",
+                behaviour: [
+                    "Video autoplays muted and loops on desktop; pauses on mobile to save data",
+                    "Dark gradient overlay ensures text readability over any video frame",
+                    "Headline animates in with fade-up on page load (not scroll-triggered)",
+                    "Two CTA buttons: primary (green fill) and secondary (outline white)",
+                    "Responsive: stacks vertically on mobile, text size scales down via clamp()"
+                ],
+                technical: [
+                    "MP4 source with poster image fallback",
+                    "Uses object-fit: cover for full-bleed sizing",
+                    "100vh height with min-height fallback for mobile browsers",
+                    "Text toggle available in preview modal to inspect video without overlay"
+                ],
+                wordpress: {
+                    desc: "Replicate using the core Gutenberg Cover block with a video source — no plugins required.",
+                    plugins: ["None — Cover block ships with WordPress core"],
+                    steps: [
+                        "In the page editor, add a Cover block",
+                        "Click Upload and select your MP4 from the Media Library (upload it first if needed)",
+                        "In the block sidebar, set Background Type to Video",
+                        "Adjust the Overlay Opacity slider (50–70% works well for text contrast)",
+                        "Add a Heading and Buttons block as inner blocks inside the Cover",
+                        "Set the Cover block alignment to Full Width for edge-to-edge display",
+                        "Set Minimum height of cover to 100vh in block settings"
+                    ],
+                    technical: [
+                        "Video autoplays muted and loops automatically — this is browser-enforced behaviour",
+                        "For best performance compress the MP4 under 10 MB using HandBrake",
+                        "Poster image: set a featured image on the cover block as the loading fallback",
+                        "The video will not autoplay on iOS Safari in low-power mode — the poster image shows instead",
+                        "Full-width alignment requires your theme to support wide/full alignment (most modern themes do)"
+                    ]
+                }
+            },
+            "Mega Menu": {
+                label: "Block",
+                desc: "Multi-column navigation dropdown on desktop with full-screen hamburger drawer on mobile.",
+                where: "All pages",
+                behaviour: [
+                    "Desktop: hover triggers mega dropdown with columns of categorised links",
+                    "Each column has a heading and 4-6 sub-links with descriptions",
+                    "Mobile: hamburger icon triggers full-screen drawer from right",
+                    "Mobile sub-menus use accordion pattern — tap to expand/collapse",
+                    "Sticky header: nav bar remains fixed on scroll with subtle shadow"
+                ],
+                technical: [
+                    "Pure CSS hover on desktop (no JS for dropdown trigger)",
+                    "Mobile drawer uses transform: translateX for slide animation",
+                    "Breakpoint: switches at 1024px",
+                    "Focus trap enabled when mobile drawer is open for accessibility"
+                ],
+                wordpress: {
+                    desc: "Use the free Max Mega Menu plugin with your existing WordPress navigation menu — no coding required.",
+                    plugins: [
+                        "Max Mega Menu (free) — wordpress.org/plugins/megamenu",
+                        "Optional: Templately (free) for importing a matching header layout"
+                    ],
+                    steps: [
+                        "Install and activate Max Mega Menu from Plugins > Add New",
+                        "Go to Mega Menu > Menu Themes to set colours, fonts and hover styles",
+                        "Go to Appearance > Menus and open the menu you use in the header",
+                        "For each top-level item, click the grid icon that Max Mega Menu adds",
+                        "Enable Mega Menu for that item and drag sub-items into columns",
+                        "Set the number of columns per dropdown item in the plugin settings",
+                        "For mobile: the plugin automatically adds a hamburger toggle — style it in Menu Themes"
+                    ],
+                    technical: [
+                        "Max Mega Menu works with any WordPress theme that uses wp_nav_menu()",
+                        "Column layout is configured per nav item — no CSS needed for basic setup",
+                        "Sticky header behaviour: add position: sticky via your theme Customizer or a Custom CSS field",
+                        "If using Templately: import a header template, then activate Max Mega Menu on its menu"
+                    ]
+                }
+            },
+            "Search": {
+                label: "Block",
+                desc: "Full-screen search overlay with predictive results that appear as the user types.",
+                where: "All pages (via navigation bar)",
+                behaviour: [
+                    "Click search icon or press '/' to open overlay",
+                    "Results filter instantly as user types (client-side matching)",
+                    "Results grouped by category: Pages, Resources, Topics",
+                    "Keyboard navigation: arrow keys to move, Enter to select, Escape to close",
+                    "Recent searches shown when overlay opens with empty input"
+                ],
+                technical: [
+                    "Overlay uses position: fixed with backdrop-filter blur",
+                    "Client-side search against a JSON index of all pages",
+                    "Debounced input (200ms) to avoid excessive filtering",
+                    "Accessible: aria-live region announces result count"
+                ],
+                wordpress: {
+                    desc: "Add instant AJAX predictive search using the free SearchWP Live Search plugin — place the search block anywhere in the header.",
+                    plugins: [
+                        "SearchWP Live Search (free) — wordpress.org/plugins/searchwp-live-ajax-search"
+                    ],
+                    steps: [
+                        "Install and activate SearchWP Live Search from Plugins > Add New",
+                        "Go to SearchWP > Settings to confirm what content types are searched",
+                        "In your header template (via Appearance > Editor or your theme header area), add the Search block",
+                        "The plugin automatically enhances the native Search block with live AJAX results",
+                        "Style the search icon and input field via Additional CSS in the Customizer to match the FMNR header"
+                    ],
+                    technical: [
+                        "Free tier searches all posts and pages — no configuration required",
+                        "Pairs with SearchWP Pro (paid) if you need to search custom post types like Resources or filtered results",
+                        "Results appear in a dropdown below the input field — no full-screen overlay by default",
+                        "For a full-screen overlay effect: add a Templately search overlay template or use a small CSS snippet",
+                        "Accessible: keyboard navigation and screen reader announcements work out of the box"
+                    ]
+                }
+            },
+            "Contact & Newsletter": {
+                label: "Block",
+                desc: "Split-panel contact form with inline newsletter email capture.",
+                where: "Partner page, footer",
+                behaviour: [
+                    "Form validates fields inline on blur (name, email, message required)",
+                    "Submit button disabled until all required fields pass validation",
+                    "Newsletter input: email only, shows success tick on submit",
+                    "Error states: red border + helper text beneath invalid fields",
+                    "Success state: form replaced with confirmation message"
+                ],
+                technical: [
+                    "HTML5 validation with custom styled error messages",
+                    "50/50 split layout, stacks on mobile at 768px",
+                    "Newsletter uses separate form action from contact form",
+                    "Honeypot field for basic spam prevention"
+                ],
+                wordpress: {
+                    desc: "Use WPForms Lite for the contact form and Mailchimp for WordPress for the newsletter sign-up — both insert as Gutenberg blocks, no coding needed.",
+                    plugins: [
+                        "WPForms Lite (free) — wordpress.org/plugins/wpforms-lite",
+                        "Mailchimp for WordPress (free) — wordpress.org/plugins/mailchimp-for-wp"
+                    ],
+                    steps: [
+                        "Install WPForms Lite, go to WPForms > Add New and choose the Simple Contact Form template",
+                        "Customise fields (Name, Email, Message are pre-built), then Save",
+                        "On your page, add the WPForms block and select your form from the dropdown",
+                        "Install Mailchimp for WordPress, connect your Mailchimp account via the plugin settings",
+                        "Go to Mailchimp for WP > Forms, create a sign-up form with an Email field",
+                        "Add the MC4WP Form block to the footer or partner page where the newsletter sign-up should appear",
+                        "Set up email notifications in WPForms > Settings > Notifications so enquiries reach the right inbox"
+                    ],
+                    technical: [
+                        "WPForms Lite includes spam protection via a hidden honeypot field — no extra config",
+                        "Mailchimp for WP connects via API key: find yours in Mailchimp > Account > Extras > API Keys",
+                        "For the two-column layout: wrap both blocks in a Columns block (2 equal columns)",
+                        "Form submissions are stored in WPForms > Entries — useful for fallback if email delivery fails",
+                        "Both plugins work with any theme and require no shortcodes or PHP knowledge"
+                    ]
+                }
+            },
+            "Interactive Map": {
+                label: "Block / Data Vis",
+                desc: "Leaflet.js interactive map with pin markers that reveal rich data cards on click.",
+                where: "Homepage, Impact page",
+                behaviour: [
+                    "Map loads centred on Africa with zoom level showing all FMNR countries",
+                    "Custom green pin markers for each country",
+                    "Click a pin to open a popup card with country stats (hectares, people, trees)",
+                    "Cards show key metrics with formatted numbers (e.g. 2.5M hectares)",
+                    "Mobile: cards appear as swipeable carousel beneath the map",
+                    "Zoom and pan enabled; double-click or pinch to zoom"
+                ],
+                technical: [
+                    "Leaflet.js 1.9.4 with OpenStreetMap tiles",
+                    "14 countries defined in a JS data array — add more by extending the array",
+                    "Custom popup template with CSS styling (not default Leaflet popups)",
+                    "Responsive: map height reduces on mobile, carousel appears below"
+                ],
+                wordpress: {
+                    desc: "Replicate using WP Go Maps (formerly Maps Builder) — create your map and add country markers entirely within the WordPress admin, then insert with a block.",
+                    plugins: [
+                        "WP Go Maps (free) — wordpress.org/plugins/wp-google-maps"
+                    ],
+                    steps: [
+                        "Install WP Go Maps, go to Maps > Add New Map",
+                        "Set the default centre point (drag the map to Africa) and zoom level",
+                        "For each FMNR country: click Add Marker, search for the location, add a title and description with the country stats",
+                        "Style markers using the Marker icon settings (upload a custom green pin SVG for brand consistency)",
+                        "On your page, add the WP Go Maps block and select your map",
+                        "In the block settings, set map width to 100% and adjust height (500px recommended)"
+                    ],
+                    technical: [
+                        "WP Go Maps free tier uses OpenLayers — no API key required",
+                        "To use Google Maps tiles: enable Google Maps in plugin settings and add a free Google Maps API key",
+                        "Marker data is stored in the WordPress database — edit anytime without touching code",
+                        "For rich popup cards with multiple stats: use the Description field with basic HTML formatting",
+                        "Mobile responsive by default — map reflows to full width on smaller screens"
+                    ]
+                }
+            },
+            "Cards": {
+                label: "Block",
+                desc: "Responsive card grid supporting image, video and text variants in 1-4 column layouts.",
+                where: "Partner page, Resources page",
+                behaviour: [
+                    "Cards support three variants: image thumbnail, video embed, text-only",
+                    "Hover state: subtle lift with shadow transition",
+                    "Image cards: thumbnail with title, description and CTA link",
+                    "Video cards: play button overlay, click to expand or link out",
+                    "Grid adapts: 4 columns to 3 to 2 to 1 as viewport narrows"
+                ],
+                technical: [
+                    "CSS Grid with auto-fill and minmax for fluid columns",
+                    "Consistent card height using flex column layout",
+                    "Images use object-fit: cover with fixed aspect ratio container",
+                    "Accessible: all cards are links with descriptive text"
+                ],
+                wordpress: {
+                    desc: "Use Kadence Blocks to build image card grids — auto-pull from posts using the Posts block, or build manual cards using the Info Box block.",
+                    plugins: [
+                        "Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"
+                    ],
+                    steps: [
+                        "Install Kadence Blocks from Plugins > Add New",
+                        "For post-based cards (e.g. Resources): add the Kadence Posts block, choose post type, set columns to 4",
+                        "For manual cards (e.g. Partner types): add the Kadence Info Box block, set image, heading, body text and button URL",
+                        "Wrap multiple Info Box blocks in a Kadence Row Layout block and set it to 4 equal columns",
+                        "In each Info Box block, set image aspect ratio in the Image settings panel",
+                        "Set hover shadow in Advanced > Box Shadow — use 0 8px 30px rgba(0,0,0,0.08) to match the FMNR style"
+                    ],
+                    technical: [
+                        "Kadence Posts block filters by category, tag or custom taxonomy for curated content feeds",
+                        "Info Box images use object-fit: cover automatically — no CSS needed",
+                        "Row Layout handles responsive columns: set breakpoints for tablet (2 col) and mobile (1 col) in Layout settings",
+                        "Alternative: Essential Blocks (free) has similar card and post grid blocks",
+                        "Cards created with Info Box are static content — update them in the page editor whenever needed"
+                    ]
+                }
+            },
+            "Scroll Animations": {
+                label: "Interaction",
+                desc: "8 animation patterns used across the site, all triggered on scroll using GSAP + ScrollTrigger.",
+                where: "All pages",
+                behaviour: [
+                    "Fade-up: elements slide up 32px and fade in as they enter viewport",
+                    "Stagger: grid items animate sequentially with 80ms delay between each",
+                    "Parallax: background images move at different rate to create depth",
+                    "Scale-in: elements grow from 60% with bounce easing",
+                    "Count-up: numbers animate from 0 to target value",
+                    "Slide-in: elements enter from left or right",
+                    "Bar chart: horizontal bars animate width from 0% to target",
+                    "Ken Burns: slow zoom and pan on images"
+                ],
+                technical: [
+                    "GSAP 3.12.5 + ScrollTrigger plugin",
+                    "All animations trigger once (no replay on scroll back)",
+                    "Custom cubic-bezier easing: (0.16, 1, 0.3, 1) for smooth deceleration",
+                    "IntersectionObserver fallback for count-up on pages without GSAP"
+                ],
+                wordpress: {
+                    desc: "Apply entrance animations to any Gutenberg block using Templately's built-in animation controls — no CSS or JavaScript required.",
+                    plugins: [
+                        "Templately (free) — wordpress.org/plugins/templately"
+                    ],
+                    steps: [
+                        "Install and activate Templately from Plugins > Add New",
+                        "In the page editor, select any Gutenberg block you want to animate",
+                        "Open the block settings panel on the right and look for the Templately Animation tab",
+                        "Choose an entrance effect: Fade Up, Slide In Left, Zoom In, Bounce etc.",
+                        "Set Duration (0.6s recommended) and Delay (use stagger: add 0.1s delay increments for each card in a grid)",
+                        "Click Preview to see the animation in the editor"
+                    ],
+                    technical: [
+                        "Templately injects its own lightweight animation library — no GSAP licence required",
+                        "Works on any block type including core Gutenberg, Kadence, Essential Blocks and others",
+                        "Animations trigger once as the element scrolls into view — same behaviour as the custom-built site",
+                        "For Ken Burns effect on images: use the Kadence Cover block which includes a built-in Ken Burns option",
+                        "For parallax scrolling: Templately Pro (paid) includes a parallax option, or use the free Cocoon parallax block if your theme supports it"
+                    ]
+                }
+            },
+            "Image Hero with Overlay": {
+                label: "Block",
+                desc: "Full-viewport image hero with Ken Burns animation, dark gradient overlay and eyebrow label.",
+                where: "Tony Rinaudo page",
+                behaviour: [
+                    "Image fills 100vh with slow Ken Burns zoom animation (12s loop)",
+                    "Dark gradient overlay from bottom ensures text readability",
+                    "Eyebrow label (green pill) shows category above main heading",
+                    "Scroll indicator arrow bounces at bottom of hero",
+                    "Heading fades in on page load with slight delay"
+                ],
+                technical: [
+                    "CSS @keyframes for Ken Burns (scale + translate)",
+                    "Gradient: linear-gradient from transparent to rgba(0,0,0,0.7)",
+                    "Image loaded via CSS background-image for better cover behaviour",
+                    "100vh with -webkit-fill-available fallback for iOS"
+                ],
+                wordpress: {
+                    desc: "Use the Kadence Cover block which includes a built-in Ken Burns animation option — no custom CSS needed.",
+                    plugins: [
+                        "Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"
+                    ],
+                    steps: [
+                        "Add a Kadence Cover block (not the core Cover block)",
+                        "Upload your hero image via the block's media panel",
+                        "In Block Settings > Image, enable Ken Burns animation and set zoom direction",
+                        "Set Overlay colour to #000 and opacity to 60-70% for text readability",
+                        "Add a Kadence Advanced Heading as an inner block for the eyebrow label (style it as a small green pill via Typography settings)",
+                        "Add a second Kadence Advanced Heading for the main H1",
+                        "Set the Cover block minimum height to 100vh"
+                    ],
+                    technical: [
+                        "Kadence Cover Ken Burns is a CSS animation applied automatically — no code",
+                        "For the gradient overlay: Kadence Cover supports gradient overlays in its Overlay settings",
+                        "The scroll indicator arrow can be added as an SVG in a Custom HTML inner block",
+                        "If you prefer core blocks: use a core Cover block with the image, then add the Ken Burns CSS class and paste the @keyframes in Appearance > Customizer > Additional CSS"
+                    ]
+                }
+            },
+            "Timeline Accordion": {
+                label: "Block",
+                desc: "Vertical timeline with expandable year entries revealing detail text and images.",
+                where: "Tony Rinaudo page",
+                behaviour: [
+                    "Vertical line connects all timeline entries",
+                    "Each entry shows year and title — click to expand",
+                    "Expanded state reveals paragraph text and optional image",
+                    "Only one entry open at a time (accordion pattern)",
+                    "Smooth height animation on expand/collapse",
+                    "Entries stagger-animate in on scroll"
+                ],
+                technical: [
+                    "CSS transition on max-height for smooth accordion",
+                    "Vertical line via ::before pseudo-element on container",
+                    "Year markers are absolutely positioned circles on the line",
+                    "Reusable: data can be swapped for any chronological content"
+                ],
+                wordpress: {
+                    desc: "Use the Essential Blocks Timeline block for a no-code vertical timeline with expand/collapse interactions.",
+                    plugins: [
+                        "Essential Blocks (free) — wordpress.org/plugins/essential-blocks"
+                    ],
+                    steps: [
+                        "Install Essential Blocks from Plugins > Add New",
+                        "Add the Essential Blocks Timeline block to your page",
+                        "For each timeline item: enter the year as the Date, add a heading and body text",
+                        "Optional: add an image to each timeline item via the Image field in block settings",
+                        "In Style settings: set the connector line colour to var(--color-green) (#077D57) and marker colour to match",
+                        "For accordion behaviour: use the Accordion block from Essential Blocks alongside the Timeline, or combine Timeline entries with the Accordion block"
+                    ],
+                    technical: [
+                        "Essential Blocks Timeline does not have built-in click-to-expand — it shows all content by default",
+                        "For true accordion behaviour: use the Essential Blocks Accordion block styled to look like timeline entries",
+                        "Alternative approach: Kadence Blocks Tabs block can simulate an accordion timeline with year labels as tabs",
+                        "For the vertical connecting line: Essential Blocks Timeline draws this automatically",
+                        "All content is editable in the WordPress editor — no database queries or custom post types required"
+                    ]
+                }
+            },
+            "Split Bio Panel": {
+                label: "Block",
+                desc: "50/50 image-text split layout with role tags and multi-paragraph biography.",
+                where: "Tony Rinaudo page",
+                behaviour: [
+                    "Left: large rounded portrait photo",
+                    "Right: role tags (green pills), name heading, multi-paragraph bio",
+                    "Tags are non-interactive labels showing roles/titles",
+                    "Stacks vertically on mobile (image on top, text below)",
+                    "Content fades up on scroll"
+                ],
+                technical: [
+                    "CSS Grid 50/50 split, switches to single column at 768px",
+                    "Image uses border-radius: 16px with object-fit: cover",
+                    "Tags use same pill style as demo-label (green background, uppercase)",
+                    "Reusable for any person profile or ambassador spotlight"
+                ],
+                wordpress: {
+                    desc: "Use the core Gutenberg Media & Text block — it is a native 50/50 split layout with zero plugins required.",
+                    plugins: [
+                        "None — Media &amp; Text block ships with WordPress core"
+                    ],
+                    steps: [
+                        "Add a Media &amp; Text block to your page",
+                        "Click the image area and upload or select the portrait photo",
+                        "In the block settings sidebar, enable Crop image to fill entire left column",
+                        "Add Heading, Paragraph blocks in the right text column for the name and bio",
+                        "For role tags (green pills): add a Buttons block set to non-linked style, or use a Paragraph with a Custom CSS class for the pill styling",
+                        "The block automatically stacks image on top on mobile — no extra configuration"
+                    ],
+                    technical: [
+                        "Rounded image corners: in the image block settings, set Border Radius to 16px",
+                        "For the pill/tag styling, add this to Appearance > Customizer > Additional CSS: .wp-role-tag { display: inline-block; background: rgba(7,125,87,0.1); color: #077D57; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }",
+                        "Then add the class wp-role-tag to the Buttons or Paragraph block via Advanced > Additional CSS class",
+                        "Media &amp; Text block supports 50/50, 40/60 and 33/66 splits — set in the block toolbar"
+                    ]
+                }
+            },
+            "Pull Quote Band": {
+                label: "Block",
+                desc: "Full-width coloured band with large italic quotation and attribution.",
+                where: "Tony Rinaudo, Impact pages",
+                behaviour: [
+                    "Full-bleed green background breaks up page content visually",
+                    "Large italic quote text (serif or heading font for contrast)",
+                    "Attribution below: name in bold, role in regular weight",
+                    "Quote fades in on scroll",
+                    "Adds visual rhythm between dense content sections"
+                ],
+                technical: [
+                    "Background: var(--color-green) with white text",
+                    "Max-width container inside full-bleed wrapper",
+                    "Font-size: clamp() for responsive quote text sizing",
+                    "Reusable: drop into any page as a section divider"
+                ],
+                wordpress: {
+                    desc: "Use the core Gutenberg Quote block wrapped inside a Cover block set to a solid green background colour — no plugins needed.",
+                    plugins: [
+                        "None — uses core Gutenberg blocks only"
+                    ],
+                    steps: [
+                        "Add a Cover block and set its background to a solid colour: #077D57",
+                        "Set Cover block alignment to Full Width",
+                        "Set minimum height to auto so it sizes to content",
+                        "Inside the Cover, add a Quote block for the quotation text",
+                        "In the Quote block, enter the quote in the main area and the attribution in the Citation field",
+                        "Set the Quote block text colour to white in Typography > Color settings",
+                        "Increase the quote font size to XL or 2XL in the block toolbar"
+                    ],
+                    technical: [
+                        "The Quote block's Citation field renders as a <cite> element — style it via Additional CSS if needed",
+                        "For italic styling: select the quote text and use the italic button in the block toolbar",
+                        "For a constrained content width inside the full-bleed green band: wrap the Quote in a Group block with a max-width constraint",
+                        "To add a scroll fade-in: add the Templately animation Fade Up to the inner Quote block"
+                    ]
+                }
+            },
+            "Numbered Pillars": {
+                label: "Block",
+                desc: "Three-column numbered feature cards for values, steps or principles.",
+                where: "Tony Rinaudo page",
+                behaviour: [
+                    "Three cards in a row, each with large numeral (01, 02, 03)",
+                    "Below numeral: heading and supporting paragraph",
+                    "Cards stagger-animate on scroll (left to right)",
+                    "Equal height cards regardless of content length",
+                    "Stacks to single column on mobile"
+                ],
+                technical: [
+                    "CSS Grid with 3 equal columns",
+                    "Large numeral uses heading font at ~64px with low opacity or teal colour",
+                    "Stagger delay: 120ms between each card",
+                    "Reusable for any 3-item content pattern"
+                ],
+                wordpress: {
+                    desc: "Use the Kadence Blocks Info Box in a 3-column Row Layout — set the large numeral as the icon or heading prefix.",
+                    plugins: [
+                        "Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"
+                    ],
+                    steps: [
+                        "Add a Kadence Row Layout block and set it to 3 equal columns",
+                        "Inside each column, add a Kadence Info Box block",
+                        "For the large numeral: in Info Box settings, set the Icon/Number field to display mode and type 01, 02, 03",
+                        "Alternatively: use a Kadence Advanced Heading at ~72px font size for the numeral, followed by a smaller heading and paragraph",
+                        "Set all cards to equal height via the Row Layout > Row Height setting",
+                        "Add stagger animation via Templately: open each Info Box, go to Templately Animation, set Fade Up with 0ms, 120ms and 240ms delays"
+                    ],
+                    technical: [
+                        "Kadence Row Layout handles the 3-col to 1-col responsive breakpoint automatically",
+                        "For the large numeral colour: set it to #0FFBAB (teal) or a low-opacity version of #1d1d1f",
+                        "Info Box equalises card heights within a row — no CSS needed",
+                        "Alternative: Essential Blocks Count Up block can display the numeral with animation, though for static numbers Kadence is simpler"
+                    ]
+                }
+            },
+            "Awards Grid": {
+                label: "Block",
+                desc: "Three-column card grid with trophy icons, year badges and award details.",
+                where: "Tony Rinaudo page",
+                behaviour: [
+                    "Cards show: trophy icon, year, award name, issuing body",
+                    "Stagger-animate on scroll (cascade effect)",
+                    "Hover: subtle lift with shadow",
+                    "Responsive: 3 to 2 to 1 columns as viewport narrows"
+                ],
+                technical: [
+                    "CSS Grid with gap spacing",
+                    "Icon is inline SVG trophy/badge",
+                    "Year shown as small pill badge",
+                    "Reusable for certifications, press mentions or milestones"
+                ],
+                wordpress: {
+                    desc: "Use the Kadence Info Box block in a 3-column layout — set a trophy SVG as the icon and use the Title field for the award name.",
+                    plugins: [
+                        "Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"
+                    ],
+                    steps: [
+                        "Add a Kadence Row Layout block set to 3 equal columns",
+                        "In each column, add a Kadence Info Box block",
+                        "In Info Box > Icon settings, upload or paste a trophy SVG icon (free icons at heroicons.com)",
+                        "Use the Title field for the award name and the Text field for the issuing body",
+                        "For the year badge: add it as a small Paragraph above the title, styled as a pill (add CSS class wp-year-badge and define it in Additional CSS)",
+                        "Set hover shadow in Info Box > Advanced > Box Shadow to 0 8px 24px rgba(0,0,0,0.1)",
+                        "Add stagger animation via Templately with increasing delay on each card"
+                    ],
+                    technical: [
+                        "Kadence Row Layout sets responsive breakpoints: 3 col on desktop, 2 on tablet, 1 on mobile — configure in Layout Settings",
+                        "For the year pill: .wp-year-badge { display: inline-block; font-size: 11px; font-weight: 700; background: #f0f0f0; color: #6e6e73; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; } — paste into Additional CSS",
+                        "Icons can also be sourced from the Kadence built-in icon library (500+ included icons)",
+                        "Hover lift effect (translateY) requires a small Custom CSS snippet — not available in Kadence free tier natively"
+                    ]
+                }
+            },
+            "Media Cards Grid": {
+                label: "Block",
+                desc: "Four-column grid of external link cards with thumbnails and source labels.",
+                where: "Tony Rinaudo page",
+                behaviour: [
+                    "Each card links to an external resource (opens in new tab)",
+                    "Shows: thumbnail image, source label (e.g. 'BBC'), title",
+                    "Hover: image scales slightly, card lifts",
+                    "4 columns on desktop to 2 on tablet to 1 on mobile",
+                    "External link icon indicates leaves the site"
+                ],
+                technical: [
+                    "Cards are <a> tags with target='_blank' and rel='noopener'",
+                    "Images use aspect-ratio container with object-fit: cover",
+                    "Source label is uppercase small text above title",
+                    "Reusable for press, podcasts or related reading sections"
+                ],
+                wordpress: {
+                    desc: "Use the Kadence Row Layout with Info Box blocks — set each card's link to open in a new tab and add the source label as a styled eyebrow text.",
+                    plugins: [
+                        "Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"
+                    ],
+                    steps: [
+                        "Add a Kadence Row Layout block set to 4 equal columns",
+                        "In each column, add a Kadence Info Box block",
+                        "Upload a thumbnail image in Info Box > Media settings",
+                        "In Info Box > Link settings, enter the external URL and enable Open in New Tab",
+                        "For the source label (e.g. 'BBC News'): add a Paragraph block above the Info Box title, style it in uppercase via Typography settings",
+                        "Set Kadence Row Layout responsive breakpoints: 4 col desktop, 2 col tablet, 1 col mobile"
+                    ],
+                    technical: [
+                        "The external link icon can be added as a small SVG in the Info Box button/link label",
+                        "Image aspect ratio: set via Info Box > Media > Image Ratio (16:9 or 3:2 recommended for press thumbnails)",
+                        "For a dynamic version that auto-pulls recent press mentions: consider a custom post type for 'Press' and use Kadence Posts block",
+                        "Hover image scale: add a CSS class to each Info Box and define the :hover transform in Additional CSS — one snippet covers all cards"
+                    ]
+                }
+            },
+            "CTA Band": {
+                label: "Block",
+                desc: "Dark charcoal full-width band with heading, supporting text and dual action buttons.",
+                where: "All pages (before footer)",
+                behaviour: [
+                    "Full-bleed dark background creates visual separation before footer",
+                    "Heading + short supporting paragraph centred",
+                    "Two buttons: primary (green fill) and secondary (white outline)",
+                    "Content fades up on scroll",
+                    "Consistent closer used on every page for cohesion"
+                ],
+                technical: [
+                    "Background: var(--color-charcoal) or #1d1d1f",
+                    "Buttons use consistent site-wide button styles",
+                    "Max-width text container inside full-bleed wrapper",
+                    "Padding: 96px top/bottom for generous spacing"
+                ],
+                wordpress: {
+                    desc: "Use the core Gutenberg Cover block as a full-bleed dark wrapper — add Heading, Paragraph and Buttons blocks inside. No plugins required.",
+                    plugins: [
+                        "None — uses core Gutenberg blocks only"
+                    ],
+                    steps: [
+                        "Add a Cover block and set Background Type to Solid Colour: #1d1d1f",
+                        "Set Cover block alignment to Full Width",
+                        "Set minimum height to auto (content-driven height)",
+                        "Add padding top and bottom (96px) via the block's Dimensions settings in Styles",
+                        "Inside the Cover, add a Group block and set its max-width to 700px and margin to auto (centres the content)",
+                        "Inside the Group: add an H2 Heading block (white text), a Paragraph block (grey text), and a Buttons block",
+                        "For the Buttons block: add two buttons — set the first to Fill style (green background), the second to Outline style (white border)"
+                    ],
+                    technical: [
+                        "Button colours: set Fill button background to #077D57 and text to white; set Outline button border to white and text to white",
+                        "This block is used on every page — build it once as a Reusable Block (Block > Create Reusable Block) so updating it once updates everywhere",
+                        "Reusable blocks are now called Patterns in WordPress 6.3+ — find them in the Pattern Library in the inserter",
+                        "To add a scroll fade-in: add Templately animation Fade Up to the inner Group block"
+                    ]
+                }
+            },
+            "Impact Stats": {
+                label: "Data Visualisation",
+                desc: "Animated counting numbers that count up from zero when scrolled into view.",
+                where: "Homepage, Impact, Partner pages",
+                behaviour: [
+                    "Green band with 4 stat counters in a row",
+                    "Numbers animate from 0 to target value over ~2 seconds",
+                    "Triggers once when section enters viewport (no replay)",
+                    "Supports suffixes: M (million), K (thousand), + (plus)",
+                    "Labels beneath each number describe the metric"
+                ],
+                technical: [
+                    "IntersectionObserver triggers the count animation",
+                    "requestAnimationFrame loop for smooth number interpolation",
+                    "Numbers rounded to integers during animation",
+                    "Background: var(--color-green) with white text"
+                ],
+                wordpress: {
+                    desc: "Use the Essential Blocks Counter block in a 4-column layout — configure start/end numbers, suffix and animation duration entirely in the block settings.",
+                    plugins: [
+                        "Essential Blocks (free) — wordpress.org/plugins/essential-blocks"
+                    ],
+                    steps: [
+                        "Install Essential Blocks from Plugins > Add New",
+                        "Add a Columns block and set it to 4 equal columns",
+                        "Inside each column, add an Essential Blocks Counter block",
+                        "Set Starting Number to 0 and Ending Number to your target value (e.g. 28 for countries)",
+                        "In the Suffix field, enter M, K or + as needed",
+                        "Below each counter, add a Paragraph block for the label (e.g. 'Countries')",
+                        "Wrap the entire Columns block in a Cover or Group block with a solid green background (#077D57) and set text colour to white",
+                        "Set Cover alignment to Full Width"
+                    ],
+                    technical: [
+                        "Essential Blocks Counter animates using IntersectionObserver — triggers once on scroll, same behaviour as the custom-built version",
+                        "Animation duration is configurable per counter in block settings (2000ms recommended)",
+                        "For decimal values (e.g. 2.5M): set the ending number to 2.5 and add M as the suffix",
+                        "Responsive: set the Columns block to 2 columns on tablet and 1 on mobile via the block's responsive controls",
+                        "Alternative: Kadence Blocks Counter block works similarly if you already have Kadence installed"
+                    ]
+                }
+            },
+            "Bar Chart": {
+                label: "Data Visualisation",
+                desc: "Animated horizontal bar chart with percentage fills on dark background.",
+                where: "Impact page",
+                behaviour: [
+                    "Horizontal bars animate from 0% width to target percentage",
+                    "Animation triggers on scroll into viewport",
+                    "Labels on left identify each metric",
+                    "Percentage values appear on right as bars fill",
+                    "Bars animate with staggered delay (top to bottom)"
+                ],
+                technical: [
+                    "CSS transition on width property (1.2s cubic-bezier)",
+                    "Dark background (#1d1d1f) with teal bar fills",
+                    "Data defined in simple JS array: [{label, value}]",
+                    "IntersectionObserver triggers class addition to start animation"
+                ],
+                wordpress: {
+                    desc: "Use a Custom HTML block with the Chart.js snippet from bar-chart-demo.html — paste and edit the data array. No plugin or developer needed.",
+                    plugins: [
+                        "None for Option A (Custom HTML block)",
+                        "Optional — wpDataTables (free) — wordpress.org/plugins/wpdatatables for a no-code chart builder"
+                    ],
+                    steps: [
+                        "Option A (copy-paste): Open bar-chart-demo.html in a browser, right-click > View Source and copy the chart section HTML/JS",
+                        "In the WordPress editor, add a Custom HTML block and paste the copied code",
+                        "Edit the labels array and data array near the top of the script to update the values",
+                        "The Chart.js library loads from CDN automatically — no file uploads needed",
+                        "Option B (no-code): Install wpDataTables, go to Tables > Create New Table, enter your data",
+                        "In wpDataTables chart settings, choose Chart Type: Horizontal Bar and configure colours to match (#0FFBAB on dark background)",
+                        "Insert the chart on your page using the wpDataTables block"
+                    ],
+                    technical: [
+                        "Option A: Chart.js is loaded from cdn.jsdelivr.net — requires internet connection on the page visitor's device (always true)",
+                        "Option A: to update chart data, edit the Custom HTML block directly — change the values in the data: [] array",
+                        "Option B: wpDataTables free tier supports basic bar charts; advanced styling options require the paid version",
+                        "For the dark background: wrap the chart block in a Cover or Group block with background #1d1d1f and set to Full Width alignment",
+                        "Animated bars on scroll: Option A includes this via IntersectionObserver in the pasted script; Option B charts load statically"
+                    ]
+                }
+            },
+            "Stat Stack": {
+                label: "Data Visualisation",
+                desc: "Vertical stack of bold headline statistics separated by rules — numbers animate on scroll.",
+                where: "Country pages (Ethiopia, Uganda), Homepage, World Vision FMNR page on fmnrhub.com.au",
+                behaviour: [
+                    "Each stat is a full-width sentence with an embedded animated number",
+                    "Items separated by dark horizontal rules for visual rhythm",
+                    "Numbers count up from 0 to target value when scrolled into view",
+                    "Items stagger-reveal with 150ms delay between each",
+                    "Supports integers, decimals and large numbers (with comma formatting)",
+                    "Text uses heading font at large scale for maximum impact"
+                ],
+                technical: [
+                    "IntersectionObserver triggers both reveal animation and count-up",
+                    "requestAnimationFrame loop with ease-out cubic for smooth number interpolation",
+                    "CSS opacity + translateY transition for stagger reveal",
+                    "Font-size uses clamp(28px, 4vw, 48px) for responsive scaling",
+                    "Data-driven: each .stat-number span holds data-target attribute"
+                ],
+                wordpress: {
+                    desc: "Build using stacked Heading blocks inside a Group block with top/bottom borders. Use Essential Blocks Counter inline or Kadence Blocks for the animated numbers.",
+                    plugins: [
+                        "Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks",
+                        "Optional: Essential Blocks (free) for inline counter animation"
+                    ],
+                    steps: [
+                        "Add a Group block and set its width to 'Wide' or a fixed max-width (900px)",
+                        "Inside the Group, add Heading blocks — one per stat line",
+                        "Set each heading to H3, font: heading font, colour: FMNR green (#007A3D)",
+                        "In the Group block settings, add a top and bottom border (2px solid #1d1d1f)",
+                        "For separators between items: add a Separator block between each heading, set to 'Wide' and colour #1d1d1f",
+                        "For animated numbers: replace the number text with an Essential Blocks Counter shortcode inline, or simply type the static number if animation isn't needed",
+                        "Set block spacing: 48px padding top/bottom on each heading for generous vertical rhythm"
+                    ],
+                    technical: [
+                        "The animated count-up requires Essential Blocks Counter — if that feels complex, static bold numbers still look great",
+                        "Background: set the Group block background to #f5f5f7 (light grey) to match the demo",
+                        "Typography: use the theme's heading font at 36–48px for impact",
+                        "Content is fully editable in the block editor — add or remove stat lines as needed",
+                        "Mobile: headings will scale down automatically if the theme supports fluid typography"
+                    ]
+                }
+            }
+        };
+
+        // Tab switching
+        tabBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                var tab = btn.getAttribute('data-tab');
+                if (tab === 'docs') {
+                    iframe.style.display = 'none';
+                    docsPanel.classList.add('visible');
+                    wpPanel.classList.remove('visible');
+                } else if (tab === 'wordpress') {
+                    iframe.style.display = 'none';
+                    docsPanel.classList.remove('visible');
+                    wpPanel.classList.add('visible');
+                } else {
+                    iframe.style.display = 'block';
+                    docsPanel.classList.remove('visible');
+                    wpPanel.classList.remove('visible');
+                }
+            });
+        });
+
+        function renderDocs(title) {
+            var data = docs[title];
+            if (!data) {
+                docsPanel.innerHTML = '<div style="padding:64px 48px;color:#86868b;font-size:15px;">Documentation not yet available for this component.</div>';
+                return;
+            }
+            var html = '<span class="doc-label">' + data.label + '</span>';
+            html += '<h2 class="doc-title">' + title + '</h2>';
+            html += '<p class="doc-desc">' + data.desc + '</p>';
+            html += '<p class="doc-where">Used on: <span>' + data.where + '</span></p>';
+            html += '<div class="doc-section"><h4>Behaviour</h4><ul>';
+            data.behaviour.forEach(function(item) { html += '<li>' + item + '</li>'; });
+            html += '</ul></div>';
+            html += '<div class="doc-section"><h4>Technical Details</h4><ul>';
+            data.technical.forEach(function(item) { html += '<li>' + item + '</li>'; });
+            html += '</ul></div>';
+            docsPanel.innerHTML = html;
+        }
+
+        function renderWP(title) {
+            var data = docs[title];
+            if (!data || !data.wordpress) {
+                wpPanel.innerHTML = '<div style="padding:64px 48px;color:#86868b;font-size:15px;">WordPress integration guide not yet available for this component.</div>';
+                return;
+            }
+            var wp = data.wordpress;
+            var shots = wpScreenshots[title] || [];
+            var html = '<span class="doc-label" style="color:#21759b;background:rgba(33,117,155,0.1);">WordPress Integration</span>';
+            html += '<h2 class="doc-title">' + title + '</h2>';
+            html += '<p class="doc-desc">' + wp.desc + '</p>';
+            if (wp.plugins && wp.plugins.length) {
+                html += '<div class="doc-section"><h4>Plugins Required</h4><ul>';
+                wp.plugins.forEach(function(item) {
+                    html += '<li><span class="wp-plugin-tag">Plugin</span>' + item + '</li>';
+                });
+                html += '</ul></div>';
+            }
+            if (shots.length) {
+                html += '<div class="doc-section"><h4>Plugin Screenshots</h4>';
+                html += '<div class="wp-screenshots-grid">';
+                shots.forEach(function(s) {
+                    html += '<figure class="wp-screenshot-item">';
+                    html += '<img src="' + s.url + '" alt="' + s.caption + '" loading="lazy">';
+                    html += '<figcaption>' + s.caption + '</figcaption>';
+                    html += '</figure>';
+                });
+                html += '</div></div>';
+            }
+            html += '<div class="doc-section"><h4>Implementation Steps</h4><ul>';
+            wp.steps.forEach(function(item) { html += '<li>' + item + '</li>'; });
+            html += '</ul></div>';
+            html += '<div class="doc-section"><h4>Technical Notes</h4><ul>';
+            wp.technical.forEach(function(item) { html += '<li>' + item + '</li>'; });
+            html += '</ul></div>';
+            wpPanel.innerHTML = html;
+        }
+
+        // Device toggle
+        toggleBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                toggleBtns.forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                var view = btn.getAttribute('data-view');
+                iframe.className = view + '-view';
+            });
+        });
+
+        // Text layer toggle (for banner)
+        var textToggle = document.getElementById('text-toggle');
+        var textVisible = true;
+        textToggle.addEventListener('click', function() {
+            textVisible = !textVisible;
+            textToggle.classList.toggle('active', textVisible);
+            try {
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+                var style = doc.getElementById('hide-text-layer');
+                if (!textVisible) {
+                    if (!style) {
+                        style = doc.createElement('style');
+                        style.id = 'hide-text-layer';
+                        style.textContent = '.hero-content, .hero h1, .hero h2, .hero p, .hero-text, [class*="hero"] h1, [class*="hero"] h2, [class*="hero"] p, [class*="hero"] .btn, [class*="banner"] h1, [class*="banner"] p { opacity: 0 !important; transition: opacity 0.3s; }';
+                        doc.head.appendChild(style);
+                    }
+                } else if (style) {
+                    style.remove();
+                }
+            } catch(e) {}
+        });
+
+        function openModal(href, title) {
+            titleEl.textContent = title || 'Component';
+            urlEl.textContent = href;
+            openLink.href = href;
+            iframe.src = href;
+            iframe.className = 'desktop-view';
+            iframe.style.display = 'block';
+            docsPanel.classList.remove('visible');
+            wpPanel.classList.remove('visible');
+            tabBtns.forEach(function(b) { b.classList.remove('active'); });
+            tabBtns[0].classList.add('active');
+            toggleBtns.forEach(function(b) { b.classList.remove('active'); });
+            toggleBtns[0].classList.add('active');
+            // Show text toggle only for banner
+            textVisible = true;
+            textToggle.classList.add('active');
+            textToggle.style.display = (title === 'Video Hero Banner') ? 'flex' : 'none';
+            renderDocs(title);
+            renderWP(title);
+            backdrop.classList.add('open');
+            document.body.classList.add('modal-open');
+        }
+        function closeModal() {
+            backdrop.classList.remove('open');
+            document.body.classList.remove('modal-open');
+            setTimeout(function() { iframe.src = 'about:blank'; }, 400);
+        }
+        closeBtn.addEventListener('click', closeModal);
+        backdrop.addEventListener('click', function(e) { if (e.target === backdrop) closeModal(); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+        document.querySelectorAll('.showcase-card').forEach(function(card) {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                var href = card.getAttribute('href');
+                var title = card.getAttribute('data-title') || card.querySelector('.showcase-card__title').textContent;
+                openModal(href, title);
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

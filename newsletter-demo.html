@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Newsletter Demo — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:var(--font-body);background:#f0f0f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+        .demo-frame{width:100%;max-width:1280px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.15)}
+
+        .newsletter-section{background:#000;padding:100px 48px;text-align:center}
+        .newsletter-inner{max-width:600px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:32px}
+        .newsletter-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--color-teal)}
+        .newsletter-inner h2{font-family:var(--font-heading);font-size:clamp(32px,5vw,60px);text-transform:uppercase;color:#fff;line-height:1}
+        .newsletter-inner h2 em{color:var(--color-teal);font-style:normal}
+        .newsletter-inner>p{font-size:18px;color:rgba(255,255,255,.45);line-height:1.6}
+        .newsletter-form{display:flex;gap:12px;width:100%;max-width:480px}
+        .newsletter-form input[type="email"]{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:980px;padding:14px 20px;font-family:var(--font-body);font-size:15px;color:#fff;outline:none;transition:border-color .2s}
+        .newsletter-form input[type="email"]::placeholder{color:rgba(255,255,255,.28)}
+        .newsletter-form input[type="email"]:focus{border-color:var(--color-teal)}
+        .newsletter-form .btn-subscribe{background:var(--color-green);border:none;color:#fff;font-family:var(--font-body);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:14px 24px;border-radius:980px;cursor:pointer;white-space:nowrap;transition:background .2s}
+        .newsletter-form .btn-subscribe:hover{background:#065e42}
+        .newsletter-success{display:none;font-size:16px;color:var(--color-teal);font-weight:700}
+        .newsletter-success.visible{display:block}
+        .newsletter-legal{font-size:13px;color:rgba(255,255,255,.22)}
+        @media(max-width:600px){.newsletter-section{padding:60px 24px}.newsletter-form{flex-direction:column}}
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <section class="newsletter-section">
+            <div class="newsletter-inner">
+                <span class="newsletter-eyebrow">Stay connected</span>
+                <h2>Join the <em>movement</em></h2>
+                <p>The latest stories, research and updates from the global FMNR community &#8212; delivered to your inbox.</p>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" name="email" placeholder="Your email address" required>
+                    <button type="submit" class="btn-subscribe">Subscribe</button>
+                </form>
+                <p class="newsletter-success" id="newsletter-success">Thanks for subscribing!</p>
+                <p class="newsletter-legal">No spam. Unsubscribe anytime.</p>
+            </div>
+        </section>
+    </div>
+    <script>
+    (function(){
+        var f=document.getElementById('newsletter-form'),s=document.getElementById('newsletter-success');
+        if(f)f.addEventListener('submit',function(e){e.preventDefault();f.style.display='none';s.classList.add('visible');});
+    })();
+    </script>
+</body>
+</html>

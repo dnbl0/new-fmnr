@@ -8,25 +8,25 @@
     <link href="design-tokens.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); color: #1d1d1f; background: #f5f5f7; -webkit-font-smoothing: antialiased; }
+        body { font-family: var(--font-body); color: var(--wp--preset--color--contrast); background: var(--wp--preset--color--base); -webkit-font-smoothing: antialiased; }
 
         .page-wrap { max-width: 1400px; margin: 0 auto; padding: 80px 48px 96px; }
 
         h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 52px); text-transform: uppercase; margin-bottom: 6px; line-height: 1; }
-        .meta { font-size: 13px; color: #86868b; margin-bottom: 8px; }
-        .subtitle { font-size: 16px; color: #6e6e73; margin-bottom: 56px; max-width: 560px; line-height: 1.5; }
+        .meta { font-size: 13px; color: var(--wp--preset--color--contrast-3); margin-bottom: 8px; }
+        .subtitle { font-size: 16px; color: var(--wp--preset--color--contrast-2); margin-bottom: 56px; max-width: 560px; line-height: 1.5; }
 
         /* ── Legend ── */
         .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
-        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #6e6e73; }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--wp--preset--color--contrast-2); }
         .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
         .legend-dot.new { background: #077D57; }
         .legend-dot.improve { background: #FA6B01; }
-        .legend-dot.existing { background: #d1d1d6; }
+        .legend-dot.existing { background: var(--wp--preset--color--contrast-3); }
 
         /* ── Global row ── */
         .global-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
-        .global-card { background: #1d1d1f; color: #fff; border-radius: 14px; padding: 20px 24px; }
+        .global-card { background: var(--wp--preset--color--contrast); color: var(--wp--preset--color--white); border-radius: 14px; padding: 20px 24px; }
         .global-card .gc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
         .global-card h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
         .global-card .gc-items { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -34,7 +34,7 @@
         .global-card .gc-item.new { background: rgba(7,125,87,0.35); color: #0FFBAB; }
 
         /* ── Section connector ── */
-        .divider-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #86868b; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e5e5e5; }
+        .divider-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--wp--preset--color--contrast-3); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e5e5e5; }
 
         /* ── Main sections grid ── */
         .sections-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; align-items: start; }
@@ -44,44 +44,44 @@
 
         .section-head { border-radius: 12px 12px 0 0; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
         .section-head.learn   { background: #077D57; }
-        .section-head.adopt   { background: #1d1d1f; }
+        .section-head.adopt   { background: var(--wp--preset--color--contrast); }
         .section-head.partner { background: #FA6B01; }
         .section-head.impact  { background: #0a5c3f; }
         .section-head.about   { background: #3a3a3c; }
-        .section-head h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; }
-        .priority-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,0.2); color: #fff; }
+        .section-head h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--wp--preset--color--white); }
+        .priority-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,0.2); color: var(--wp--preset--color--white); }
 
         /* ── Groups within a section ── */
-        .section-body { background: #fff; border-radius: 0 0 12px 12px; border: 1px solid #e5e5e5; border-top: none; overflow: hidden; }
+        .section-body { background: var(--wp--preset--color--white); border-radius: 0 0 12px 12px; border: 1px solid #e5e5e5; border-top: none; overflow: hidden; }
 
         .group { border-bottom: 1px solid #f0f0f0; }
         .group:last-child { border-bottom: none; }
-        .group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #86868b; padding: 10px 14px 6px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+        .group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--wp--preset--color--contrast-3); padding: 10px 14px 6px; background: var(--wp--preset--color--base); border-bottom: 1px solid #f0f0f0; }
 
         /* ── Page items ── */
         .page-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 14px; border-bottom: 1px solid #f7f7f7; }
         .page-item:last-child { border-bottom: none; }
-        .page-item .page-title { font-size: 12px; color: #1d1d1f; line-height: 1.3; }
+        .page-item .page-title { font-size: 12px; color: var(--wp--preset--color--contrast); line-height: 1.3; }
         .status-pill { flex-shrink: 0; margin-left: 6px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 4px; }
         .status-pill.new     { background: rgba(7,125,87,0.1); color: #077D57; }
         .status-pill.improve { background: rgba(250,107,1,0.1); color: #c85500; }
 
         /* ── Landing page callout ── */
         .lp-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
-        .lp-card { background: #fff; border: 2px solid #FA6B01; border-radius: 12px; padding: 16px 18px; }
+        .lp-card { background: var(--wp--preset--color--white); border: 2px solid #FA6B01; border-radius: 12px; padding: 16px 18px; }
         .lp-card .lp-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #FA6B01; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
         .lp-card .lp-tag svg { width: 10px; height: 10px; flex-shrink: 0; }
-        .lp-card h3 { font-size: 13px; font-weight: 700; color: #1d1d1f; margin-bottom: 6px; line-height: 1.2; }
-        .lp-card p { font-size: 11px; color: #86868b; line-height: 1.5; margin-bottom: 10px; }
+        .lp-card h3 { font-size: 13px; font-weight: 700; color: var(--wp--preset--color--contrast); margin-bottom: 6px; line-height: 1.2; }
+        .lp-card p { font-size: 11px; color: var(--wp--preset--color--contrast-3); line-height: 1.5; margin-bottom: 10px; }
         .lp-card .lp-pages { display: flex; flex-direction: column; gap: 4px; }
-        .lp-card .lp-page { font-size: 11px; color: #1d1d1f; padding: 4px 8px; background: #fff7f2; border-radius: 5px; border-left: 2px solid #FA6B01; }
-        .lp-card.urgent { border-color: #c85500; background: #fff7f2; }
+        .lp-card .lp-page { font-size: 11px; color: var(--wp--preset--color--contrast); padding: 4px 8px; background: var(--wp--preset--color--white)7f2; border-radius: 5px; border-left: 2px solid #FA6B01; }
+        .lp-card.urgent { border-color: #c85500; background: var(--wp--preset--color--white)7f2; }
         .lp-card.urgent .lp-tag { color: #c85500; }
         .lp-card.urgent .lp-page { background: #ffe8d8; border-color: #c85500; }
         .lp-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #FA6B01; background: rgba(250,107,1,0.1); padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
 
         /* ── Footer note ── */
-        .footnote { margin-top: 48px; font-size: 12px; color: #86868b; line-height: 1.6; max-width: 560px; }
+        .footnote { margin-top: 48px; font-size: 12px; color: var(--wp--preset--color--contrast-3); line-height: 1.6; max-width: 560px; }
         .footnote a { color: var(--color-green); text-decoration: none; }
 
         @media (max-width: 1100px) { .sections-grid { grid-template-columns: repeat(3, 1fr); } }

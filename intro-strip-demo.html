@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Intro Strip Demo — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:var(--font-body);background:#f0f0f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+        .demo-frame{width:100%;max-width:1280px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.15);background:#fff}
+
+        .intro-strip{border-bottom:1px solid #e8e8e8;border-top:1px solid #e8e8e8}
+        .intro-strip-inner{max-width:1280px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 1fr}
+        .intro-col{padding:72px 0}
+        .intro-col.intro-col-right{border-left:1px solid #e8e8e8;padding-left:72px;display:flex;flex-direction:column;justify-content:center;gap:24px}
+        .intro-big{font-family:var(--font-heading);font-size:clamp(26px,2.8vw,42px);text-transform:uppercase;line-height:1.05;color:#1d1d1f}
+        .intro-big em{color:var(--color-green);font-style:normal}
+        .intro-body{font-size:17px;line-height:1.75;color:rgba(0,0,0,.52)}
+        .link-arrow{font-family:var(--font-body);font-weight:700;font-size:15px;color:var(--color-green);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+        .link-arrow:hover{text-decoration:underline}
+        @media(max-width:900px){.intro-strip-inner{grid-template-columns:1fr;padding:0 24px}.intro-col{padding:48px 0}.intro-col.intro-col-right{border-left:none;border-top:1px solid #e8e8e8;padding-left:0}}
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="intro-strip">
+            <div class="intro-strip-inner">
+                <div class="intro-col">
+                    <p class="intro-big">The world&#8217;s most <em>scalable</em> land restoration technique.</p>
+                </div>
+                <div class="intro-col intro-col-right">
+                    <p class="intro-body">FMNR is practiced by millions of smallholder farmers across 27 countries. By protecting and managing naturally regenerating trees, communities restore degraded land &#8212; faster, cheaper, and more reliably than any other method.</p>
+                    <a href="#" class="link-arrow">Learn how it works &#8250;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

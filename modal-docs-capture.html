@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modal Content Capture — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-text-primary); background: var(--color-bg-light); -webkit-font-smoothing: antialiased; padding: 48px; }
+
+        .capture-frame {
+            background: var(--color-white);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 48px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .frame-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            background: var(--color-white);
+        }
+        .frame-header h3 { font-size: 15px; font-weight: 700; }
+        .frame-header .tab-indicator {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .frame-header .tab-docs { color: var(--color-green); background: rgba(7,125,87,0.08); }
+        .frame-header .tab-wp { color: #21759b; background: rgba(33,117,155,0.1); }
+
+        .frame-body { padding: 64px 48px; }
+
+        .doc-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 16px; }
+        .doc-label--wp { color: #21759b; background: rgba(33,117,155,0.1); }
+        .doc-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .doc-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 32px; max-width: 600px; }
+        .doc-where { font-size: 14px; color: var(--color-text-primary); font-weight: 600; margin-bottom: 24px; }
+        .doc-where span { font-weight: 400; color: var(--color-text-secondary); }
+        .doc-section { margin-bottom: 32px; }
+        .doc-section h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-primary); margin-bottom: 10px; }
+        .doc-section ul { list-style: none; padding: 0; }
+        .doc-section li { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; padding: 6px 0; border-bottom: 1px solid var(--color-border-light); padding-left: 16px; position: relative; }
+        .doc-section li::before { content: ""; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: var(--color-green); }
+        .doc-section--wp li::before { background: #21759b; }
+        .wp-plugin-tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #21759b; background: rgba(33,117,155,0.08); padding: 3px 8px; border-radius: 4px; margin-right: 6px; }
+
+        .page-title { font-family: var(--font-heading); font-size: 48px; text-transform: uppercase; color: var(--color-text-primary); text-align: center; margin-bottom: 12px; }
+        .page-subtitle { font-size: 17px; color: var(--color-text-secondary); text-align: center; margin-bottom: 64px; }
+    </style>
+</head>
+<body>
+
+<h1 class="page-title">Component Documentation</h1>
+<p class="page-subtitle">Docs & WordPress integration panels for each deliverable</p>
+
+<div id="output"></div>
+
+<script>
+var docs = {
+    "Video Hero Banner": {
+        label: "Block",
+        desc: "Full-viewport autoplay video with gradient overlay, animated headline and dual CTA buttons.",
+        where: "Homepage",
+        behaviour: ["Video autoplays muted and loops on desktop; pauses on mobile to save data","Dark gradient overlay ensures text readability over any video frame","Headline animates in with fade-up on page load (not scroll-triggered)","Two CTA buttons: primary (green fill) and secondary (outline white)","Responsive: stacks vertically on mobile, text size scales down via clamp()"],
+        technical: ["MP4 source with poster image fallback","Uses object-fit: cover for full-bleed sizing","100vh height with min-height fallback for mobile browsers","Text toggle available in preview modal to inspect video without overlay"],
+        wordpress: { desc: "Replicate using the core Gutenberg Cover block with a video source — no plugins required.", plugins: ["None — Cover block ships with WordPress core"], steps: ["In the page editor, add a Cover block","Click Upload and select your MP4 from the Media Library","In the block sidebar, set Background Type to Video","Adjust the Overlay Opacity slider (50–70% works well for text contrast)","Add a Heading and Buttons block as inner blocks inside the Cover","Set the Cover block alignment to Full Width for edge-to-edge display","Set Minimum height of cover to 100vh in block settings"], technical: ["Video autoplays muted and loops automatically — browser-enforced behaviour","Compress the MP4 under 10 MB using HandBrake","Poster image: set a featured image on the cover block as the loading fallback","The video will not autoplay on iOS Safari in low-power mode","Full-width alignment requires theme wide/full alignment support"] }
+    },
+    "Mega Menu": {
+        label: "Block",
+        desc: "Multi-column navigation dropdown on desktop with full-screen hamburger drawer on mobile.",
+        where: "All pages",
+        behaviour: ["Desktop: hover triggers mega dropdown with columns of categorised links","Each column has a heading and 4-6 sub-links with descriptions","Mobile: hamburger icon triggers full-screen drawer from right","Mobile sub-menus use accordion pattern — tap to expand/collapse","Sticky header: nav bar remains fixed on scroll with subtle shadow"],
+        technical: ["Pure CSS hover on desktop (no JS for dropdown trigger)","Mobile drawer uses transform: translateX for slide animation","Breakpoint: switches at 1024px","Focus trap enabled when mobile drawer is open for accessibility"],
+        wordpress: { desc: "Use the free Max Mega Menu plugin with your existing WordPress navigation menu — no coding required.", plugins: ["Max Mega Menu (free) — wordpress.org/plugins/megamenu","Optional: Templately (free) for importing a matching header layout"], steps: ["Install and activate Max Mega Menu from Plugins > Add New","Go to Mega Menu > Menu Themes to set colours, fonts and hover styles","Go to Appearance > Menus and open the menu you use in the header","For each top-level item, click the grid icon that Max Mega Menu adds","Enable Mega Menu for that item and drag sub-items into columns","Set the number of columns per dropdown item in the plugin settings","For mobile: the plugin automatically adds a hamburger toggle"], technical: ["Max Mega Menu works with any WordPress theme that uses wp_nav_menu()","Column layout is configured per nav item — no CSS needed for basic setup","Sticky header: add position: sticky via Customizer or Custom CSS field","If using Templately: import a header template, then activate Max Mega Menu on its menu"] }
+    },
+    "Search": {
+        label: "Block",
+        desc: "Full-screen search overlay with predictive results that appear as the user types.",
+        where: "All pages (via navigation bar)",
+        behaviour: ["Click search icon or press '/' to open overlay","Results filter instantly as user types (client-side matching)","Results grouped by category: Pages, Resources, Topics","Keyboard navigation: arrow keys to move, Enter to select, Escape to close","Recent searches shown when overlay opens with empty input"],
+        technical: ["Overlay uses position: fixed with backdrop-filter blur","Client-side search against a JSON index of all pages","Debounced input (200ms) to avoid excessive filtering","Accessible: aria-live region announces result count"],
+        wordpress: { desc: "Add instant AJAX predictive search using the free SearchWP Live Search plugin.", plugins: ["SearchWP Live Search (free) — wordpress.org/plugins/searchwp-live-ajax-search"], steps: ["Install and activate SearchWP Live Search from Plugins > Add New","Go to SearchWP > Settings to confirm what content types are searched","In your header template, add the Search block","The plugin automatically enhances the native Search block with live AJAX results","Style the search icon and input via Additional CSS to match the FMNR header"], technical: ["Free tier searches all posts and pages — no configuration required","Pairs with SearchWP Pro (paid) for custom post types","Results appear in dropdown below input — no full-screen overlay by default","For full-screen overlay: use Templately search overlay template or CSS snippet","Accessible: keyboard navigation and screen reader announcements work out of the box"] }
+    },
+    "Contact & Newsletter": {
+        label: "Block",
+        desc: "Split-panel contact form with inline newsletter email capture.",
+        where: "Partner page, footer",
+        behaviour: ["Form validates fields inline on blur","Submit button disabled until all required fields pass","Newsletter input: email only, shows success tick on submit","Error states: red border + helper text","Success state: form replaced with confirmation message"],
+        technical: ["HTML5 validation with custom styled error messages","50/50 split layout, stacks on mobile at 768px","Newsletter uses separate form action from contact form","Honeypot field for basic spam prevention"],
+        wordpress: { desc: "Use WPForms Lite for the contact form and Mailchimp for WordPress for the newsletter sign-up.", plugins: ["WPForms Lite (free) — wordpress.org/plugins/wpforms-lite","Mailchimp for WordPress (free) — wordpress.org/plugins/mailchimp-for-wp"], steps: ["Install WPForms Lite, go to WPForms > Add New and choose Simple Contact Form","Customise fields (Name, Email, Message are pre-built), then Save","Add the WPForms block and select your form","Install Mailchimp for WordPress, connect your Mailchimp account","Create a sign-up form with an Email field","Add the MC4WP Form block to the footer or partner page","Set up email notifications in WPForms > Settings > Notifications"], technical: ["WPForms Lite includes spam protection via hidden honeypot","Mailchimp for WP connects via API key","For two-column layout: wrap both blocks in a Columns block","Form submissions stored in WPForms > Entries","Both plugins work with any theme — no shortcodes or PHP needed"] }
+    },
+    "Interactive Map": {
+        label: "Block / Data Vis",
+        desc: "Leaflet.js interactive map with pin markers that reveal rich data cards on click.",
+        where: "Homepage, Impact page",
+        behaviour: ["Map loads centred on Africa with zoom level showing all FMNR countries","Custom green pin markers for each country","Click a pin to open popup card with country stats","Cards show key metrics with formatted numbers","Mobile: cards appear as swipeable carousel beneath the map","Zoom and pan enabled; double-click or pinch to zoom"],
+        technical: ["Leaflet.js 1.9.4 with OpenStreetMap tiles","14 countries defined in a JS data array","Custom popup template with CSS styling","Responsive: map height reduces on mobile, carousel appears below"],
+        wordpress: { desc: "Replicate using WP Go Maps — create your map and add country markers in the WordPress admin.", plugins: ["WP Go Maps (free) — wordpress.org/plugins/wp-google-maps"], steps: ["Install WP Go Maps, go to Maps > Add New Map","Set the default centre point (Africa) and zoom level","For each country: click Add Marker, search location, add title and description","Style markers using the Marker icon settings (upload green pin SVG)","On your page, add the WP Go Maps block and select your map","Set map width to 100% and height to 500px"], technical: ["WP Go Maps free tier uses OpenLayers — no API key required","To use Google Maps tiles: enable in settings and add API key","Marker data stored in WordPress database — edit anytime","Rich popup cards: use Description field with basic HTML","Mobile responsive by default"] }
+    },
+    "Cards": {
+        label: "Block",
+        desc: "Responsive card grid supporting image, video and text variants in 1-4 column layouts.",
+        where: "Partner page, Resources page",
+        behaviour: ["Cards support three variants: image thumbnail, video embed, text-only","Hover state: subtle lift with shadow transition","Image cards: thumbnail with title, description and CTA link","Video cards: play button overlay, click to expand","Grid adapts: 4 columns to 3 to 2 to 1"],
+        technical: ["CSS Grid with auto-fill and minmax for fluid columns","Consistent card height using flex column layout","Images use object-fit: cover with fixed aspect ratio","Accessible: all cards are links with descriptive text"],
+        wordpress: { desc: "Use Kadence Blocks to build image card grids — auto-pull from posts or build manual cards.", plugins: ["Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"], steps: ["Install Kadence Blocks from Plugins > Add New","For post-based cards: add the Kadence Posts block, choose post type, set columns to 4","For manual cards: add the Kadence Info Box block","Wrap Info Box blocks in a Kadence Row Layout block (4 columns)","Set image aspect ratio in Image settings panel","Set hover shadow in Advanced > Box Shadow"], technical: ["Kadence Posts block filters by category, tag or taxonomy","Info Box images use object-fit: cover automatically","Row Layout handles responsive columns with breakpoints","Alternative: Essential Blocks has similar card blocks","Cards created with Info Box are static — update in page editor"] }
+    },
+    "Scroll Animations": {
+        label: "Interaction",
+        desc: "8 animation patterns used across the site, all triggered on scroll using GSAP + ScrollTrigger.",
+        where: "All pages",
+        behaviour: ["Fade-up: elements slide up 32px and fade in","Stagger: grid items animate with 80ms delay between each","Parallax: background images move at different rate","Scale-in: elements grow from 60% with bounce easing","Count-up: numbers animate from 0 to target value","Slide-in: elements enter from left or right","Bar chart: horizontal bars animate width from 0%","Ken Burns: slow zoom and pan on images"],
+        technical: ["GSAP 3.12.5 + ScrollTrigger plugin","All animations trigger once","Custom cubic-bezier easing: (0.16, 1, 0.3, 1)","IntersectionObserver fallback for count-up"],
+        wordpress: { desc: "Apply entrance animations using Templately's built-in animation controls — no CSS or JavaScript required.", plugins: ["Templately (free) — wordpress.org/plugins/templately"], steps: ["Install and activate Templately","Select any block you want to animate","Open the Templately Animation tab","Choose entrance effect: Fade Up, Slide In, Zoom In, Bounce etc.","Set Duration (0.6s) and Delay for stagger","Click Preview to see the animation"], technical: ["Templately injects its own lightweight animation library — no GSAP licence required","Works on any block type","Animations trigger once on scroll — same as custom-built","For Ken Burns: use Kadence Cover block with built-in option","For parallax: Templately Pro or Cocoon parallax block"] }
+    },
+    "Impact Stats": {
+        label: "Data Visualisation",
+        desc: "Animated counting numbers that count up from zero when scrolled into view.",
+        where: "Homepage, Impact, Partner pages",
+        behaviour: ["Green band with 4 stat counters in a row","Numbers animate from 0 to target over ~2 seconds","Triggers once when section enters viewport","Supports suffixes: M, K, +","Labels beneath each number describe the metric"],
+        technical: ["IntersectionObserver triggers count animation","requestAnimationFrame loop for smooth interpolation","Numbers rounded to integers during animation","Background: var(--color-green) with white text"],
+        wordpress: { desc: "Use the Essential Blocks Counter block in a 4-column layout.", plugins: ["Essential Blocks (free) — wordpress.org/plugins/essential-blocks"], steps: ["Install Essential Blocks","Add a Columns block set to 4 equal columns","In each column, add an Essential Blocks Counter block","Set Starting Number to 0 and Ending Number to target","In the Suffix field, enter M, K or +","Below each counter, add a Paragraph for the label","Wrap in a Cover block with green background (#077D57)","Set Cover alignment to Full Width"], technical: ["Counter animates using IntersectionObserver — triggers once","Animation duration configurable per counter (2000ms recommended)","For decimal values: set ending number to 2.5, add M as suffix","Responsive: set Columns to 2 on tablet, 1 on mobile","Alternative: Kadence Blocks Counter works similarly"] }
+    },
+    "Bar Chart": {
+        label: "Data Visualisation",
+        desc: "Animated horizontal bar chart with percentage fills on dark background.",
+        where: "Impact page",
+        behaviour: ["Horizontal bars animate from 0% width to target percentage","Animation triggers on scroll into viewport","Labels on left identify each metric","Percentage values appear on right as bars fill","Bars animate with staggered delay"],
+        technical: ["CSS transition on width property (1.2s cubic-bezier)","Dark background (#1d1d1f) with teal bar fills","Data defined in simple JS array","IntersectionObserver triggers animation"],
+        wordpress: { desc: "Use a Custom HTML block with chart code, or wpDataTables for a no-code chart builder.", plugins: ["None for Option A (Custom HTML)","Optional — wpDataTables (free) for no-code charts"], steps: ["Option A: Copy the chart HTML/JS from bar-chart-demo.html","Add a Custom HTML block and paste the code","Edit the labels and data arrays to update values","Option B: Install wpDataTables, create a new table","Choose Horizontal Bar chart type","Configure colours (#0FFBAB on dark background)","Insert using the wpDataTables block"], technical: ["Chart.js loads from CDN — no file uploads needed","Update data by editing the Custom HTML block","wpDataTables free tier supports basic bar charts","Wrap in Cover block with dark background","Option A includes scroll-triggered animation via IntersectionObserver"] }
+    },
+    "Stat Stack": {
+        label: "Data Visualisation",
+        desc: "Vertical stack of bold headline statistics — numbers animate on scroll.",
+        where: "Country pages, Homepage",
+        behaviour: ["Each stat is a full-width sentence with animated number","Items separated by dark horizontal rules","Numbers count up from 0 when scrolled into view","Items stagger-reveal with 150ms delay","Supports integers, decimals and large numbers","Text uses heading font at large scale"],
+        technical: ["IntersectionObserver triggers reveal and count-up","requestAnimationFrame with ease-out cubic","CSS opacity + translateY for stagger reveal","Font-size uses clamp() for responsive scaling","Data-driven: data-target attributes on spans"],
+        wordpress: { desc: "Build using stacked Heading blocks inside a Group block with borders.", plugins: ["Kadence Blocks (free)","Optional: Essential Blocks for counter animation"], steps: ["Add a Group block (max-width 900px)","Inside, add Heading blocks — one per stat line","Set each to H3 with heading font and green colour","Add top/bottom borders in Group settings","Add Separator blocks between each heading","For animated numbers: use Essential Blocks Counter","Set 48px padding on each heading for rhythm"], technical: ["Animated count-up requires Essential Blocks Counter","Background: set Group to #f5f5f7 (light grey)","Typography: heading font at 36–48px","Content fully editable in block editor","Mobile: headings scale via fluid typography"] }
+    }
+};
+
+var output = document.getElementById('output');
+var html = '';
+
+Object.keys(docs).forEach(function(title) {
+    var data = docs[title];
+    var wp = data.wordpress;
+
+    // Docs panel
+    html += '<div class="capture-frame">';
+    html += '<div class="frame-header"><h3>' + title + '</h3><span class="tab-indicator tab-docs">Docs</span></div>';
+    html += '<div class="frame-body">';
+    html += '<span class="doc-label">' + data.label + '</span>';
+    html += '<h2 class="doc-title">' + title + '</h2>';
+    html += '<p class="doc-desc">' + data.desc + '</p>';
+    html += '<p class="doc-where">Used on: <span>' + data.where + '</span></p>';
+    html += '<div class="doc-section"><h4>Behaviour</h4><ul>';
+    data.behaviour.forEach(function(item) { html += '<li>' + item + '</li>'; });
+    html += '</ul></div>';
+    html += '<div class="doc-section"><h4>Technical Details</h4><ul>';
+    data.technical.forEach(function(item) { html += '<li>' + item + '</li>'; });
+    html += '</ul></div>';
+    html += '</div></div>';
+
+    // WordPress panel
+    html += '<div class="capture-frame">';
+    html += '<div class="frame-header"><h3>' + title + '</h3><span class="tab-indicator tab-wp">WordPress</span></div>';
+    html += '<div class="frame-body">';
+    html += '<span class="doc-label doc-label--wp">WordPress Integration</span>';
+    html += '<h2 class="doc-title">' + title + '</h2>';
+    html += '<p class="doc-desc">' + wp.desc + '</p>';
+    if (wp.plugins && wp.plugins.length) {
+        html += '<div class="doc-section doc-section--wp"><h4>Plugins Required</h4><ul>';
+        wp.plugins.forEach(function(p) { html += '<li><span class="wp-plugin-tag">Plugin</span>' + p + '</li>'; });
+        html += '</ul></div>';
+    }
+    html += '<div class="doc-section doc-section--wp"><h4>Implementation Steps</h4><ul>';
+    wp.steps.forEach(function(s) { html += '<li>' + s + '</li>'; });
+    html += '</ul></div>';
+    html += '<div class="doc-section doc-section--wp"><h4>Technical Notes</h4><ul>';
+    wp.technical.forEach(function(s) { html += '<li>' + s + '</li>'; });
+    html += '</ul></div>';
+    html += '</div></div>';
+});
+
+output.innerHTML = html;
+</script>
+</body>
+</html>

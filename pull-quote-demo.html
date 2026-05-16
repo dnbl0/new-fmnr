@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pull Quote — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f0f0f0; overflow-x: hidden; }
+        .demo-frame { max-width: 1280px; margin: 40px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+
+        .quote-section { background: var(--color-green); padding: 96px; }
+        .quote-inner { max-width: 900px; margin: 0 auto; text-align: center; }
+        .quote-mark { font-family: var(--font-heading); font-size: 120px; line-height: 0.6; color: rgba(255,255,255,0.15); margin-bottom: 0; }
+        .quote-text { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 44px); line-height: 1.1; text-transform: uppercase; color: var(--wp--preset--color--white); margin-bottom: 32px; }
+        .quote-attribution { font-family: var(--font-body); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+
+        @media (max-width: 768px) {
+            .quote-section { padding: 56px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="quote-section">
+            <div class="quote-inner">
+                <div class="quote-mark">"</div>
+                <p class="quote-text">The trees were never dead. They were simply waiting for someone to give them permission to grow.</p>
+                <p class="quote-attribution">— Tony Rinaudo, FMNR Founder</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

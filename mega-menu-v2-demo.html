@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mega Menu v2 Variations — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #fff; min-height: 100vh; }
+
+        /* ─── Page chrome ─── */
+        .page-header { padding: 80px 48px 0; max-width: 1400px; margin: 0 auto; }
+        .page-header h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; color: #1d1d1f; line-height: 1; margin-bottom: 8px; }
+        .page-header p { font-size: 15px; color: #6e6e73; max-width: 560px; line-height: 1.5; }
+
+        .section-nav { padding: 32px 48px 0; max-width: 1400px; margin: 0 auto; display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+        .section-nav span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #86868b; margin-right: 8px; }
+        .section-btn { border: none; background: #f0f0f0; border-radius: 6px; padding: 7px 16px; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: #6e6e73; cursor: pointer; transition: background 0.15s, color 0.15s; }
+        .section-btn.active { background: var(--color-green); color: #fff; }
+        .section-btn:hover:not(.active) { background: #e5e5e5; color: #1d1d1f; }
+
+        .variations-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 32px 48px 80px; max-width: 1400px; margin: 0 auto; }
+        @media (max-width: 1100px) { .variations-grid { grid-template-columns: 1fr; } }
+
+        .variation-meta { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+        .variation-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 4px 10px; border-radius: 4px; }
+        .variation-name { font-family: var(--font-heading); font-size: 18px; text-transform: uppercase; color: #1d1d1f; line-height: 1; margin-top: 6px; }
+        .variation-desc { font-size: 12px; color: #86868b; margin-top: 4px; line-height: 1.4; }
+
+        .variation-frame { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08), 0 16px 40px rgba(0,0,0,0.06); }
+        .frame-bar { background: #f5f5f7; border-bottom: 1px solid #e5e5e5; padding: 8px 14px; display: flex; align-items: center; gap: 6px; }
+        .frame-dot { width: 9px; height: 9px; border-radius: 50%; }
+        .frame-dot:nth-child(1) { background: #ff5f57; }
+        .frame-dot:nth-child(2) { background: #febc2e; }
+        .frame-dot:nth-child(3) { background: #28c840; }
+        .frame-url { font-size: 11px; color: #86868b; margin-left: 10px; font-family: monospace; }
+        .frame-nav { background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; padding: 10px 24px; }
+        .frame-nav-logo { height: 22px; display: block; }
+        .frame-nav-links { display: flex; gap: 2px; }
+        .frame-nav-links span { font-size: 11px; font-weight: 700; color: #1d1d1f; padding: 5px 10px; border-radius: 6px; white-space: nowrap; }
+        .frame-nav-links span.active-link { color: var(--color-green); background: rgba(7,125,87,0.06); }
+        .frame-nav-cta { background: var(--color-green); color: #fff; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 6px 12px; border-radius: 980px; }
+
+        /* ═══ LAYOUT A — Standard 3-col ═══ */
+        .la { display: flex; align-items: stretch; }
+        .la-col1 { width: 220px; flex-shrink: 0; padding: 24px 20px; display: flex; flex-direction: column; gap: 10px; }
+        .la-title { font-family: var(--font-heading); font-size: 32px; line-height: 1; text-transform: uppercase; color: var(--color-green); }
+        .la-desc { font-size: 12px; color: var(--color-charcoal); line-height: 1.5; }
+        .la-link { font-size: 11px; font-weight: 700; color: var(--color-green); text-decoration: none; text-transform: uppercase; letter-spacing: 0.04em; }
+        .la-div { width: 1px; background: rgba(70,70,70,0.2); flex-shrink: 0; }
+        .la-col2 { flex: 1; padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+        .la-card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid #d5d5d5; border-radius: 6px; text-decoration: none; transition: border-color 0.15s, background 0.15s; }
+        .la-card:hover { border-color: var(--color-green); background: rgba(7,125,87,0.03); }
+        .la-card-icon { width: 52px; height: 40px; flex-shrink: 0; border: 1.5px solid var(--color-green); border-radius: 3px; display: flex; align-items: center; justify-content: center; }
+        .la-card-icon svg { width: 18px !important; height: 18px !important; stroke: var(--color-green); stroke-width: 1.5; flex-shrink: 0; }
+        .la-card-body { display: flex; flex-direction: column; gap: 2px; }
+        .la-card-label { font-size: 12px; font-weight: 700; color: #000; line-height: 1.2; }
+        .la-card-desc { font-size: 11px; color: var(--color-charcoal); line-height: 1.3; }
+        .la-col3 { width: 160px; flex-shrink: 0; border-left: 1px solid rgba(0,0,0,0.12); padding: 16px; display: flex; flex-direction: column; }
+        .la-feature { flex: 1; min-height: 240px; border-radius: 8px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; background: linear-gradient(160deg, #2d5a3d 0%, #0a3d24 60%, #063020 100%); }
+        .la-feature-content { position: relative; padding: 12px; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%); }
+        .la-feature-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+        .la-feature-title { font-size: 11px; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 3px; }
+        .la-feature-desc { font-size: 10px; color: rgba(255,255,255,0.75); line-height: 1.3; }
+
+        /* ═══ LAYOUT C — Compact list ═══ */
+        .lc { display: flex; align-items: stretch; }
+        .lc-col1 { width: 220px; flex-shrink: 0; padding: 24px 20px; display: flex; flex-direction: column; gap: 12px; justify-content: space-between; }
+        .lc-heading-block { display: flex; flex-direction: column; gap: 10px; }
+        .lc-title { font-family: var(--font-heading); font-size: 32px; line-height: 1; text-transform: uppercase; color: var(--color-green); }
+        .lc-desc { font-size: 12px; color: var(--color-charcoal); line-height: 1.5; }
+        .lc-stat { background: rgba(7,125,87,0.06); border-radius: 8px; padding: 12px; }
+        .lc-stat-num { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-green); line-height: 1; }
+        .lc-stat-label { font-size: 11px; color: #6e6e73; margin-top: 4px; }
+        .lc-col2 { flex: 1; padding: 16px 0; border-left: 1px solid rgba(0,0,0,0.1); }
+        .lc-group { padding: 0 20px; }
+        .lc-group + .lc-group { border-top: 1px solid #f0f0f0; margin-top: 4px; padding-top: 4px; }
+        .lc-group-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #b0b0b8; padding: 8px 0 6px; }
+        .lc-link { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; text-decoration: none; border-bottom: 1px solid #f5f5f7; transition: color 0.12s; }
+        .lc-link:last-child { border-bottom: none; }
+        .lc-link:hover .lc-link-label { color: var(--color-green); }
+        .lc-link:hover .lc-link-arrow { transform: translateX(3px); color: var(--color-green); }
+        .lc-link-label { font-size: 13px; font-weight: 700; color: #1d1d1f; transition: color 0.12s; }
+        .lc-link-desc { font-size: 11px; color: #86868b; margin-top: 1px; }
+        .lc-link-arrow { font-size: 13px; color: #c0c0c8; flex-shrink: 0; margin-left: 8px; transition: transform 0.12s, color 0.12s; }
+
+        /* ═══ LAYOUT D — Immersive dark ═══ */
+        .ld { display: flex; align-items: stretch; background: #063020; border-radius: 0 0 12px 12px; }
+        .ld-col1 { width: 220px; flex-shrink: 0; padding: 24px 20px; display: flex; flex-direction: column; gap: 12px; border-right: 1px solid rgba(255,255,255,0.1); }
+        .ld-title { font-family: var(--font-heading); font-size: 32px; line-height: 1; text-transform: uppercase; color: #fff; }
+        .ld-desc { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+        .ld-link { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5); text-decoration: none; text-transform: uppercase; letter-spacing: 0.04em; }
+        .ld-link:hover { color: #fff; }
+        .ld-col2 { flex: 1; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+        .ld-card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; text-decoration: none; transition: border-color 0.15s, background 0.15s; }
+        .ld-card:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
+        .ld-card-icon { width: 40px; height: 40px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .ld-card-icon svg { width: 18px !important; height: 18px !important; stroke: rgba(255,255,255,0.7); stroke-width: 1.5; flex-shrink: 0; }
+        .ld-card-body { display: flex; flex-direction: column; gap: 2px; }
+        .ld-card-label { font-size: 12px; font-weight: 700; color: #fff; line-height: 1.2; }
+        .ld-card-desc { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.3; }
+        .ld-col3 { width: 180px; flex-shrink: 0; border-left: 1px solid rgba(255,255,255,0.1); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+        .ld-feature { flex: 1; min-height: 200px; border-radius: 6px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; background: linear-gradient(160deg, #1a5c3a 0%, #0a3d24 100%); border: 1px solid rgba(255,255,255,0.15); }
+        .ld-feature-content { position: relative; padding: 12px; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%); }
+        .ld-feature-eyebrow { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+        .ld-feature-title { font-size: 11px; font-weight: 700; color: #fff; line-height: 1.3; }
+        .ld-stats { display: flex; flex-direction: column; gap: 6px; }
+        .ld-stat { text-align: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px; }
+        .ld-stat-num { font-family: var(--font-heading); font-size: 18px; text-transform: uppercase; color: #fff; line-height: 1; }
+        .ld-stat-label { font-size: 9px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+        .frame-nav.dark { background: #063020; border-bottom-color: rgba(255,255,255,0.1); }
+        .frame-nav.dark .frame-nav-links span { color: rgba(255,255,255,0.7); }
+        .frame-nav.dark .frame-nav-links span.active-link { color: #fff; background: rgba(255,255,255,0.1); }
+        .frame-nav.dark .frame-nav-logo { filter: brightness(0) invert(1); }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <h1>Mega Menu — Alternate Layouts</h1>
+        <p>Three alternative layout variations (A, C, D) — switchable across all five nav sections.</p>
+    </header>
+
+    <div class="section-nav">
+        <span>Section:</span>
+        <button class="section-btn active" data-section="partner">Partner</button>
+        <button class="section-btn" data-section="learn">Learn</button>
+        <button class="section-btn" data-section="adopt">Adopt</button>
+        <button class="section-btn" data-section="impact">Impact</button>
+        <button class="section-btn" data-section="about">About</button>
+    </div>
+
+    <div class="variations-grid">
+
+        <!-- ── Layout A ── -->
+        <div class="variation">
+            <div class="variation-meta">
+                <div>
+                    <span class="variation-tag">Layout A</span>
+                    <div class="variation-name">Standard 3-col</div>
+                    <div class="variation-desc">Heading · Icon cards · Feature card</div>
+                </div>
+            </div>
+            <div class="variation-frame">
+                <div class="frame-bar"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-url">fmnrhub.com.au</span></div>
+                <div class="frame-nav">
+                    <img src="fmnr-logo-figma.png" class="frame-nav-logo" alt="FMNR">
+                    <div class="frame-nav-links" id="la-nav-links"><span class="active-link">Partner</span><span>Learn</span><span>Adopt</span><span>Impact</span><span>About</span></div>
+                    <span class="frame-nav-cta">Get in touch</span>
+                </div>
+                <div class="la" id="la-content"></div>
+            </div>
+        </div>
+
+        <!-- ── Layout C ── -->
+        <div class="variation">
+            <div class="variation-meta">
+                <div>
+                    <span class="variation-tag">Layout C</span>
+                    <div class="variation-name">Compact List</div>
+                    <div class="variation-desc">Heading + stat callout · Grouped text links with arrows</div>
+                </div>
+            </div>
+            <div class="variation-frame">
+                <div class="frame-bar"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-url">fmnrhub.com.au</span></div>
+                <div class="frame-nav">
+                    <img src="fmnr-logo-figma.png" class="frame-nav-logo" alt="FMNR">
+                    <div class="frame-nav-links" id="lc-nav-links"><span class="active-link">Partner</span><span>Learn</span><span>Adopt</span><span>Impact</span><span>About</span></div>
+                    <span class="frame-nav-cta">Get in touch</span>
+                </div>
+                <div class="lc" id="lc-content"></div>
+            </div>
+        </div>
+
+        <!-- ── Layout D ── -->
+        <div class="variation">
+            <div class="variation-meta">
+                <div>
+                    <span class="variation-tag">Layout D</span>
+                    <div class="variation-name">Immersive Dark</div>
+                    <div class="variation-desc">Dark green background · Outlined icon cards · Feature + stats sidebar</div>
+                </div>
+            </div>
+            <div class="variation-frame">
+                <div class="frame-bar"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-url">fmnrhub.com.au</span></div>
+                <div class="frame-nav dark">
+                    <img src="fmnr-logo-figma.png" class="frame-nav-logo" alt="FMNR">
+                    <div class="frame-nav-links" id="ld-nav-links"><span class="active-link">Partner</span><span>Learn</span><span>Adopt</span><span>Impact</span><span>About</span></div>
+                    <span class="frame-nav-cta">Get in touch</span>
+                </div>
+                <div class="ld" id="ld-content"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>
+    (function() {
+        var data = {
+            partner: {
+                title: 'Partner', desc: 'Join the global movement to restore land and transform communities through FMNR.', href: 'partner.html',
+                stat: { num: '180+', label: 'Partner organisations' },
+                feature: { eyebrow: 'Featured', title: 'Scaling FMNR across Sub-Saharan Africa', desc: 'See how faith networks and NGOs are driving landscape restoration.' },
+                items: [
+                    { icon: 'heart-handshake', label: 'Faith-based Actors',   desc: 'Churches, pastors and faith network leaders' },
+                    { icon: 'network',         label: 'NGOs & Implementers',  desc: 'Development organisations and programme teams' },
+                    { icon: 'landmark',        label: 'Governments & Policy', desc: 'Policy makers and national programme leaders' },
+                    { icon: 'trending-up',     label: 'Funders & Supporters', desc: 'Philanthropists, impact investors and grant-makers' }
+                ]
+            },
+            learn: {
+                title: 'Learn', desc: 'Discover how FMNR restores degraded land, boosts food security, and builds climate resilience.', href: '#',
+                stat: { num: '40+', label: 'Years of field evidence' },
+                feature: { eyebrow: 'Story', title: "From desert to forest: Niger\u2019s transformation", desc: 'How millions of farmers changed the Sahel.' },
+                items: [
+                    { icon: 'sprout',     label: 'FMNR Fundamentals',  desc: 'What it is, how it works and why it matters' },
+                    { icon: 'microscope', label: 'Science & Evidence', desc: 'Research, climate benefits and livelihood outcomes' },
+                    { icon: 'globe',      label: 'Global Activity',    desc: 'Maps, flagship countries and movement tracker' }
+                ]
+            },
+            adopt: {
+                title: 'Adopt', desc: 'Practical tools, guides and community connections to bring FMNR to your landscape.', href: '#',
+                stat: { num: '28', label: 'Countries practicing FMNR' },
+                feature: { eyebrow: 'Guide', title: 'Field guide to FMNR adoption', desc: 'Step-by-step practitioner guide.' },
+                items: [
+                    { icon: 'book-open', label: 'Getting Started',  desc: 'Step-by-step guides, tools and video library' },
+                    { icon: 'map-pin',   label: 'Country Examples', desc: 'Niger, Ethiopia, Zambia, Mali and more' },
+                    { icon: 'users',     label: 'Connect to Adopt', desc: 'Find local support and share your story' }
+                ]
+            },
+            impact: {
+                title: 'Impact', desc: 'Stories, data and reporting on the global reach and outcomes of FMNR.', href: 'impact.html',
+                stat: { num: '1B ha', label: 'Vision for restoration' },
+                feature: { eyebrow: 'Data', title: '1 Billion Hectare Vision', desc: 'Track progress toward our global target.' },
+                items: [
+                    { icon: 'library',     label: 'Resource Hub',        desc: 'Stories, research and featured content' },
+                    { icon: 'bar-chart-2', label: 'Impact Dashboard',    desc: 'People reached, hectares and the 1B vision' },
+                    { icon: 'mail',        label: 'Reporting & Updates', desc: 'Annual highlights, newsletter and community' }
+                ]
+            },
+            about: {
+                title: 'About', desc: 'The people, mission and values behind the FMNR Hub and World Vision.', href: '#',
+                stat: { num: '1983', label: 'Year FMNR was pioneered' },
+                feature: { eyebrow: 'Meet', title: "Tony Rinaudo \u2014 The Forest Maker", desc: 'The story of the man behind the movement.' },
+                items: [
+                    { icon: 'star',           label: 'Tony Rinaudo',            desc: 'The man who transformed the Sahel' },
+                    { icon: 'building-2',     label: 'FMNR Hub & World Vision', desc: 'Our mission, values and open-source commitment' },
+                    { icon: 'message-circle', label: 'Connect',                 desc: 'Contact, newsletter and community links' }
+                ]
+            }
+        };
+
+        function iconTag(name, cls) { return '<span class="' + cls + '"><i data-lucide="' + name + '"></i></span>'; }
+
+        function renderA(key) {
+            var d = data[key];
+            var cards = d.items.map(function(item) {
+                return '<a class="la-card" href="#">' + iconTag(item.icon, 'la-card-icon') + '<span class="la-card-body"><span class="la-card-label">' + item.label + '</span><span class="la-card-desc">' + item.desc + '</span></span></a>';
+            }).join('');
+            document.getElementById('la-content').innerHTML =
+                '<div class="la-col1"><span class="la-title">' + d.title + '</span><p class="la-desc">' + d.desc + '</p><a class="la-link" href="#">Explore ' + d.title + ' \u2192</a></div>'
+              + '<div class="la-div"></div>'
+              + '<div class="la-col2">' + cards + '</div>'
+              + '<div class="la-col3"><a class="la-feature" href="#"><div class="la-feature-content"><div class="la-feature-eyebrow">' + d.feature.eyebrow + '</div><div class="la-feature-title">' + d.feature.title + '</div><div class="la-feature-desc">' + d.feature.desc + '</div></div></a></div>';
+            setNavActive('la-nav-links', key);
+        }
+
+        function renderC(key) {
+            var d = data[key];
+            var groups = [];
+            if (d.items.length >= 4) { groups.push({ label: 'Primary', items: d.items.slice(0, 2) }); groups.push({ label: 'More', items: d.items.slice(2) }); }
+            else { groups.push({ label: 'Sections', items: d.items }); }
+            var groupsHtml = groups.map(function(g) {
+                var links = g.items.map(function(item) { return '<a class="lc-link" href="#"><span><div class="lc-link-label">' + item.label + '</div><div class="lc-link-desc">' + item.desc + '</div></span><span class="lc-link-arrow">\u2192</span></a>'; }).join('');
+                return '<div class="lc-group"><div class="lc-group-label">' + g.label + '</div>' + links + '</div>';
+            }).join('');
+            document.getElementById('lc-content').innerHTML =
+                '<div class="lc-col1"><div class="lc-heading-block"><span class="lc-title">' + d.title + '</span><p class="lc-desc">' + d.desc + '</p></div><div class="lc-stat"><div class="lc-stat-num">' + d.stat.num + '</div><div class="lc-stat-label">' + d.stat.label + '</div></div></div>'
+              + '<div class="lc-col2">' + groupsHtml + '</div>';
+            setNavActive('lc-nav-links', key);
+        }
+
+        function renderD(key) {
+            var d = data[key];
+            var cards = d.items.map(function(item) {
+                return '<a class="ld-card" href="#">' + iconTag(item.icon, 'ld-card-icon') + '<span class="ld-card-body"><span class="ld-card-label">' + item.label + '</span><span class="ld-card-desc">' + item.desc + '</span></span></a>';
+            }).join('');
+            document.getElementById('ld-content').innerHTML =
+                '<div class="ld-col1"><span class="ld-title">' + d.title + '</span><p class="ld-desc">' + d.desc + '</p><a class="ld-link" href="#">Explore ' + d.title + ' \u2192</a></div>'
+              + '<div class="ld-col2">' + cards + '</div>'
+              + '<div class="ld-col3"><a class="ld-feature" href="#"><div class="ld-feature-content"><div class="ld-feature-eyebrow">' + d.feature.eyebrow + '</div><div class="ld-feature-title">' + d.feature.title + '</div></div></a><div class="ld-stats"><div class="ld-stat"><div class="ld-stat-num">' + d.stat.num + '</div><div class="ld-stat-label">' + d.stat.label + '</div></div></div></div>';
+            setNavActive('ld-nav-links', key);
+        }
+
+        function setNavActive(navId, key) {
+            var order = ['partner', 'learn', 'adopt', 'impact', 'about'];
+            var idx = order.indexOf(key);
+            document.getElementById(navId).querySelectorAll('span').forEach(function(s, i) { s.classList.toggle('active-link', i === idx); });
+        }
+
+        function renderAll(key) { renderA(key); renderC(key); renderD(key); if (window.lucide) lucide.createIcons(); }
+
+        document.querySelectorAll('.section-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.section-btn').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                renderAll(btn.getAttribute('data-section'));
+            });
+        });
+
+        renderAll('partner');
+    })();
+    </script>
+</body>
+</html>

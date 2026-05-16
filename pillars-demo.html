@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pillars — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f0f0f0; overflow-x: hidden; }
+        .demo-frame { max-width: 1280px; margin: 40px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+
+        .pillars-section { background: var(--wp--preset--color--base); padding: 96px; }
+        .pillars-inner { max-width: 1120px; margin: 0 auto; }
+        .section-eyebrow { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-green); margin-bottom: 16px; }
+        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 64px; }
+        .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+        .pillar { background: var(--wp--preset--color--white); padding: 48px 40px; }
+        .pillar:first-child { border-radius: 16px 0 0 16px; }
+        .pillar:last-child { border-radius: 0 16px 16px 0; }
+        .pillar-number { font-family: var(--font-heading); font-size: 72px; line-height: 1; color: var(--color-teal); margin-bottom: 24px; }
+        .pillar h3 { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 16px; }
+        .pillar p { font-family: var(--font-body); font-size: 16px; line-height: 1.6; color: rgba(0,0,0,0.55); }
+
+        @media (max-width: 1024px) {
+            .pillars-grid { grid-template-columns: 1fr; }
+            .pillar:first-child { border-radius: 16px 16px 0 0; }
+            .pillar:last-child { border-radius: 0 0 16px 16px; }
+        }
+        @media (max-width: 768px) {
+            .pillars-section { padding: 56px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="pillars-section">
+            <div class="pillars-inner">
+                <p class="section-eyebrow">His approach</p>
+                <h2 class="section-headline">Faith + Persistence + Community</h2>
+                <div class="pillars-grid">
+                    <div class="pillar">
+                        <div class="pillar-number">01</div>
+                        <h3>Believe<br>the impossible</h3>
+                        <p>When the agricultural establishment said the Sahel was beyond saving, Tony refused to accept it. He saw what others overlooked.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-number">02</div>
+                        <h3>Empower<br>the farmer</h3>
+                        <p>FMNR does not depend on outside experts. Tony's insight was radical: the solution already exists within farming communities.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-number">03</div>
+                        <h3>Scale through<br>community</h3>
+                        <p>Real change is contagious. By working with communities rather than for them, Tony's approach spreads farmer to farmer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

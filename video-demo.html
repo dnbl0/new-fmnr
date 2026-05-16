@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Video — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; max-width: 900px; }
+        .demo-area--dark { background: var(--color-bg-dark); }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+        .demo-video { width: 100%; max-width: 640px; border-radius: 8px; overflow: hidden; background: var(--color-black); }
+        .demo-video video { width: 100%; height: auto; display: block; }
+        @media (max-width: 768px) { body { padding: 48px 24px; } .demo-area { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <span class="block-label">Core Block</span>
+    <h2 class="block-title">Video</h2>
+    <p class="block-desc">Autoplay/muted video embed with optional poster frame.</p>
+    <div class="demo-area demo-area--dark">
+        <span class="variant-label" style="color:rgba(255,255,255,0.5);">Autoplay / Muted / Loop</span>
+        <div class="demo-video">
+            <video autoplay muted loop playsinline>
+                <source src="forest.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+</body>
+</html>

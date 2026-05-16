@@ -60,31 +60,30 @@
         .site-header.scrolled .hamburger span{background:var(--color-charcoal);filter:none}
         @media(max-width:900px){.nav-links{display:none}.mobile-search-btn,.hamburger{display:flex}.btn-donate{display:none}.header-inner{padding:12px 24px}}
 
-        /* MEGA MENU */
-        .mega-backdrop{position:fixed;top:57px;left:0;right:0;bottom:0;background:rgba(0,0,0,0);pointer-events:none;z-index:998;transition:background .3s,backdrop-filter .3s}
+        /* MEGA MENU — Layout B (Editorial Feature) */
+        .mega-backdrop{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);pointer-events:none;z-index:998;transition:background .3s,backdrop-filter .3s}
         .mega-backdrop.open{background:rgba(0,0,0,.25);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);pointer-events:auto}
         .mega-menu{position:absolute;top:100%;left:0;right:0;background:#fff;border-top:1px solid #ebebeb;box-shadow:0 32px 80px rgba(0,0,0,.1);z-index:999;opacity:0;transform:translateY(-8px);visibility:hidden;pointer-events:none;transition:opacity .22s cubic-bezier(.4,0,.2,1),transform .22s cubic-bezier(.4,0,.2,1),visibility 0s linear .22s}
         .mega-menu.open{opacity:1;transform:translateY(0);visibility:visible;pointer-events:auto;transition:opacity .22s cubic-bezier(.4,0,.2,1),transform .22s cubic-bezier(.4,0,.2,1),visibility 0s linear 0s}
         .mega-inner{max-width:1280px;margin:0 auto;padding:40px 48px 48px}
-        .mega-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid #f0f0f0}
+        .mega-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid #f0f0f0}
         .mega-eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:var(--color-green)}
         .mega-view-all{font-size:13px;font-weight:700;color:var(--color-green);text-decoration:none}
         .mega-view-all:hover{text-decoration:underline}
-        .mega-body{display:grid;grid-template-columns:1fr 280px;gap:48px}
-        .mega-cols{display:flex;gap:40px}
-        .mega-col{flex:1;min-width:160px}
-        .mega-col-heading{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(0,0,0,.38);margin-bottom:16px}
-        .mega-col ul{list-style:none;display:flex;flex-direction:column;gap:2px}
-        .mega-col li a{display:flex;flex-direction:column;gap:3px;padding:8px 10px;border-radius:8px;text-decoration:none;transition:background .15s}
-        .mega-col li a:hover{background:#f5f5f7}
-        .mega-link-label{font-size:14px;font-weight:600;color:#1d1d1f}
-        .mega-link-desc{font-size:12px;color:rgba(0,0,0,.42)}
-        .mega-featured{flex-shrink:0}
-        .mega-card{display:block;text-decoration:none;border-radius:8px;overflow:hidden;background:#f5f5f7}
-        .mega-card img{width:100%;height:160px;object-fit:cover}
-        .mega-card-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--color-green);padding:14px 16px 4px}
-        .mega-card-heading{display:block;font-family:var(--font-heading);font-size:16px;text-transform:uppercase;color:#1d1d1f;padding:0 16px 16px;line-height:1.1}
-        @media(max-width:900px){.mega-backdrop{top:80px}.mega-menu.open{overflow-y:auto;max-height:calc(100vh - 80px)}.mega-body{grid-template-columns:1fr}.mega-cols{flex-direction:column;gap:24px}.mega-featured{display:none}}
+        .mega-body{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start}
+        .mega-feature{width:100%;border-radius:10px;overflow:hidden;position:relative;display:block;text-decoration:none;aspect-ratio:3/4;max-height:320px}
+        .mega-feature img{width:100%;height:100%;object-fit:cover;display:block}
+        .mega-feature-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+        .mega-feature-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.6);margin-bottom:6px}
+        .mega-feature-title{font-family:var(--font-heading);font-size:18px;text-transform:uppercase;color:#fff;line-height:1.05}
+        .mega-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .mega-card{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;border:1px solid #e8e8e8;border-radius:10px;text-decoration:none;transition:border-color .15s,background .15s}
+        .mega-card:hover{border-color:var(--color-green);background:rgba(7,125,87,.03)}
+        .mega-card-num{font-family:var(--font-heading);font-size:28px;line-height:1;color:var(--color-green);flex-shrink:0;opacity:.7}
+        .mega-card-body{display:flex;flex-direction:column;gap:4px}
+        .mega-card-label{font-size:14px;font-weight:700;color:#1d1d1f;line-height:1.2}
+        .mega-card-desc{font-size:12px;color:#6e6e73;line-height:1.4}
+        @media(max-width:900px){.mega-backdrop{top:80px}.mega-menu.open{overflow-y:auto;max-height:calc(100vh - 80px)}.mega-body{grid-template-columns:1fr}.mega-feature{max-height:200px}.mega-cards{grid-template-columns:1fr}}
 
         /* SEARCH */
         .search-backdrop{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);pointer-events:none;z-index:998;transition:background .4s,backdrop-filter .4s}
@@ -407,8 +406,8 @@
                     <a href="#" class="mega-view-all" id="mega-view-all"></a>
                 </div>
                 <div class="mega-body">
-                    <div class="mega-cols" id="mega-cols"></div>
-                    <div class="mega-featured" id="mega-featured"></div>
+                    <div class="mega-feature" id="mega-feature"></div>
+                    <div class="mega-cards" id="mega-cards"></div>
                 </div>
             </div>
         </div>
@@ -1061,30 +1060,30 @@
     </script>
 
     <script>
-    // Mega Menu
+    // Mega Menu — Layout B (Editorial Feature)
     (function(){
         var megaData={
             partner:{eyebrow:'Partnership',viewAll:'View all partnerships',viewAllHref:'partner.html',
-                cols:[{heading:'Partner Types',links:[{label:'Faith Based Partners',href:'partner.html#faith',desc:'Churches and faith communities'},{label:'NGO & Restoration',href:'partner.html#ngo',desc:'Non-profits and development orgs'},{label:'Corporate Partners',href:'partner.html#corporate',desc:'Carbon, CSR and sustainability'},{label:'Government Partners',href:'partner.html#government',desc:'National and regional policy'}]},{heading:'Resources',links:[{label:'Partnership Framework',href:'#',desc:'How we work together'},{label:'MOU Templates',href:'#',desc:'Start the formal process'},{label:'Partner Stories',href:'#',desc:'Case studies from the field'}]}],
-                featured:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_01_Image_0001.jpg',label:'Partnership',heading:'Join 200+ partners worldwide',href:'partner.html'}},
+                feature:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_01_Image_0001.jpg',eyebrow:'Featured',title:'Join 200+ partners worldwide'},
+                cards:[{label:'Faith Based Partners',desc:'Churches and faith communities driving restoration',href:'partner.html#faith'},{label:'NGO & Restoration',desc:'Non-profits and development organisations',href:'partner.html#ngo'},{label:'Corporate Partners',desc:'Carbon, CSR and sustainability programs',href:'partner.html#corporate'},{label:'Government Partners',desc:'National and regional policy frameworks',href:'partner.html#government'}]},
             adopt:{eyebrow:'Adoption',viewAll:'Adoption resources',viewAllHref:'resources.html',
-                cols:[{heading:'Getting Started',links:[{label:'What is FMNR?',href:'#',desc:'The basics explained'},{label:'Step-by-step guide',href:'#',desc:'From field to forest'},{label:'Training programs',href:'#',desc:'Hands-on learning'},{label:'Field toolkits',href:'#',desc:'Practical resources'}]},{heading:'Support',links:[{label:'Community bylaws',href:'#',desc:'Governance templates'},{label:'Monitoring apps',href:'#',desc:'Track your progress'}]}],
-                featured:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_07_Image_0001.jpg',label:'New Guide',heading:'Adopting FMNR in dryland Africa',href:'#'}},
+                feature:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_07_Image_0001.jpg',eyebrow:'New Guide',title:'Adopting FMNR in dryland Africa'},
+                cards:[{label:'What is FMNR?',desc:'The basics of the technique explained',href:'#'},{label:'Step-by-step Guide',desc:'From field assessment to forest',href:'#'},{label:'Training Programs',desc:'Hands-on learning and certification',href:'#'},{label:'Field Toolkits',desc:'Practical resources for practitioners',href:'#'}]},
             impact:{eyebrow:'Impact',viewAll:'Full impact evidence',viewAllHref:'impact.html',
-                cols:[{heading:'Impact Areas',links:[{label:'Environmental Impact',href:'impact.html',desc:'Trees, soil and water'},{label:'Social Impact',href:'#',desc:'Communities and livelihoods'},{label:'Economic Impact',href:'#',desc:'Cost-effectiveness data'},{label:'Climate Impact',href:'#',desc:'Carbon and resilience'}]},{heading:'Evidence',links:[{label:'Research papers',href:'#',desc:'Peer-reviewed studies'},{label:'Case studies',href:'#',desc:'On-the-ground stories'}]}],
-                featured:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_20_Image_0001.jpg',label:'2025 Report',heading:'24 million hectares restored',href:'impact.html'}},
+                feature:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_20_Image_0001.jpg',eyebrow:'2025 Report',title:'24 million hectares restored'},
+                cards:[{label:'Environmental Impact',desc:'Trees, soil and water restoration data',href:'impact.html'},{label:'Social Impact',desc:'Communities and livelihoods transformed',href:'#'},{label:'Economic Impact',desc:'Cost-effectiveness and ROI evidence',href:'#'},{label:'Climate Impact',desc:'Carbon sequestration and resilience',href:'#'}]},
             fund:{eyebrow:'Funding',viewAll:'All funding options',viewAllHref:'#',
-                cols:[{heading:'Ways to Give',links:[{label:'Donate now',href:'#',desc:'One-off or recurring'},{label:'Fundraise for FMNR',href:'#',desc:'Create your campaign'},{label:'Corporate giving',href:'#',desc:'Aligned to your ESG goals'},{label:'Major gifts',href:'#',desc:'Significant impact'}]},{heading:'Transparency',links:[{label:'Where funds go',href:'#',desc:'Full accountability'},{label:'Annual reports',href:'#',desc:'Impact per dollar'}]}],
-                featured:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_04_Image_0001.jpg',label:'Donate',heading:'Restore one hectare for $12',href:'#'}},
+                feature:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_04_Image_0001.jpg',eyebrow:'Donate',title:'Restore one hectare for $12'},
+                cards:[{label:'Donate Now',desc:'One-off or recurring contributions',href:'#'},{label:'Fundraise for FMNR',desc:'Create your own campaign',href:'#'},{label:'Corporate Giving',desc:'Aligned to your ESG goals',href:'#'},{label:'Where Funds Go',desc:'Full transparency and accountability',href:'#'}]},
             what:{eyebrow:'About FMNR',viewAll:'About us',viewAllHref:'#',
-                cols:[{heading:'Our Story',links:[{label:'What is FMNR?',href:'#',desc:'The technique explained'},{label:'Tony Rinaudo',href:'#',desc:"The founder's journey"},{label:'Where we work',href:'#',desc:'27 countries and growing'},{label:'Our team',href:'#',desc:'The people behind FMNR'}]},{heading:'More',links:[{label:'Media & Press',href:'#',desc:'News and coverage'},{label:'Contact us',href:'#contact',desc:'Get in touch'}]}],
-                featured:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_19_Image_0001.jpg',label:'Story',heading:'From one field in Niger to 27 countries',href:'#'}}
+                feature:{img:'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_19_Image_0001.jpg',eyebrow:'Story',title:'From one field in Niger to 27 countries'},
+                cards:[{label:'What is FMNR?',desc:'The technique and science explained',href:'#'},{label:'Tony Rinaudo',desc:"The founder's journey and legacy",href:'tony-rinaudo.html'},{label:'Where We Work',desc:'27 countries and growing',href:'#'},{label:'Our Team',desc:'The people behind FMNR Hub',href:'#'}]}
         };
         var menu=document.getElementById('mega-menu'),backdrop=document.getElementById('mega-backdrop'),
             eyebrowEl=document.getElementById('mega-eyebrow'),viewAllEl=document.getElementById('mega-view-all'),
-            colsEl=document.getElementById('mega-cols'),featuredEl=document.getElementById('mega-featured'),
+            featureEl=document.getElementById('mega-feature'),cardsEl=document.getElementById('mega-cards'),
             activeKey=null,closeTimer=null;
-        function renderMenu(key){var d=megaData[key];if(!d)return;eyebrowEl.textContent=d.eyebrow;viewAllEl.textContent=d.viewAll;viewAllEl.href=d.viewAllHref;colsEl.innerHTML=d.cols.map(function(c){return'<div class="mega-col"><p class="mega-col-heading">'+c.heading+'</p><ul>'+c.links.map(function(l){return'<li><a href="'+l.href+'"><span class="mega-link-label">'+l.label+'</span><span class="mega-link-desc">'+l.desc+'</span></a></li>';}).join('')+'</ul></div>';}).join('');featuredEl.innerHTML=d.featured?'<a class="mega-card" href="'+d.featured.href+'"><img src="'+d.featured.img+'" alt=""><span class="mega-card-label">'+d.featured.label+'</span><p class="mega-card-heading">'+d.featured.heading+'</p></a>':'';}
+        function renderMenu(key){var d=megaData[key];if(!d)return;eyebrowEl.textContent=d.eyebrow;viewAllEl.textContent=d.viewAll;viewAllEl.href=d.viewAllHref;featureEl.innerHTML='<a href="'+(d.viewAllHref||'#')+'" style="display:block;height:100%;position:relative"><img src="'+d.feature.img+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"><div class="mega-feature-overlay"><span class="mega-feature-eyebrow">'+d.feature.eyebrow+'</span><span class="mega-feature-title">'+d.feature.title+'</span></div></a>';cardsEl.innerHTML=d.cards.map(function(c,i){return'<a class="mega-card" href="'+c.href+'"><span class="mega-card-num">0'+(i+1)+'</span><span class="mega-card-body"><span class="mega-card-label">'+c.label+'</span><span class="mega-card-desc">'+c.desc+'</span></span></a>';}).join('');}
         function openMenu(key){if(closeTimer){clearTimeout(closeTimer);closeTimer=null;}activeKey=key;renderMenu(key);menu.classList.add('open');backdrop.classList.add('open');document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.toggle('active',a.getAttribute('data-mega')===key);});}
         function closeMenu(){activeKey=null;menu.classList.remove('open');backdrop.classList.remove('open');document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');});}
         function scheduleClose(){closeTimer=setTimeout(closeMenu,160);}

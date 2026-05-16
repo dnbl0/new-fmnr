@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cards — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); color: var(--color-text-primary); }
+
+        /* Controls */
+        .controls { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border); padding: 16px 48px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+        .controls label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-secondary); }
+        .control-group { display: flex; align-items: center; gap: 8px; }
+        .pill-btn { border: 1px solid var(--color-border); background: var(--color-white); border-radius: 980px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--color-text-primary); }
+        .pill-btn:hover { border-color: var(--color-border-subtle); background: var(--color-bg-light); }
+        .pill-btn.active { background: var(--color-text-primary); color: var(--color-white); border-color: var(--color-text-primary); }
+
+        /* Section */
+        .demo-section { max-width: 1280px; margin: 0 auto; padding: 64px 48px; }
+        .demo-section + .demo-section { border-top: 1px solid var(--color-border); }
+        .demo-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: 24px; }
+
+        /* Card grid */
+        .cards-grid { display: grid; gap: 24px; transition: grid-template-columns 0.4s; }
+        .cards-grid[data-cols="1"] { grid-template-columns: 1fr; }
+        .cards-grid[data-cols="2"] { grid-template-columns: 1fr 1fr; }
+        .cards-grid[data-cols="3"] { grid-template-columns: 1fr 1fr 1fr; }
+        .cards-grid[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+
+        /* Card base */
+        .card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; color: var(--color-white); border-radius: 8px; overflow: hidden; height: 440px; transition: box-shadow .25s, transform .25s; }
+        .card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.18); transform: translateY(-3px); }
+        .cards-grid[data-cols="1"] .card { height: 560px; }
+        .cards-grid[data-cols="2"] .card { height: 500px; }
+
+        /* Media */
+        .card__media { position: absolute; inset: 0; }
+        .card__media img,
+        .card__media video { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+        .card:hover .card__media img,
+        .card:hover .card__media video { transform: scale(1.05); }
+
+        /* Gradient overlay — always present for legibility */
+        .card__overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 40%, transparent 70%); pointer-events: none; z-index: 1; }
+
+        /* Body — anchored to bottom */
+        .card__body { position: relative; z-index: 2; padding: 28px; display: flex; flex-direction: column; gap: 4px; margin-top: auto; }
+        .card__title { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; line-height: 1.1; color: var(--color-white); }
+        .card__desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.4; max-width: 360px; display: none; }
+        .card__cta { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; color: var(--color-white); margin-top: 6px; }
+
+        /* Show description when toggled */
+        .cards-grid.show-desc .card__desc { display: block; }
+
+        /* Icon card variant */
+        .card--icon { background: var(--color-bg-light); height: 320px; }
+        .card--icon .card__overlay { display: none; }
+        .card--icon .card__body { padding: 28px; gap: 4px; }
+        .card--icon .card__icon { width: 48px; height: 48px; margin-bottom: 12px; }
+        .card--icon .card__title { color: var(--color-text-primary); font-size: 20px; }
+        .card--icon .card__desc { color: var(--color-text-secondary); }
+        .card--icon .card__cta { color: var(--color-green); }
+
+        /* Blog card */
+        .card--blog { background: var(--color-white); border: 1px solid var(--color-border); height: auto; min-height: 0; }
+        .card--blog .card__overlay { display: none; }
+        .card--blog .card__thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px 12px 0 0; }
+        .card--blog .card__thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+        .card--blog:hover .card__thumb img { transform: scale(1.04); }
+        .card--blog .card__body { padding: 24px; position: static; gap: 6px; }
+        .card--blog .card__meta { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-green); }
+        .card--blog .card__title { color: var(--color-text-primary); font-size: 18px; }
+        .card--blog .card__desc { color: var(--color-text-secondary); }
+        .card--blog .card__cta { color: var(--color-green); }
+
+        /* Podcast card */
+        .card--podcast { background: var(--color-bg-dark); height: auto; min-height: 0; border-radius: 8px; }
+        .card--podcast .card__overlay { display: none; }
+        .card--podcast .card__body { padding: 28px; position: static; gap: 8px; }
+        .card--podcast .card__play { width: 48px; height: 48px; border-radius: 50%; background: var(--color-green); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; }
+        .card--podcast .card__play svg { width: 18px; height: 18px; color: var(--color-white); margin-left: 2px; }
+        .card--podcast .card__meta { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); }
+        .card--podcast .card__title { color: var(--color-white); font-size: 18px; }
+        .card--podcast .card__desc { color: rgba(255,255,255,0.5); }
+        .card--podcast .card__cta { color: var(--color-teal); }
+
+        /* Awards card */
+        .card--award { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); height: auto; min-height: 0; text-align: center; }
+        .card--award .card__overlay { display: none; }
+        .card--award .card__body { padding: 40px 28px; position: static; align-items: center; gap: 8px; }
+        .card--award .card__badge { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #f5a623 0%, #f7c948 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .card--award .card__badge svg { width: 28px; height: 28px; color: #1a1a2e; }
+        .card--award .card__title { color: var(--color-white); font-size: 18px; text-align: center; }
+        .card--award .card__desc { color: rgba(255,255,255,0.5); text-align: center; }
+        .card--award .card__year { font-family: var(--font-heading); font-size: 13px; color: #f5a623; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* Video badge */
+        .card__video-badge { position: absolute; top: 16px; right: 16px; z-index: 3; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--color-white); text-transform: uppercase; letter-spacing: 0.04em; }
+        .card__video-badge svg { width: 12px; height: 12px; }
+
+        @media (max-width: 900px) {
+            .cards-grid[data-cols="4"] { grid-template-columns: 1fr 1fr; }
+            .cards-grid[data-cols="3"] { grid-template-columns: 1fr 1fr; }
+            .controls { padding: 16px 24px; }
+            .demo-section { padding: 48px 24px; }
+        }
+        @media (max-width: 560px) {
+            .cards-grid[data-cols="4"],
+            .cards-grid[data-cols="3"],
+            .cards-grid[data-cols="2"] { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controls -->
+    <div class="controls">
+        <div class="control-group">
+            <label>Columns:</label>
+            <button class="pill-btn" data-col="1">1</button>
+            <button class="pill-btn" data-col="2">2</button>
+            <button class="pill-btn" data-col="3">3</button>
+            <button class="pill-btn active" data-col="4">4</button>
+        </div>
+        <div class="control-group">
+            <label>Description:</label>
+            <button class="pill-btn" id="desc-toggle">Show</button>
+        </div>
+    </div>
+
+    <!-- Image Cards -->
+    <div class="demo-section">
+        <p class="demo-label">Image Cards</p>
+        <div class="cards-grid" id="image-grid" data-cols="4">
+            <a href="#" class="card">
+                <div class="card__media"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_18_Image_0003.jpg" alt="Faith Partners"></div>
+                <div class="card__overlay"></div>
+                <div class="card__body">
+                    <p class="card__title">Faith Communities</p>
+                    <p class="card__desc">Churches and faith organisations mobilising members to restore land.</p>
+                    <span class="card__cta">Explore ›</span>
+                </div>
+            </a>
+            <a href="#" class="card">
+                <div class="card__media"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_04_Image_0001.jpg" alt="NGO Partners"></div>
+                <div class="card__overlay"></div>
+                <div class="card__body">
+                    <p class="card__title">NGOs & Development</p>
+                    <p class="card__desc">Non-profits scaling FMNR training and community engagement globally.</p>
+                    <span class="card__cta">Explore ›</span>
+                </div>
+            </a>
+            <a href="#" class="card">
+                <div class="card__media"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_22_Image_0001.jpg" alt="Corporate Partners"></div>
+                <div class="card__overlay"></div>
+                <div class="card__body">
+                    <p class="card__title">Corporate Partners</p>
+                    <p class="card__desc">Businesses aligning carbon and sustainability goals with restoration.</p>
+                    <span class="card__cta">Explore ›</span>
+                </div>
+            </a>
+            <a href="#" class="card">
+                <div class="card__media"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_20_Image_0001.jpg" alt="Government Partners"></div>
+                <div class="card__overlay"></div>
+                <div class="card__body">
+                    <p class="card__title">Government Partners</p>
+                    <p class="card__desc">Governments integrating FMNR into policy and food security programs.</p>
+                    <span class="card__cta">Explore ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Icon Cards -->
+    <div class="demo-section">
+        <p class="demo-label">Icon Cards</p>
+        <div class="cards-grid" id="icon-grid" data-cols="4">
+            <a href="#" class="card card--icon">
+                <div class="card__body">
+                    <img class="card__icon" src="icons/leaf.svg" alt="">
+                    <p class="card__title">Restoration</p>
+                    <p class="card__desc">Regenerating degraded lands through community-driven natural processes.</p>
+                    <span class="card__cta">Learn more ›</span>
+                </div>
+            </a>
+            <a href="#" class="card card--icon">
+                <div class="card__body">
+                    <img class="card__icon" src="icons/grow.svg" alt="">
+                    <p class="card__title">Global Reach</p>
+                    <p class="card__desc">Active across 27 countries with millions of hectares restored.</p>
+                    <span class="card__cta">View map ›</span>
+                </div>
+            </a>
+            <a href="#" class="card card--icon">
+                <div class="card__body">
+                    <img class="card__icon" src="icons/sprout.svg" alt="">
+                    <p class="card__title">Community</p>
+                    <p class="card__desc">Empowering farming communities with sustainable land management.</p>
+                    <span class="card__cta">Our partners ›</span>
+                </div>
+            </a>
+            <a href="#" class="card card--icon">
+                <div class="card__body">
+                    <img class="card__icon" src="icons/seeds.svg" alt="">
+                    <p class="card__title">Cost Effective</p>
+                    <p class="card__desc">92% cheaper than conventional reforestation at just $12 per hectare.</p>
+                    <span class="card__cta">See evidence ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Blog Cards -->
+    <div class="demo-section">
+        <p class="demo-label">Blog / Article Cards</p>
+        <div class="cards-grid" id="blog-grid" data-cols="3">
+            <a href="#" class="card card--blog">
+                <div class="card__thumb"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_04_Image_0001.jpg" alt=""></div>
+                <div class="card__body">
+                    <span class="card__meta">Research · 5 min read</span>
+                    <p class="card__title">How FMNR Outperforms Conventional Tree Planting</p>
+                    <p class="card__desc">A meta-analysis of 78% survival rates versus 20-30% for planted seedlings.</p>
+                    <span class="card__cta">Read article ›</span>
+                </div>
+            </a>
+            <a href="#" class="card card--blog">
+                <div class="card__thumb"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_09_Image_0002.jpg" alt=""></div>
+                <div class="card__body">
+                    <span class="card__meta">Field Report · 8 min read</span>
+                    <p class="card__title">Niger's Green Wall: 20 Years of Community-Led Restoration</p>
+                    <p class="card__desc">Documenting the transformation of 5 million hectares of degraded Sahel.</p>
+                    <span class="card__cta">Read article ›</span>
+                </div>
+            </a>
+            <a href="#" class="card card--blog">
+                <div class="card__thumb"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_18_Image_0003.jpg" alt=""></div>
+                <div class="card__body">
+                    <span class="card__meta">Case Study · 4 min read</span>
+                    <p class="card__title">Faith Communities Driving Land Restoration in East Africa</p>
+                    <p class="card__desc">How church networks mobilised 12,000 households to adopt FMNR.</p>
+                    <span class="card__cta">Read article ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Podcast Cards -->
+    <div class="demo-section">
+        <p class="demo-label">Podcast Cards</p>
+        <div class="cards-grid" id="podcast-grid" data-cols="3">
+            <a href="#" class="card card--podcast">
+                <div class="card__body">
+                    <div class="card__play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg></div>
+                    <span class="card__meta">Episode 12 · 34 min</span>
+                    <p class="card__title">The Forest Maker: Tony Rinaudo's Story</p>
+                    <p class="card__desc">How one man's persistence led to a global movement restoring millions of hectares.</p>
+                    <span class="card__cta">Listen now ›</span>
+                </div>
+            </a>
+            <a href="#" class="card card--podcast">
+                <div class="card__body">
+                    <div class="card__play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg></div>
+                    <span class="card__meta">Episode 11 · 28 min</span>
+                    <p class="card__title">Carbon Credits & Community: The Humbo Project</p>
+                    <p class="card__desc">Ethiopia's pioneering carbon credit program that generated $638K for local cooperatives.</p>
+                    <span class="card__cta">Listen now ›</span>
+                </div>
+            </a>
+            <a href="#" class="card card--podcast">
+                <div class="card__body">
+                    <div class="card__play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg></div>
+                    <span class="card__meta">Episode 10 · 41 min</span>
+                    <p class="card__title">Women Leading FMNR in the Sahel</p>
+                    <p class="card__desc">Female farmers driving restoration outcomes and household income growth.</p>
+                    <span class="card__cta">Listen now ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Awards Cards -->
+    <div class="demo-section">
+        <p class="demo-label">Awards Cards</p>
+        <div class="cards-grid" id="awards-grid" data-cols="4">
+            <a href="#" class="card card--award">
+                <div class="card__body">
+                    <div class="card__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 14l-3 8 6-3 6 3-3-8"/></svg></div>
+                    <span class="card__year">2018</span>
+                    <p class="card__title">Right Livelihood Award</p>
+                    <p class="card__desc">Awarded to Tony Rinaudo for demonstrating on a large scale how drylands can be greened.</p>
+                </div>
+            </a>
+            <a href="#" class="card card--award">
+                <div class="card__body">
+                    <div class="card__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 14l-3 8 6-3 6 3-3-8"/></svg></div>
+                    <span class="card__year">2019</span>
+                    <p class="card__title">UNEP Champion of the Earth</p>
+                    <p class="card__desc">Recognised for inspiration and action in restoring degraded landscapes globally.</p>
+                </div>
+            </a>
+            <a href="#" class="card card--award">
+                <div class="card__body">
+                    <div class="card__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 14l-3 8 6-3 6 3-3-8"/></svg></div>
+                    <span class="card__year">2020</span>
+                    <p class="card__title">Sustainability Award</p>
+                    <p class="card__desc">World Vision's FMNR program recognised for scalable environmental impact.</p>
+                </div>
+            </a>
+            <a href="#" class="card card--award">
+                <div class="card__body">
+                    <div class="card__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 14l-3 8 6-3 6 3-3-8"/></svg></div>
+                    <span class="card__year">2022</span>
+                    <p class="card__title">Land for Life Award</p>
+                    <p class="card__desc">UNCCD recognition for outstanding contribution to sustainable land management.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Video Card -->
+    <div class="demo-section">
+        <p class="demo-label">Video Card</p>
+        <div class="cards-grid" id="video-grid" data-cols="2">
+            <a href="#" class="card">
+                <div class="card__media"><video src="forest.mp4" autoplay muted loop playsinline></video></div>
+                <div class="card__overlay"></div>
+                <span class="card__video-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                    Video
+                </span>
+                <div class="card__body">
+                    <p class="card__title">FMNR In Action</p>
+                    <p class="card__desc">See how communities are regenerating forests through simple pruning techniques.</p>
+                    <span class="card__cta">Watch ›</span>
+                </div>
+            </a>
+            <a href="#" class="card">
+                <div class="card__media"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_18_Image_0003.jpg" alt="Impact"></div>
+                <div class="card__overlay"></div>
+                <div class="card__body">
+                    <p class="card__title">Impact Stories</p>
+                    <p class="card__desc">Real outcomes from farming communities across 27 countries.</p>
+                    <span class="card__cta">Read more ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var colBtns = document.querySelectorAll('[data-col]');
+        var grids = document.querySelectorAll('.cards-grid');
+        var descBtn = document.getElementById('desc-toggle');
+        var descVisible = false;
+
+        colBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                colBtns.forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                var cols = btn.getAttribute('data-col');
+                grids.forEach(function(g) {
+                    var id = g.id;
+                    if (id === 'video-grid') g.setAttribute('data-cols', Math.min(cols, 2));
+                    else g.setAttribute('data-cols', cols);
+                });
+            });
+        });
+
+        descBtn.addEventListener('click', function() {
+            descVisible = !descVisible;
+            descBtn.classList.toggle('active', descVisible);
+            descBtn.textContent = descVisible ? 'Hide' : 'Show';
+            grids.forEach(function(g) { g.classList.toggle('show-desc', descVisible); });
+        });
+    })();
+    </script>
+</body>
+</html>

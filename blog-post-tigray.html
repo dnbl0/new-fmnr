@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>&ldquo;Tony the Second&rdquo; of Tigray — FMNR Hub</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-text-primary); background: var(--color-white); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        a { color: inherit; } img { display: block; }
+        .site-header { background: rgba(255,255,255,0.93); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 1px 0 rgba(0,0,0,.07); }
+        .header-inner { max-width: 1280px; margin: 0 auto; padding: 14px 48px; display: flex; align-items: center; justify-content: space-between; }
+        .logo img { height: 33px; }
+        .nav-links { display: flex; align-items: center; gap: 8px; }
+        .nav-links a { font-weight: 700; font-size: 14px; color: var(--color-charcoal, #464646); text-decoration: none; padding: 8px 12px; transition: color .2s; }
+        .nav-links a:hover { color: var(--color-green, #077D57); }
+        .header-actions { display: flex; align-items: center; gap: 16px; }
+        .btn-donate { background: var(--color-green, #077D57); border: none; color: var(--color-white); font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; padding: 10px 20px; border-radius: 980px; text-decoration: none; white-space: nowrap; transition: background .2s; }
+        .btn-donate:hover { background: var(--color-green-dark); }
+        .hamburger { display: none; flex-direction: column; gap: 5px; background: transparent; border: none; cursor: pointer; padding: 8px; }
+        .hamburger span { display: block; width: 22px; height: 2px; background: var(--color-charcoal, #464646); }
+        @media (max-width: 900px) { .nav-links { display: none; } .hamburger { display: flex; } .btn-donate { display: none; } .header-inner { padding: 12px 24px; } }
+        .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: var(--color-green, #077D57); transform-origin: left; transform: scaleX(0); z-index: 2000; transition: transform .1s linear; }
+        .article-hero { display: flex; min-height: 520px; padding-top: 61px; }
+        .hero-left { flex: 0 0 45%; background: var(--color-bg-warm); padding: 48px 56px 56px 64px; display: flex; flex-direction: column; }
+        .hero-right { flex: 1; position: relative; overflow: hidden; }
+        .hero-right img { width: 100%; height: 100%; object-fit: cover; }
+        .back-link { font-size: 13px; font-weight: 700; color: var(--color-charcoal); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; margin-bottom: auto; padding-bottom: 40px; transition: color .15s; }
+        .back-link:hover { color: var(--color-green, #077D57); }
+        .back-link svg { width: 14px; height: 14px; }
+        .hero-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .hero-category { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--color-orange, #FA6B01); }
+        .hero-date { font-size: 13px; color: var(--color-text-muted); }
+        .hero-title { font-family: var(--font-heading), 'fatfrank', sans-serif; font-size: clamp(26px, 3.5vw, 50px); text-transform: uppercase; line-height: 1.0; color: var(--color-text-primary); letter-spacing: -.01em; }
+        .article-wrap { max-width: 1100px; margin: 0 auto; padding: 72px 48px 80px; display: flex; gap: 72px; align-items: flex-start; }
+        .article-sidebar { flex: 0 0 200px; position: sticky; top: 100px; }
+        .toc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--color-text-muted); margin-bottom: 14px; }
+        .toc { display: flex; flex-direction: column; gap: 2px; }
+        .toc-link { font-size: 13px; color: var(--color-text-muted); text-decoration: none; padding: 5px 0; display: flex; align-items: center; gap: 9px; transition: color .15s; line-height: 1.3; }
+        .toc-link::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--color-border-subtle); flex-shrink: 0; transition: background .15s; }
+        .toc-link.active { color: var(--color-green, #077D57); font-weight: 700; }
+        .toc-link.active::before { background: var(--color-green, #077D57); }
+        .toc-link:hover:not(.active) { color: var(--color-text-primary); }
+        .sidebar-divider { border: none; border-top: 1px solid var(--color-border); margin: 24px 0; }
+        .share-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--color-text-muted); margin-bottom: 12px; }
+        .share-strip { display: flex; gap: 8px; flex-wrap: wrap; }
+        .share-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--color-border); background: var(--color-white); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--color-text-secondary); text-decoration: none; transition: border-color .15s, color .15s; flex-shrink: 0; }
+        .share-btn:hover { border-color: var(--color-green, #077D57); color: var(--color-green, #077D57); }
+        .share-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+        .article-body { flex: 1; max-width: 680px; }
+        .article-intro { font-size: 18px; line-height: 1.7; color: var(--color-intro); margin-bottom: 36px; }
+        .article-body p { font-size: 16px; line-height: 1.8; color: var(--color-text-primary); margin-bottom: 24px; }
+        .article-body h2 { font-family: var(--font-heading), 'fatfrank', sans-serif; font-size: clamp(22px, 2.5vw, 30px); text-transform: uppercase; color: var(--color-text-primary); margin-top: 52px; margin-bottom: 20px; line-height: 1.1; scroll-margin-top: 110px; }
+        .article-body blockquote { border-left: 3px solid var(--color-green, #077D57); padding: 4px 0 4px 24px; margin: 36px 0; font-size: 18px; font-style: italic; line-height: 1.65; color: var(--color-charcoal); }
+        .article-body blockquote cite { display: block; font-size: 13px; font-style: normal; font-weight: 700; color: var(--color-text-muted); margin-top: 10px; }
+        .article-body figure { margin: 40px 0; }
+        .article-body figure img { width: 100%; border-radius: 8px; }
+        .article-body figcaption { font-size: 12px; color: var(--color-text-muted); margin-top: 10px; line-height: 1.4; }
+        .article-cta { background: var(--color-bg-warm); border-radius: 10px; padding: 20px 24px; font-size: 15px; line-height: 1.6; margin-top: 40px !important; }
+        .article-cta a { color: var(--color-green, #077D57); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+        .article-attr { font-size: 13px; font-style: italic; color: var(--color-text-muted); margin-top: 40px !important; padding-top: 28px; border-top: 1px solid var(--color-border); }
+        .related-section { background: var(--color-bg-light); padding: 80px 0; }
+        .related-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+        .related-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; }
+        .related-title { font-family: var(--font-heading), 'fatfrank', sans-serif; font-size: 32px; text-transform: uppercase; color: var(--color-text-primary); }
+        .related-all { font-size: 14px; font-weight: 700; color: var(--color-green, #077D57); text-decoration: none; }
+        .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .related-card { background: var(--color-white); border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: box-shadow .2s, transform .2s; }
+        .related-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.1); transform: translateY(-3px); }
+        .related-card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+        .related-card-body { padding: 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .related-card-meta { display: flex; align-items: center; gap: 8px; }
+        .related-card-cat { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--color-green, #077D57); }
+        .related-card-date { font-size: 12px; color: var(--color-text-muted); }
+        .related-card-title { font-size: 15px; font-weight: 700; line-height: 1.4; color: var(--color-text-primary); }
+        .edm-band { background: var(--color-green, #077D57); padding: 96px 48px; text-align: center; }
+        .edm-display { font-family: var(--font-heading), 'fatfrank', sans-serif; font-size: clamp(40px, 8vw, 108px); text-transform: uppercase; color: var(--color-white); line-height: .88; margin-bottom: 28px; letter-spacing: -.02em; }
+        .edm-sub { font-size: 16px; color: rgba(255,255,255,.7); margin-bottom: 32px; }
+        .edm-form { display: flex; gap: 8px; max-width: 440px; margin: 0 auto; }
+        .edm-form input { flex: 1; padding: 13px 22px; border-radius: 980px; border: none; font-family: var(--font-body); font-size: 14px; outline: none; color: var(--color-text-primary); min-width: 0; }
+        .edm-form button { background: var(--color-white); color: var(--color-green, #077D57); border: none; border-radius: 980px; padding: 13px 26px; font-family: var(--font-body); font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap; }
+        #footer { background: var(--color-text-primary); color: var(--color-white); padding: 80px 0 40px; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+        .footer-top { display: flex; gap: 80px; margin-bottom: 60px; }
+        .footer-brand { flex: 0 0 260px; display: flex; flex-direction: column; gap: 16px; }
+        .footer-brand img { height: 34px; filter: brightness(0) invert(1); }
+        .footer-brand p { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.45); }
+        .footer-nav { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; }
+        .footer-nav-col h4 { font-family: var(--font-heading), 'fatfrank', sans-serif; font-size: 14px; text-transform: uppercase; color: var(--color-white); margin: 0 0 16px; }
+        .footer-nav-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .footer-nav-col a { font-size: 13px; color: rgba(255,255,255,.38); text-decoration: none; transition: color .2s; }
+        .footer-nav-col a:hover { color: var(--color-teal, #0FFBAB); }
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.07); }
+        .footer-bottom p { font-size: 13px; color: rgba(255,255,255,.28); }
+        .footer-social { display: flex; gap: 16px; }
+        .footer-social a { color: rgba(255,255,255,.28); transition: color .2s; }
+        .footer-social a:hover { color: var(--color-teal, #0FFBAB); }
+        .footer-social svg { width: 20px; height: 20px; }
+        .copy-toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--color-text-primary); color: var(--color-white); font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 980px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 9999; }
+        .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        @media (max-width: 900px) {
+            .article-hero { flex-direction: column; padding-top: 57px; min-height: auto; }
+            .hero-left { flex: none; width: 100%; padding: 36px 24px 40px; }
+            .hero-right { flex: none; height: 280px; }
+            .article-wrap { flex-direction: column; padding: 40px 24px 56px; gap: 0; }
+            .article-sidebar { display: none; }
+            .article-body { max-width: 100%; }
+            .related-inner { padding: 0 24px; }
+            .related-grid { grid-template-columns: 1fr; }
+            .edm-band { padding: 64px 24px; }
+            .edm-form { flex-direction: column; }
+            .footer-inner { padding: 0 24px; }
+            .footer-top { flex-direction: column; gap: 40px; }
+            .footer-nav { grid-template-columns: repeat(2, 1fr); }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress-bar"></div>
+    <div class="copy-toast" id="copy-toast">Link copied!</div>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo"><img src="fmnr-logo-figma.png" alt="FMNR Hub"></a>
+            <nav class="nav-links"><a href="#">Partner</a><a href="#">Adopt</a><a href="#" style="color:var(--color-green,#077D57)">Impact</a><a href="#">Fund</a><a href="#">About</a></nav>
+            <div class="header-actions"><a href="#contact" class="btn-donate">Get in touch</a><button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+        </div>
+    </header>
+
+    <section class="article-hero">
+        <div class="hero-left">
+            <a href="blog.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Stories</a>
+            <div class="hero-meta">
+                <span class="hero-category">Leadership</span>
+                <span class="hero-date">March 2026</span>
+            </div>
+            <h1 class="hero-title">&ldquo;Tony the Second&rdquo; of Tigray</h1>
+        </div>
+        <div class="hero-right">
+            <img src="https://fmnrhub.com.au/wp-content/uploads/2026/03/IMG_4374-2-2048x1150.jpg" alt="Gebregziebeher on his farm in Tigray">
+        </div>
+    </section>
+
+    <div class="article-wrap">
+        <aside class="article-sidebar">
+            <p class="toc-label">On This Page</p>
+            <nav class="toc" id="toc">
+                <a href="#section-champion" class="toc-link active">A local champion</a>
+                <a href="#section-mentor" class="toc-link">Becoming &ldquo;Tony the Second&rdquo;</a>
+                <a href="#section-impact" class="toc-link">Family &amp; community impact</a>
+                <a href="#section-legacy" class="toc-link">A lasting legacy</a>
+            </nav>
+            <hr class="sidebar-divider">
+            <p class="share-label">Share</p>
+            <div class="share-strip">
+                <button class="share-btn" id="copy-btn" title="Copy link" aria-label="Copy link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></button>
+                <button class="share-btn" onclick="window.print()" title="Print" aria-label="Print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+                <a class="share-btn" href="mailto:?subject=Tony the Second of Tigray&body=Read this story from FMNR Hub" title="Email" aria-label="Share by email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+            </div>
+        </aside>
+
+        <article class="article-body">
+            <p class="article-intro">In the gently sloping, clay-soiled land of Tanqua Milash District, a quiet revolution in land restoration is taking place, led by a passionate 70-year-old farmer named Gebregziebeher.</p>
+
+            <h2 id="section-champion">A local champion</h2>
+            <p>Despite the challenges posed by the intense temperature and unpredictable rainfall of the semi-arid Tanqua Milash District, Gebregziebeher has emerged as a local champion of Farmer Managed Natural Regeneration. His land, once vulnerable to the elements, is now a thriving work of native vegetation, including species such as Ziziphus spina-christi (Giba), Acacia, and Terminalia brownie (Weyiba).</p>
+            <p>While Gebregziebeher has always possessed a deep-seated love for trees, it was a training session with World Vision Ethiopia in Wukro, Tigray, that gave his indigenous wisdom a new depth and structure, transforming his 2.5-hectare farm into a model of ecological resilience.</p>
+            <p>Gebregziebeher manages a total of 469 trees across 17 different species, maintaining an impressive density of 117 trees per hectare. His philosophy is rooted in the belief that naturally regenerated trees are far more resilient than planted seedlings.</p>
+
+            <figure>
+                <img src="https://fmnrhub.com.au/wp-content/uploads/2026/03/IMG_4198-2048x1363.jpg" alt="Gebregziebeher's restored farmland">
+                <figcaption>World Vision Photo / Bitima Milkessa</figcaption>
+            </figure>
+
+            <h2 id="section-mentor">Becoming &ldquo;Tony the Second&rdquo;</h2>
+            <p>Inspired by the fact that Tony Rinaudo taught a nation about Farmer Managed Natural Regeneration, Gebregziebeher felt a personal responsibility to mentor his neighbours, setting a goal to become &ldquo;Tony the Second&rdquo;. While sceptics in his town often ask who is paying him for his time, he tells them that protecting natural resources is his true pay.</p>
+            <p>This passion has turned him into a tireless teacher who spends his Sundays visiting local churches to share the benefits of land restoration with the community and goes to schools to teach students.</p>
+
+            <blockquote>
+                "I see how excited and motivated the students become when I talk to them about the importance of trees. They ask a lot of questions because they genuinely want to understand how trees help protect our land."
+                <cite>&mdash; Gebregziebeher, FMNR champion, Tigray</cite>
+            </blockquote>
+
+            <p>He keeps a registration notebook to track the farmers he has taught; to date, he has reached over 3,000 people and personally mentored 10 neighbouring farmers in adopting these practices.</p>
+
+            <blockquote>
+                "I never mind that I am tired; I just go forward. Learn today, tomorrow, always learning."
+                <cite>&mdash; Gebregziebeher</cite>
+            </blockquote>
+
+            <h2 id="section-impact">Family &amp; community impact</h2>
+            <p>The impact of this stewardship is most evident within Gebregziebeher&rsquo;s own household of eight. By reviving the soil, he has secured his family&rsquo;s future, earning an average annual income of 136,000 Birr from wood sales and fruits like mangoes, oranges, and grapes. His family no longer relies on local markets for firewood or construction materials.</p>
+            <p>Miraf, Gebregziebeher&rsquo;s daughter in grade 7, said, &ldquo;I told my classmates that my father is an environmental advocate who teaches communities by visiting different kebeles. Our garden is green. We use trees for firewood and income-generating activities. My father also buys me exercise books by selling Terminalia brownie seeds.&rdquo;</p>
+
+            <figure>
+                <img src="https://fmnrhub.com.au/wp-content/uploads/2026/03/IMG_4211-1-2048x1150.jpg" alt="Gebregziebeher's thriving farm">
+                <figcaption>World Vision Photo / Bitima Milkessa</figcaption>
+            </figure>
+
+            <h2 id="section-legacy">A lasting legacy</h2>
+            <p>Ultimately, his work is about creating a &ldquo;conducive environment&rdquo; for his children and grandchildren, ensuring they grow up with food security and economic stability. Despite obstacles like a lack of specialised tools, he remains committed to his legacy, proving that local champions can revive both the soil and the hope of an entire region.</p>
+
+            <p class="article-cta">Want to bring FMNR to your region? <a href="resources.html">Explore our implementation guides</a> or <a href="#contact">contact our field team</a>.</p>
+            <p class="article-attr">By Alemayehu Markos, Project Manager, and Bitima Milkessa, Advocacy and Communications Coordinator, World Vision Ethiopia. Photography: World Vision / Bitima Milkessa.</p>
+        </article>
+    </div>
+
+    <section class="related-section">
+        <div class="related-inner">
+            <div class="related-header"><h2 class="related-title">Related stories</h2><a href="blog.html" class="related-all">All stories &rarr;</a></div>
+            <div class="related-grid">
+                <a class="related-card" href="blog-post-niger.html"><img class="related-card-img" src="https://fmnrhub.com.au/wp-content/uploads/2025/11/1-Trailor-circa-1983.jpg" alt="Niger"><div class="related-card-body"><div class="related-card-meta"><span class="related-card-cat">Impact</span><span class="related-card-date">Oct 2025</span></div><p class="related-card-title">How Niger&rsquo;s FMNR experience has inspired a global scaling movement</p></div></a>
+                <a class="related-card" href="blog-post-zambia.html"><img class="related-card-img" src="https://fmnrhub.com.au/wp-content/uploads/2026/01/AU395-0060-06-768x512.jpg" alt="Zambia"><div class="related-card-body"><div class="related-card-meta"><span class="related-card-cat">Community</span><span class="related-card-date">Jan 2026</span></div><p class="related-card-title">FMNR Champion Leads Her Village in Land Restoration</p></div></a>
+                <a class="related-card" href="blog-post-kenya.html"><img class="related-card-img" src="https://fmnrhub.com.au/wp-content/uploads/2025/10/W200-0587-018_08.2023_Kenya_training_HQ_CNS-2048x1363.jpg" alt="Kenya"><div class="related-card-body"><div class="related-card-meta"><span class="related-card-cat">Field Report</span><span class="related-card-date">Jul 2025</span></div><p class="related-card-title">Improving the living standards of communities through FMNR</p></div></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="edm-band">
+        <p class="edm-display">Add impact<br>to your inbox</p>
+        <p class="edm-sub">Field stories, research and FMNR news &mdash; direct to you.</p>
+        <form class="edm-form" onsubmit="return false;"><input type="email" placeholder="Your email address" aria-label="Email address"><button type="submit">Subscribe</button></form>
+    </section>
+
+    <footer id="footer">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand"><a href="index.html"><img src="fmnr-logo-figma.png" alt="FMNR Hub"></a><p>FMNR is a low-cost, scalable approach to restoring degraded land by encouraging natural tree regrowth.</p></div>
+                <nav class="footer-nav">
+                    <div class="footer-nav-col"><h4>Partner</h4><ul><li><a href="#">Faith Partners</a></li><li><a href="#">NGOs &amp; Implementers</a></li><li><a href="#">Governments</a></li><li><a href="#">Funders</a></li></ul></div>
+                    <div class="footer-nav-col"><h4>Adopt</h4><ul><li><a href="#">Getting Started</a></li><li><a href="#">Field Guides</a></li><li><a href="#">Video Library</a></li><li><a href="#">Country Examples</a></li></ul></div>
+                    <div class="footer-nav-col"><h4>Impact</h4><ul><li><a href="#">Stories &amp; Research</a></li><li><a href="#">Impact Dashboard</a></li><li><a href="#">Annual Highlights</a></li></ul></div>
+                    <div class="footer-nav-col"><h4>Learn</h4><ul><li><a href="#">What is FMNR</a></li><li><a href="#">Science &amp; Evidence</a></li><li><a href="#">Global Activity</a></li></ul></div>
+                    <div class="footer-nav-col"><h4>About</h4><ul><li><a href="#">Tony Rinaudo</a></li><li><a href="#">FMNR Hub</a></li><li><a href="#">World Vision</a></li><li><a href="#">Contact</a></li></ul></div>
+                </nav>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 FMNR Hub. All rights reserved.</p><div class="footer-social"><a href="#" aria-label="X / Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a><a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a></div></div>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        var bar = document.getElementById('progress-bar');
+        function updateProgress() { var s = window.scrollY, t = document.documentElement.scrollHeight - window.innerHeight; bar.style.transform = 'scaleX(' + (t > 0 ? s / t : 0) + ')'; }
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        var headings = document.querySelectorAll('.article-body h2[id]');
+        var tocLinks = document.querySelectorAll('.toc-link');
+        if ('IntersectionObserver' in window && headings.length) {
+            var observer = new IntersectionObserver(function (entries) { entries.forEach(function (entry) { if (entry.isIntersecting) { tocLinks.forEach(function (l) { l.classList.remove('active'); }); var a = document.querySelector('.toc-link[href="#' + entry.target.id + '"]'); if (a) a.classList.add('active'); } }); }, { rootMargin: '-20% 0px -70% 0px' });
+            headings.forEach(function (h) { observer.observe(h); });
+        }
+        tocLinks.forEach(function (link) { link.addEventListener('click', function (e) { var target = document.querySelector(link.getAttribute('href')); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }); });
+        var toast = document.getElementById('copy-toast');
+        document.getElementById('copy-btn').addEventListener('click', function () { if (navigator.clipboard) { navigator.clipboard.writeText(window.location.href).then(showToast); } else { showToast(); } });
+        function showToast() { toast.classList.add('show'); setTimeout(function () { toast.classList.remove('show'); }, 2200); }
+    })();
+    </script>
+</body>
+</html>

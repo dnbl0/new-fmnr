@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Awards — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f0f0f0; overflow-x: hidden; }
+        .demo-frame { max-width: 1280px; margin: 40px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+
+        .awards-section { background: var(--wp--preset--color--base); padding: 96px; }
+        .awards-inner { max-width: 1120px; margin: 0 auto; }
+        .section-eyebrow { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-green); margin-bottom: 16px; }
+        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 64px; }
+        .awards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+        .award-card { background: var(--wp--preset--color--white); border-radius: 16px; padding: 40px 32px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(0,0,0,0.04); }
+        .award-icon { width: fit-content; background: rgba(7,125,87,0.08); color: var(--color-green); border-radius: 980px; padding: 7px 12px; font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .award-year { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-green); }
+        .award-name { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: var(--wp--preset--color--black); line-height: 1.1; }
+        .award-body { font-family: var(--font-body); font-size: 15px; line-height: 1.55; color: rgba(0,0,0,0.55); }
+        .award-source { margin-top: auto; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--color-green); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .awards-section { padding: 56px 24px; }
+            .awards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="awards-section">
+            <div class="awards-inner">
+                <p class="section-eyebrow">Recognition</p>
+                <h2 class="section-headline">Awards &amp; Honours</h2>
+                <div class="awards-grid">
+                    <div class="award-card">
+                        <div class="award-icon">Award</div>
+                        <span class="award-year">2018</span>
+                        <h3 class="award-name">Right Livelihood Award</h3>
+                        <p class="award-body">Tony was recognised for showing at large scale how drylands can be greened at minimal cost.</p>
+                        <a class="award-source" href="#">View source</a>
+                    </div>
+                    <div class="award-card">
+                        <div class="award-icon">Honour</div>
+                        <span class="award-year">2019</span>
+                        <h3 class="award-name">Member of the Order of Australia</h3>
+                        <p class="award-body">Appointed AM for significant service to conservation as a pioneer in international reforestation.</p>
+                    </div>
+                    <div class="award-card">
+                        <div class="award-icon">Peace</div>
+                        <span class="award-year">2025</span>
+                        <h3 class="award-name">Luxembourg Peace Prize</h3>
+                        <p class="award-body">Named Outstanding Environmental Peace laureate for restoration work.</p>
+                        <a class="award-source" href="#">View source</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

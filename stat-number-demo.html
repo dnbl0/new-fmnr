@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stat Number — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; max-width: 900px; }
+        .demo-area--dark { background: var(--color-bg-dark); }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+        .demo-stats { display: flex; gap: 48px; flex-wrap: wrap; }
+        .demo-stat { text-align: center; }
+        .demo-stat-num { font-family: var(--font-heading); font-size: clamp(48px, 6vw, 80px); text-transform: uppercase; line-height: 1; }
+        .demo-stat-num--pear { color: var(--color-pear); }
+        .demo-stat-num--teal { color: var(--color-teal); }
+        .demo-stat-label { font-size: 13px; color: var(--color-text-secondary); margin-top: 8px; }
+        @media (max-width: 768px) { body { padding: 48px 24px; } .demo-area { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <span class="block-label">Core Block</span>
+    <h2 class="block-title">Stat Number</h2>
+    <p class="block-desc">Animated count-up figure in FatFrank — pear or teal colour token.</p>
+    <div class="demo-area demo-area--dark">
+        <span class="variant-label" style="color:rgba(255,255,255,0.5);">Pear & Teal</span>
+        <div class="demo-stats">
+            <div class="demo-stat">
+                <div class="demo-stat-num demo-stat-num--pear" data-target="28">0</div>
+                <div class="demo-stat-label" style="color:rgba(255,255,255,0.5);">Countries</div>
+            </div>
+            <div class="demo-stat">
+                <div class="demo-stat-num demo-stat-num--teal" data-target="180">0</div>
+                <div class="demo-stat-label" style="color:rgba(255,255,255,0.5);">Partners</div>
+            </div>
+            <div class="demo-stat">
+                <div class="demo-stat-num demo-stat-num--pear" data-target="24">0</div>
+                <div class="demo-stat-label" style="color:rgba(255,255,255,0.5);">Million hectares</div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function animateStats() {
+        document.querySelectorAll('.demo-stat-num[data-target]').forEach(function(el) {
+            var target = parseInt(el.getAttribute('data-target'));
+            var duration = 1500;
+            var start = performance.now();
+            function tick(now) {
+                var progress = Math.min((now - start) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(target * eased);
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        });
+    }
+    setTimeout(animateStats, 300);
+    </script>
+</body>
+</html>

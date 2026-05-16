@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tag — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; max-width: 900px; }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+        .demo-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 12px; border-radius: 980px; }
+        .tag--green { background: rgba(7,125,87,0.1); color: var(--color-green); }
+        .tag--orange { background: rgba(250,107,1,0.1); color: var(--color-orange); }
+        .tag--charcoal { background: rgba(70,70,70,0.08); color: var(--color-charcoal); }
+        @media (max-width: 768px) { body { padding: 48px 24px; } .demo-area { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <span class="block-label">Core Block</span>
+    <h2 class="block-title">Tag</h2>
+    <p class="block-desc">Pill label for categories or dates (e.g. "Agriculture", "2024").</p>
+    <div class="demo-area">
+        <span class="variant-label">Colour Variants</span>
+        <div class="demo-tags">
+            <span class="tag tag--green">Agriculture</span>
+            <span class="tag tag--green">Restoration</span>
+            <span class="tag tag--orange">Featured</span>
+            <span class="tag tag--orange">New</span>
+            <span class="tag tag--charcoal">2024</span>
+            <span class="tag tag--charcoal">Report</span>
+        </div>
+    </div>
+</body>
+</html>

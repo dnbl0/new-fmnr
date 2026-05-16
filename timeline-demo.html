@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Timeline — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f0f0f0; overflow-x: hidden; }
+        .demo-frame { max-width: 1280px; margin: 40px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+
+        .timeline-section { background: var(--wp--preset--color--white); padding: 96px; }
+        .timeline-inner { max-width: 1120px; margin: 0 auto; }
+        .section-eyebrow { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-green); margin-bottom: 16px; }
+        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 64px; }
+        .timeline-entries { display: flex; flex-direction: column; gap: 0; border-top: 1px solid rgba(0,0,0,0.08); }
+        .timeline-entry { border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .timeline-entry-header { display: grid; grid-template-columns: 120px 1fr auto; gap: 40px; align-items: center; padding: 28px 0; cursor: pointer; user-select: none; }
+        .timeline-year { font-family: var(--font-heading); font-size: 36px; color: var(--color-green); line-height: 1; }
+        .timeline-headline { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: var(--wp--preset--color--black); line-height: 1.1; }
+        .timeline-toggle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, background 0.2s; }
+        .timeline-toggle svg { width: 12px; height: 12px; color: rgba(0,0,0,0.4); transition: transform 0.3s, color 0.2s; }
+        .timeline-entry.open .timeline-toggle { border-color: var(--color-green); background: var(--color-green); }
+        .timeline-entry.open .timeline-toggle svg { color: var(--wp--preset--color--white); transform: rotate(45deg); }
+        .timeline-body { display: grid; grid-template-columns: 120px 1fr; gap: 40px; overflow: hidden; max-height: 0; transition: max-height 0.5s cubic-bezier(0.25,1,0.5,1); }
+        .timeline-entry.open .timeline-body { max-height: 800px; }
+        .timeline-body-content { padding-bottom: 40px; }
+        .timeline-body-content p { font-family: var(--font-body); font-size: 17px; line-height: 1.65; color: rgba(0,0,0,0.6); margin-bottom: 24px; }
+        .timeline-images { display: flex; gap: 12px; flex-wrap: wrap; }
+        .timeline-images img { height: 160px; width: auto; border-radius: 10px; object-fit: cover; flex: 1; min-width: 140px; max-width: 280px; }
+
+        @media (max-width: 768px) {
+            .timeline-section { padding: 56px 24px; }
+            .timeline-entry-header { grid-template-columns: 80px 1fr auto; gap: 16px; }
+            .timeline-body { grid-template-columns: 1fr; }
+            .timeline-body > :first-child { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="timeline-section">
+            <div class="timeline-inner">
+                <p class="section-eyebrow">The journey</p>
+                <h2 class="section-headline">Accelerating<br>land restoration<br>since 1981</h2>
+                <div class="timeline-entries">
+                    <div class="timeline-entry open">
+                        <div class="timeline-entry-header">
+                            <span class="timeline-year">1981</span>
+                            <span class="timeline-headline">A young agronomist arrives in the Sahel</span>
+                            <div class="timeline-toggle"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+                        </div>
+                        <div class="timeline-body">
+                            <div></div>
+                            <div class="timeline-body-content">
+                                <p>Tony Rinaudo arrives in the Maradi region of Niger as a missionary agronomist. The landscape is bleak — a semi-arid wasteland stripped bare by decades of over-farming, drought and population pressure.</p>
+                                <div class="timeline-images">
+                                    <img src="images/brand/tony-3.jpg" alt="Tony Rinaudo speaking with communities">
+                                    <img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_18_Image_0020.jpg" alt="FMNR field work">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-entry">
+                        <div class="timeline-entry-header">
+                            <span class="timeline-year">1983</span>
+                            <span class="timeline-headline">The underground forest discovery</span>
+                            <div class="timeline-toggle"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+                        </div>
+                        <div class="timeline-body">
+                            <div></div>
+                            <div class="timeline-body-content">
+                                <p>During a moment of despair on a dusty road, Tony notices small green shoots emerging from what appear to be dead tree stumps — the living remnants of a vast "underground forest."</p>
+                                <div class="timeline-images">
+                                    <img src="images/brand/tony-1.jpg" alt="Tony Rinaudo in an FMNR landscape">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-entry">
+                        <div class="timeline-entry-header">
+                            <span class="timeline-year">2018</span>
+                            <span class="timeline-headline">Right Livelihood Award — the "Alternative Nobel"</span>
+                            <div class="timeline-toggle"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg></div>
+                        </div>
+                        <div class="timeline-body">
+                            <div></div>
+                            <div class="timeline-body-content">
+                                <p>Tony receives the Right Livelihood Award in recognition of his transformative work in land restoration and food security.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    (function() {
+        var entries = document.querySelectorAll('.timeline-entry');
+        entries.forEach(function(entry) {
+            entry.querySelector('.timeline-entry-header').addEventListener('click', function() {
+                var isOpen = entry.classList.contains('open');
+                entries.forEach(function(e) { e.classList.remove('open'); });
+                if (!isOpen) entry.classList.add('open');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

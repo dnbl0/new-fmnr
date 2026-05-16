@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>List Item — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; max-width: 900px; }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+        .demo-list { display: flex; flex-direction: column; gap: 0; max-width: 500px; }
+        .list-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--color-border-light); }
+        .list-item:last-child { border-bottom: none; }
+        .list-item-icon { width: 20px; height: 20px; stroke: var(--color-green); stroke-width: 1.5; fill: none; flex-shrink: 0; }
+        .list-item-text { font-size: 14px; font-weight: 600; color: var(--color-text-primary); }
+        .list-item-meta { font-size: 12px; color: var(--color-text-muted); margin-left: auto; }
+        @media (max-width: 768px) { body { padding: 48px 24px; } .demo-area { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <span class="block-label">Core Block</span>
+    <h2 class="block-title">List Item</h2>
+    <p class="block-desc">Single row item with optional icon, used in search results and link lists.</p>
+    <div class="demo-area">
+        <div class="demo-list">
+            <div class="list-item">
+                <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" fill="none"/><polyline points="14 2 14 8 20 8" stroke="currentColor" fill="none"/></svg>
+                <span class="list-item-text">Getting Started with FMNR</span>
+                <span class="list-item-meta">Guide</span>
+            </div>
+            <div class="list-item">
+                <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" fill="none"/><circle cx="12" cy="10" r="3" stroke="currentColor" fill="none"/></svg>
+                <span class="list-item-text">FMNR in Niger — Case Study</span>
+                <span class="list-item-meta">Country</span>
+            </div>
+            <div class="list-item">
+                <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" fill="none"/></svg>
+                <span class="list-item-text">Impact Dashboard 2024</span>
+                <span class="list-item-meta">Data</span>
+            </div>
+            <div class="list-item">
+                <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" fill="none"/><circle cx="9" cy="7" r="4" stroke="currentColor" fill="none"/></svg>
+                <span class="list-item-text">Tony Rinaudo — Profile</span>
+                <span class="list-item-meta">People</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

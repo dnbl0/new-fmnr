@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Media Cards — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f0f0f0; overflow-x: hidden; }
+        .demo-frame { max-width: 1280px; margin: 40px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+
+        .media-section { background: var(--wp--preset--color--white); padding: 96px; }
+        .media-inner { max-width: 1120px; margin: 0 auto; }
+        .media-heading { font-family: var(--font-heading); font-size: 30px; line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 24px; }
+        .media-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .media-card { background: var(--wp--preset--color--base); border-radius: 14px; padding: 28px 24px; color: inherit; text-decoration: none; min-height: 230px; display: flex; flex-direction: column; gap: 12px; transition: transform 0.25s, background 0.25s, box-shadow 0.25s; }
+        .media-card:hover { transform: translateY(-4px); background: var(--wp--preset--color--white); box-shadow: 0 18px 48px rgba(0,0,0,0.1); }
+        .media-card-type { font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-green); }
+        .media-card h4 { font-family: var(--font-heading); font-size: 20px; line-height: 1.05; text-transform: uppercase; color: var(--wp--preset--color--black); }
+        .media-card p { font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: rgba(0,0,0,0.55); }
+        .media-card-link { margin-top: auto; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--color-green); }
+
+        @media (max-width: 1024px) {
+            .media-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .media-section { padding: 56px 24px; }
+            .media-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="media-section">
+            <div class="media-inner">
+                <h3 class="media-heading">Podcasts &amp; Articles</h3>
+                <div class="media-grid">
+                    <a class="media-card" href="#" onclick="event.preventDefault()">
+                        <span class="media-card-type">Podcast</span>
+                        <h4>Invisible forests in plain view</h4>
+                        <p>Tony explains FMNR's potential to restore degraded land while strengthening livelihoods.</p>
+                        <span class="media-card-link">Listen now</span>
+                    </a>
+                    <a class="media-card" href="#" onclick="event.preventDefault()">
+                        <span class="media-card-type">Article</span>
+                        <h4>Reforesting the world</h4>
+                        <p>A profile of Tony's work restoring millions of hectares of degraded land.</p>
+                        <span class="media-card-link">Read article</span>
+                    </a>
+                    <a class="media-card" href="#" onclick="event.preventDefault()">
+                        <span class="media-card-type">Podcast</span>
+                        <h4>The hidden roots of restoration</h4>
+                        <p>A long-form conversation on mindsets and the human side of regeneration.</p>
+                        <span class="media-card-link">Listen now</span>
+                    </a>
+                    <a class="media-card" href="#" onclick="event.preventDefault()">
+                        <span class="media-card-type">Article</span>
+                        <h4>Turning deserts into farmland</h4>
+                        <p>An interview on Tony's early calling and the behaviour change behind FMNR.</p>
+                        <span class="media-card-link">Read article</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

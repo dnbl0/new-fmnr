@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Growth Steps Demo — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:var(--font-body);background:#f0f0f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+        .demo-frame{width:100%;max-width:1280px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.15);background:#fff;padding:80px 48px}
+
+        .growth-header{max-width:700px;margin-bottom:72px}
+        .growth-header .eyebrow{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--color-green);margin-bottom:14px}
+        .growth-header h2{font-family:var(--font-heading);font-size:clamp(32px,4.2vw,58px);text-transform:uppercase;line-height:1}
+        .growth-header p{margin-top:16px;font-size:17px;line-height:1.7;color:rgba(0,0,0,.52)}
+        .growth-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid #1d1d1f;gap:0}
+        .growth-step{padding:40px 28px 0 0}
+        .growth-step+.growth-step{border-left:1px solid #e8e8e8;padding-left:28px}
+        .growth-step img{width:80px;height:80px;margin-bottom:28px;object-fit:contain}
+        .gs-num{display:block;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--color-green);margin-bottom:10px}
+        .gs-title{font-family:var(--font-heading);font-size:18px;text-transform:uppercase;color:#1d1d1f;margin-bottom:12px;line-height:1}
+        .gs-body{font-size:14px;line-height:1.7;color:rgba(0,0,0,.48)}
+        @media(max-width:900px){.growth-grid{grid-template-columns:1fr 1fr;border-top:none}.growth-step{border-top:2px solid #1d1d1f;padding-top:32px;padding-right:0;margin-bottom:32px}.growth-step+.growth-step{border-left:none;padding-left:0}}
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="growth-header">
+            <span class="eyebrow">How it works</span>
+            <h2>Four steps to restore degraded land</h2>
+            <p>No planting. No nurseries. FMNR works by protecting and managing trees that are already trying to grow from existing root systems hidden beneath the soil.</p>
+        </div>
+        <div class="growth-grid">
+            <div class="growth-step">
+                <img src="images/1.png" alt="Step 1">
+                <span class="gs-num">Step 01</span>
+                <p class="gs-title">Identify</p>
+                <p class="gs-body">Locate surviving root systems in degraded fields. These &#8220;underground forests&#8221; are already present on most degraded land.</p>
+            </div>
+            <div class="growth-step">
+                <img src="images/2.png" alt="Step 2">
+                <span class="gs-num">Step 02</span>
+                <p class="gs-title">Select</p>
+                <p class="gs-body">Choose the strongest, most useful stems and protect them from being cut or grazed. Remove competing shoots to direct energy upward.</p>
+            </div>
+            <div class="growth-step">
+                <img src="images/3.png" alt="Step 3">
+                <span class="gs-num">Step 03</span>
+                <p class="gs-title">Prune</p>
+                <p class="gs-body">Regularly prune side branches to produce tall, strong trees. Pruned material feeds soil, livestock and households &#8212; nothing is wasted.</p>
+            </div>
+            <div class="growth-step">
+                <img src="images/4.png" alt="Step 4">
+                <span class="gs-num">Step 04</span>
+                <p class="gs-title">Protect</p>
+                <p class="gs-body">Establish community rules to protect regenerating trees. Within 3&#8211;5 years, degraded land transforms into a productive agroforestry system.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

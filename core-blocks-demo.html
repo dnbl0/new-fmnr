@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Core Blocks — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-section { display: none; max-width: 900px; margin: 0 auto; }
+        .block-section.active { display: block; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; }
+        .demo-area--dark { background: var(--color-bg-dark); }
+        .demo-area + .demo-area { margin-top: 24px; }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+
+        /* ── Heading demos ── */
+        .demo-h1 { font-family: var(--font-heading); font-size: clamp(40px, 5vw, 72px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1; margin-bottom: 16px; }
+        .demo-h2 { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 48px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1; margin-bottom: 16px; }
+        .demo-h3 { font-family: var(--font-heading); font-size: clamp(20px, 2.5vw, 32px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1.1; margin-bottom: 16px; }
+        .demo-h4 { font-family: var(--font-heading); font-size: clamp(16px, 2vw, 24px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1.1; }
+
+        /* ── Body text demos ── */
+        .demo-body { font-size: 17px; color: var(--color-text-primary); line-height: 1.6; margin-bottom: 16px; max-width: 640px; }
+        .demo-body--small { font-size: 14px; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: 16px; max-width: 640px; }
+        .demo-body--caption { font-size: 12px; color: var(--color-text-muted); line-height: 1.5; max-width: 640px; }
+
+        /* ── Button demos ── */
+        .demo-buttons { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 28px; border-radius: 980px; font-family: var(--font-body); font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn--primary { background: var(--color-green); color: var(--color-white); border-color: var(--color-green); }
+        .btn--secondary { background: transparent; color: var(--color-green); border-color: var(--color-green); }
+        .btn--ghost { background: transparent; color: var(--color-text-primary); border-color: transparent; text-decoration: underline; text-underline-offset: 3px; }
+
+        /* ── Icon demos ── */
+        .demo-icons { display: flex; gap: 24px; flex-wrap: wrap; }
+        .demo-icon-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .demo-icon-item svg { width: 32px; height: 32px; stroke: var(--color-green); stroke-width: 1.5; fill: none; }
+        .demo-icon-item span { font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* ── Image demos ── */
+        .demo-image { width: 100%; max-width: 640px; border-radius: 8px; overflow: hidden; }
+        .demo-image img { width: 100%; height: auto; display: block; }
+        .demo-image--ken-burns img { animation: kenBurns 12s ease-in-out infinite alternate; }
+        @keyframes kenBurns { from { transform: scale(1); } to { transform: scale(1.06); } }
+
+        /* ── Video demos ── */
+        .demo-video { width: 100%; max-width: 640px; border-radius: 8px; overflow: hidden; background: var(--color-black); }
+        .demo-video video { width: 100%; height: auto; display: block; }
+
+        /* ── Tag demos ── */
+        .demo-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 12px; border-radius: 980px; }
+        .tag--green { background: rgba(7,125,87,0.1); color: var(--color-green); }
+        .tag--orange { background: rgba(250,107,1,0.1); color: var(--color-orange); }
+        .tag--charcoal { background: rgba(70,70,70,0.08); color: var(--color-charcoal); }
+
+        /* ── Stat Number demos ── */
+        .demo-stats { display: flex; gap: 48px; flex-wrap: wrap; }
+        .demo-stat { text-align: center; }
+        .demo-stat-num { font-family: var(--font-heading); font-size: clamp(48px, 6vw, 80px); text-transform: uppercase; line-height: 1; }
+        .demo-stat-num--pear { color: var(--color-pear); }
+        .demo-stat-num--teal { color: var(--color-teal); }
+        .demo-stat-label { font-size: 13px; color: var(--color-text-secondary); margin-top: 8px; }
+
+        /* ── Divider demos ── */
+        .demo-dividers { display: flex; flex-direction: column; gap: 32px; }
+        .divider { height: 3px; border-radius: 2px; width: 100%; }
+        .divider--green { background: var(--color-green); }
+        .divider--orange { background: var(--color-orange); }
+        .divider--teal { background: var(--color-teal); }
+        .divider--thin { height: 1px; background: var(--color-border); }
+
+        /* ── Spacer demos ── */
+        .demo-spacers { display: flex; flex-direction: column; gap: 0; }
+        .spacer-row { display: flex; align-items: center; gap: 16px; }
+        .spacer-block { background: rgba(7,125,87,0.1); border: 1px dashed var(--color-green); border-radius: 4px; width: 100%; }
+        .spacer-label { font-size: 11px; color: var(--color-text-muted); width: 100px; flex-shrink: 0; font-weight: 700; }
+        .spacer-row + .spacer-row { margin-top: 16px; }
+
+        /* ── Form Field demos ── */
+        .demo-fields { display: flex; flex-direction: column; gap: 24px; max-width: 400px; }
+        .field-group label { display: block; font-size: 13px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 6px; }
+        .field-group input, .field-group select, .field-group textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--color-border-subtle); border-radius: 8px; font-family: var(--font-body); font-size: 15px; color: var(--color-text-primary); transition: border-color 0.2s; }
+        .field-group input:focus, .field-group select:focus, .field-group textarea:focus { outline: none; border-color: var(--color-green); box-shadow: 0 0 0 3px rgba(7,125,87,0.1); }
+        .field-group textarea { min-height: 100px; resize: vertical; }
+
+        /* ── List Item demos ── */
+        .demo-list { display: flex; flex-direction: column; gap: 0; max-width: 500px; }
+        .list-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--color-border-light); }
+        .list-item:last-child { border-bottom: none; }
+        .list-item-icon { width: 20px; height: 20px; stroke: var(--color-green); stroke-width: 1.5; fill: none; flex-shrink: 0; }
+        .list-item-text { font-size: 14px; font-weight: 600; color: var(--color-text-primary); }
+        .list-item-meta { font-size: 12px; color: var(--color-text-muted); margin-left: auto; }
+
+        @media (max-width: 768px) {
+            body { padding: 48px 24px; }
+            .demo-area { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ HEADING ═══ -->
+    <div class="block-section" id="heading">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Heading</h2>
+        <p class="block-desc">FatFrank display heading (H1–H4) with clamp() responsive sizing. Used for all primary headings across the site.</p>
+        <div class="demo-area">
+            <span class="variant-label">H1 — Hero / Page Title</span>
+            <h1 class="demo-h1">Restoring Land</h1>
+            <span class="variant-label" style="margin-top:32px;">H2 — Section Title</span>
+            <h2 class="demo-h2">Impact & Evidence</h2>
+            <span class="variant-label" style="margin-top:32px;">H3 — Subsection</span>
+            <h3 class="demo-h3">Our Approach</h3>
+            <span class="variant-label" style="margin-top:32px;">H4 — Card / Feature</span>
+            <h4 class="demo-h4">Faith-based Actors</h4>
+        </div>
+    </div>
+
+    <!-- ═══ BODY TEXT ═══ -->
+    <div class="block-section" id="body-text">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Body Text</h2>
+        <p class="block-desc">Lato paragraph — regular, small, and caption variants with token-based line height.</p>
+        <div class="demo-area">
+            <span class="variant-label">Regular (17px)</span>
+            <p class="demo-body">Farmer Managed Natural Regeneration is a low-cost, sustainable land restoration technique that involves farmers protecting and managing the regrowth of trees and shrubs from living root systems in farmland.</p>
+            <span class="variant-label">Small (14px)</span>
+            <p class="demo-body--small">FMNR has been practised in over 28 countries across Sub-Saharan Africa, Asia and the Pacific, restoring degraded land, boosting food security and building climate resilience.</p>
+            <span class="variant-label">Caption (12px)</span>
+            <p class="demo-body--caption">Source: World Vision meta-analysis, 2019. Data collected from 180+ partner organisations across 28 countries.</p>
+        </div>
+    </div>
+
+    <!-- ═══ BUTTON ═══ -->
+    <div class="block-section" id="button">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Button</h2>
+        <p class="block-desc">Primary (green), Secondary (outline), and Ghost variants with hover states.</p>
+        <div class="demo-area">
+            <span class="variant-label">All Variants</span>
+            <div class="demo-buttons">
+                <a class="btn btn--primary" href="#">Get Involved</a>
+                <a class="btn btn--secondary" href="#">Learn More</a>
+                <a class="btn btn--ghost" href="#">Read the report →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ ICON ═══ -->
+    <div class="block-section" id="icon">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Icon</h2>
+        <p class="block-desc">Inline SVG from the 18-icon library — scalable, token-coloured.</p>
+        <div class="demo-area">
+            <span class="variant-label">Icon Library (sample)</span>
+            <div class="demo-icons">
+                <div class="demo-icon-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" fill="none"/><path d="M2 12h20" stroke="currentColor"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10A15 15 0 0 1 12 2z" stroke="currentColor" fill="none"/></svg>
+                    <span>Globe</span>
+                </div>
+                <div class="demo-icon-item">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" fill="none"/></svg>
+                    <span>Heart</span>
+                </div>
+                <div class="demo-icon-item">
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" fill="none"/><circle cx="9" cy="7" r="4" stroke="currentColor" fill="none"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" fill="none"/></svg>
+                    <span>Users</span>
+                </div>
+                <div class="demo-icon-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" fill="none"/></svg>
+                    <span>Activity</span>
+                </div>
+                <div class="demo-icon-item">
+                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" fill="none"/><circle cx="12" cy="10" r="3" stroke="currentColor" fill="none"/></svg>
+                    <span>Map Pin</span>
+                </div>
+                <div class="demo-icon-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" fill="none"/></svg>
+                    <span>Shield</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ IMAGE ═══ -->
+    <div class="block-section" id="image">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Image</h2>
+        <p class="block-desc">Responsive image with optional Ken Burns animation class.</p>
+        <div class="demo-area">
+            <span class="variant-label">Standard</span>
+            <div class="demo-image">
+                <img src="images/brand/tony-hero.jpg" alt="FMNR landscape" onerror="this.parentElement.style.background='linear-gradient(135deg,#2d5a3d,#0a3d24)';this.parentElement.style.height='300px';this.style.display='none';">
+            </div>
+        </div>
+        <div class="demo-area" style="margin-top:24px;">
+            <span class="variant-label">With Ken Burns animation</span>
+            <div class="demo-image demo-image--ken-burns">
+                <img src="images/brand/tony-hero.jpg" alt="FMNR landscape animated" onerror="this.parentElement.style.background='linear-gradient(135deg,#2d5a3d,#0a3d24)';this.parentElement.style.height='300px';this.style.display='none';">
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ VIDEO ═══ -->
+    <div class="block-section" id="video">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Video</h2>
+        <p class="block-desc">Autoplay/muted video embed with optional poster frame.</p>
+        <div class="demo-area demo-area--dark">
+            <span class="variant-label" style="color:rgba(255,255,255,0.5);">Autoplay / Muted / Loop</span>
+            <div class="demo-video">
+                <video autoplay muted loop playsinline>
+                    <source src="forest.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ TAG ═══ -->
+    <div class="block-section" id="tag">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Tag</h2>
+        <p class="block-desc">Pill label for categories or dates (e.g. "Agriculture", "2024").</p>
+        <div class="demo-area">
+            <span class="variant-label">Colour Variants</span>
+            <div class="demo-tags">
+                <span class="tag tag--green">Agriculture</span>
+                <span class="tag tag--green">Restoration</span>
+                <span class="tag tag--orange">Featured</span>
+                <span class="tag tag--orange">New</span>
+                <span class="tag tag--charcoal">2024</span>
+                <span class="tag tag--charcoal">Report</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ STAT NUMBER ═══ -->
+    <div class="block-section" id="stat-number">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Stat Number</h2>
+        <p class="block-desc">Animated count-up figure in FatFrank — pear or teal colour token.</p>
+        <div class="demo-area demo-area--dark">
+            <span class="variant-label" style="color:rgba(255,255,255,0.5);">Pear & Teal</span>
+            <div class="demo-stats">
+                <div class="demo-stat">
+                    <div class="demo-stat-num demo-stat-num--pear" data-target="28">0</div>
+                    <div class="demo-stat-label" style="color:rgba(255,255,255,0.5);">Countries</div>
+                </div>
+                <div class="demo-stat">
+                    <div class="demo-stat-num demo-stat-num--teal" data-target="180">0</div>
+                    <div class="demo-stat-label" style="color:rgba(255,255,255,0.5);">Partners</div>
+                </div>
+                <div class="demo-stat">
+                    <div class="demo-stat-num demo-stat-num--pear" data-target="24">0</div>
+                    <div class="demo-stat-label" style="color:rgba(255,255,255,0.5);">Million hectares</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ DIVIDER ═══ -->
+    <div class="block-section" id="divider">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Divider</h2>
+        <p class="block-desc">Coloured horizontal rule — green, orange, teal, or thin separator.</p>
+        <div class="demo-area">
+            <div class="demo-dividers">
+                <div>
+                    <span class="variant-label">Green</span>
+                    <div class="divider divider--green"></div>
+                </div>
+                <div>
+                    <span class="variant-label">Orange</span>
+                    <div class="divider divider--orange"></div>
+                </div>
+                <div>
+                    <span class="variant-label">Teal</span>
+                    <div class="divider divider--teal"></div>
+                </div>
+                <div>
+                    <span class="variant-label">Thin Separator</span>
+                    <div class="divider divider--thin"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SPACER ═══ -->
+    <div class="block-section" id="spacer">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Spacer</h2>
+        <p class="block-desc">Token-based vertical spacing (--space-sm through --space-xl).</p>
+        <div class="demo-area">
+            <div class="demo-spacers">
+                <div class="spacer-row">
+                    <span class="spacer-label">--space-xs (8px)</span>
+                    <div class="spacer-block" style="height:8px;"></div>
+                </div>
+                <div class="spacer-row">
+                    <span class="spacer-label">--space-sm (16px)</span>
+                    <div class="spacer-block" style="height:16px;"></div>
+                </div>
+                <div class="spacer-row">
+                    <span class="spacer-label">--space-md (32px)</span>
+                    <div class="spacer-block" style="height:32px;"></div>
+                </div>
+                <div class="spacer-row">
+                    <span class="spacer-label">--space-lg (64px)</span>
+                    <div class="spacer-block" style="height:64px;"></div>
+                </div>
+                <div class="spacer-row">
+                    <span class="spacer-label">--space-xl (96px)</span>
+                    <div class="spacer-block" style="height:96px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ FORM FIELD ═══ -->
+    <div class="block-section" id="form-field">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">Form Field</h2>
+        <p class="block-desc">Label + input/textarea/select — text, email, dropdown and message variants.</p>
+        <div class="demo-area">
+            <div class="demo-fields">
+                <div class="field-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Enter your name">
+                </div>
+                <div class="field-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="you@organisation.com">
+                </div>
+                <div class="field-group">
+                    <label>Organisation Type</label>
+                    <select>
+                        <option>Select...</option>
+                        <option>NGO / Implementer</option>
+                        <option>Government</option>
+                        <option>Faith-based</option>
+                        <option>Funder / Donor</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>Message</label>
+                    <textarea placeholder="Tell us about your interest in FMNR..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ LIST ITEM ═══ -->
+    <div class="block-section" id="list-item">
+        <span class="block-label">Core Block</span>
+        <h2 class="block-title">List Item</h2>
+        <p class="block-desc">Single row item with optional icon, used in search results and link lists.</p>
+        <div class="demo-area">
+            <div class="demo-list">
+                <div class="list-item">
+                    <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" fill="none"/><polyline points="14 2 14 8 20 8" stroke="currentColor" fill="none"/></svg>
+                    <span class="list-item-text">Getting Started with FMNR</span>
+                    <span class="list-item-meta">Guide</span>
+                </div>
+                <div class="list-item">
+                    <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" fill="none"/><circle cx="12" cy="10" r="3" stroke="currentColor" fill="none"/></svg>
+                    <span class="list-item-text">FMNR in Niger — Case Study</span>
+                    <span class="list-item-meta">Country</span>
+                </div>
+                <div class="list-item">
+                    <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" fill="none"/></svg>
+                    <span class="list-item-text">Impact Dashboard 2024</span>
+                    <span class="list-item-meta">Data</span>
+                </div>
+                <div class="list-item">
+                    <svg class="list-item-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" fill="none"/><circle cx="9" cy="7" r="4" stroke="currentColor" fill="none"/></svg>
+                    <span class="list-item-text">Tony Rinaudo — Profile</span>
+                    <span class="list-item-meta">People</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Hash routing — show section matching URL hash
+    function showSection() {
+        var hash = location.hash.replace('#', '') || 'heading';
+        document.querySelectorAll('.block-section').forEach(function(s) {
+            s.classList.toggle('active', s.id === hash);
+        });
+    }
+    window.addEventListener('hashchange', showSection);
+    showSection();
+
+    // Count-up animation for stat numbers
+    function animateStats() {
+        document.querySelectorAll('.demo-stat-num[data-target]').forEach(function(el) {
+            var target = parseInt(el.getAttribute('data-target'));
+            var duration = 1500;
+            var start = performance.now();
+            function tick(now) {
+                var progress = Math.min((now - start) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(target * eased);
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        });
+    }
+    // Trigger count-up when stat-number section is shown
+    var observer = new MutationObserver(function() {
+        var section = document.getElementById('stat-number');
+        if (section && section.classList.contains('active')) animateStats();
+    });
+    observer.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    if (location.hash === '#stat-number') setTimeout(animateStats, 300);
+    </script>
+</body>
+</html>

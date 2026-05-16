@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Heading — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; max-width: 900px; }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+        .demo-h1 { font-family: var(--font-heading); font-size: clamp(40px, 5vw, 72px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1; margin-bottom: 16px; }
+        .demo-h2 { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 48px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1; margin-bottom: 16px; }
+        .demo-h3 { font-family: var(--font-heading); font-size: clamp(20px, 2.5vw, 32px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1.1; margin-bottom: 16px; }
+        .demo-h4 { font-family: var(--font-heading); font-size: clamp(16px, 2vw, 24px); text-transform: uppercase; color: var(--color-text-primary); line-height: 1.1; }
+        @media (max-width: 768px) { body { padding: 48px 24px; } .demo-area { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <span class="block-label">Core Block</span>
+    <h2 class="block-title">Heading</h2>
+    <p class="block-desc">FatFrank display heading (H1–H4) with clamp() responsive sizing. Used for all primary headings across the site.</p>
+    <div class="demo-area">
+        <span class="variant-label">H1 — Hero / Page Title</span>
+        <h1 class="demo-h1">Restoring Land</h1>
+        <span class="variant-label" style="margin-top:32px;">H2 — Section Title</span>
+        <h2 class="demo-h2">Impact & Evidence</h2>
+        <span class="variant-label" style="margin-top:32px;">H3 — Subsection</span>
+        <h3 class="demo-h3">Our Approach</h3>
+        <span class="variant-label" style="margin-top:32px;">H4 — Card / Feature</span>
+        <h4 class="demo-h4">Faith-based Actors</h4>
+    </div>
+</body>
+</html>

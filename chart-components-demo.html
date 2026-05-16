@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chart Components — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--wp--preset--color--contrast);
+            color: #fff;
+            min-height: 100vh;
+            padding: 80px 48px;
+        }
+
+        .page-header {
+            max-width: 640px;
+            margin-bottom: 64px;
+        }
+        .eyebrow {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            color: var(--color-teal);
+            margin-bottom: 16px;
+        }
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(36px, 4vw, 56px);
+            text-transform: uppercase;
+            color: #fff;
+            line-height: 1;
+        }
+        .page-title em { color: var(--color-teal); font-style: normal; }
+
+        /* ── Grid ── */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 1200px;
+        }
+
+        /* ── Card ── */
+        .chart-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 28px 28px 24px;
+        }
+        .chart-card--wide { grid-column: span 2; }
+
+        .chart-eyebrow {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 4px;
+        }
+        .chart-title {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            text-transform: uppercase;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .chart-desc {
+            font-size: 12px;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 24px;
+        }
+
+        svg { overflow: visible; display: block; }
+
+        /* ── Legend ── */
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+        }
+        .legend-swatch {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        /* ── Tooltip ── */
+        .chart-tooltip {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            background: #1c1c1c;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 10px 14px;
+            min-width: 148px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.12s, transform 0.12s;
+        }
+        .chart-tooltip.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tt-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 8px;
+        }
+        .tt-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        .tt-row:last-child { margin-bottom: 0; }
+        .tt-swatch {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .tt-name {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            flex: 1;
+        }
+        .tt-val {
+            font-family: var(--font-heading);
+            font-size: 15px;
+            color: #fff;
+        }
+
+        @media (max-width: 900px) {
+            body { padding: 48px 20px; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .chart-card--wide { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <span class="eyebrow">FMNR Design System</span>
+        <h1 class="page-title">Chart <em>Components</em></h1>
+    </header>
+
+    <div class="charts-grid">
+
+        <!-- ── 1. Vertical Grouped Bar ── -->
+        <div class="chart-card chart-card--wide">
+            <p class="chart-eyebrow">Restoration Progress</p>
+            <h2 class="chart-title">Hectares Restored by Region</h2>
+            <p class="chart-desc">Cumulative millions of hectares, 2015–2025</p>
+            <svg id="chart-bar" viewBox="0 0 760 260" width="100%"></svg>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:#0FFBAB"></div>
+                    Sub-Saharan Africa
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:#B8FA1A"></div>
+                    Asia-Pacific
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:#F2AA00"></div>
+                    Latin America
+                </div>
+            </div>
+        </div>
+
+        <!-- ── 2. Donut ── -->
+        <div class="chart-card">
+            <p class="chart-eyebrow">Adoption Breakdown</p>
+            <h2 class="chart-title">FMNR by Actor Type</h2>
+            <p class="chart-desc">Share of practising households, 2024</p>
+            <svg id="chart-donut" viewBox="0 0 300 300" width="100%"></svg>
+        </div>
+
+        <!-- ── 3. Radar ── -->
+        <div class="chart-card">
+            <p class="chart-eyebrow">Impact Assessment</p>
+            <h2 class="chart-title">Outcome Dimensions</h2>
+            <p class="chart-desc">Before vs. after FMNR — normalised score 0–100</p>
+            <svg id="chart-radar" viewBox="0 0 340 300" width="100%"></svg>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:rgba(255,255,255,0.18)"></div>
+                    Before FMNR
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background:#0FFBAB"></div>
+                    After FMNR
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Shared tooltip -->
+    <div class="chart-tooltip" id="tt">
+        <div class="tt-label" id="tt-label"></div>
+        <div id="tt-body"></div>
+    </div>
+
+<script>
+'use strict';
+
+// ─── Shared tooltip ────────────────────────────────────────────────────────
+var tt      = document.getElementById('tt');
+var ttLabel = document.getElementById('tt-label');
+var ttBody  = document.getElementById('tt-body');
+
+function ttShow(e, label, rows) {
+    ttLabel.textContent = label;
+    ttBody.innerHTML = rows.map(function(r) {
+        return '<div class="tt-row">' +
+            '<div class="tt-swatch" style="background:' + r.color + '"></div>' +
+            '<span class="tt-name">' + r.name + '</span>' +
+            '<span class="tt-val">' + r.value + '</span>' +
+            '</div>';
+    }).join('');
+    tt.classList.add('is-visible');
+    ttMove(e);
+}
+
+function ttMove(e) {
+    var x = e.clientX + 18;
+    var y = e.clientY - 14;
+    // keep within viewport
+    if (x + 180 > window.innerWidth) x = e.clientX - 180;
+    tt.style.left  = x + 'px';
+    tt.style.top   = y + 'px';
+}
+
+function ttHide() {
+    tt.classList.remove('is-visible');
+}
+
+document.addEventListener('mousemove', function(e) {
+    if (tt.classList.contains('is-visible')) ttMove(e);
+});
+
+
+// ─── 1. Grouped Vertical Bar Chart ─────────────────────────────────────────
+(function() {
+    var svg = document.getElementById('chart-bar');
+    var W = 760, H = 260;
+    var pad = { top: 16, right: 16, bottom: 36, left: 44 };
+    var cW = W - pad.left - pad.right;
+    var cH = H - pad.top - pad.bottom;
+
+    var cats = ['2015', '2017', '2019', '2021', '2023', '2025'];
+    var series = [
+        { name: 'Sub-Saharan Africa', color: '#0FFBAB', vals: [3.2, 5.1, 8.4, 12.6, 18.3, 24.1] },
+        { name: 'Asia-Pacific',       color: '#B8FA1A', vals: [0.8, 1.4, 2.1,  3.5,  5.2,  7.8] },
+        { name: 'Latin America',      color: '#F2AA00', vals: [0.4, 0.9, 1.6,  2.8,  4.1,  6.3] }
+    ];
+    var maxVal = 26;
+    var gridVals = [0, 5, 10, 15, 20, 25];
+    var barW   = 14;
+    var barGap = 4;
+    var groupW = cW / cats.length;
+
+    var ns = 'http://www.w3.org/2000/svg';
+
+    function el(tag, attrs) {
+        var e = document.createElementNS(ns, tag);
+        Object.keys(attrs).forEach(function(k) { e.setAttribute(k, attrs[k]); });
+        return e;
+    }
+
+    var g = el('g', { transform: 'translate(' + pad.left + ',' + pad.top + ')' });
+
+    // Grid lines + Y labels
+    gridVals.forEach(function(v) {
+        var y = cH - (v / maxVal) * cH;
+        g.appendChild(el('line', { x1: 0, y1: y, x2: cW, y2: y, stroke: 'rgba(255,255,255,0.06)', 'stroke-width': 1 }));
+        var t = el('text', { x: -8, y: y + 4, 'font-size': 10, fill: 'rgba(255,255,255,0.3)', 'text-anchor': 'end', 'font-family': 'Lato,sans-serif' });
+        t.textContent = v + 'M';
+        g.appendChild(t);
+    });
+
+    // X axis line
+    g.appendChild(el('line', { x1: 0, y1: cH, x2: cW, y2: cH, stroke: 'rgba(255,255,255,0.08)', 'stroke-width': 1 }));
+
+    // Bars
+    cats.forEach(function(cat, gi) {
+        var totalGroupW = series.length * barW + (series.length - 1) * barGap;
+        var gx = gi * groupW + groupW / 2 - totalGroupW / 2;
+
+        series.forEach(function(s, si) {
+            var val  = s.vals[gi];
+            var barH = (val / maxVal) * cH;
+            var x    = gx + si * (barW + barGap);
+            var rect = el('rect', {
+                x: x, y: cH, width: barW, height: 0,
+                fill: s.color, rx: 3,
+                'data-cat': cat, 'data-series': s.name,
+                'data-val': val, 'data-color': s.color,
+                style: 'cursor:pointer; transition: opacity 0.15s;'
+            });
+            rect._targetY = cH - barH;
+            rect._targetH = barH;
+            g.appendChild(rect);
+        });
+
+        // X label
+        var t = el('text', {
+            x: gi * groupW + groupW / 2, y: cH + 20,
+            'font-size': 11, fill: 'rgba(255,255,255,0.35)',
+            'text-anchor': 'middle', 'font-family': 'Lato,sans-serif', 'font-weight': 700
+        });
+        t.textContent = cat;
+        g.appendChild(t);
+    });
+
+    svg.appendChild(g);
+
+    // Bar hover
+    svg.addEventListener('mouseover', function(e) {
+        var rect = e.target;
+        if (rect.tagName !== 'rect' || !rect.getAttribute('data-cat')) return;
+        rect.style.opacity = '0.7';
+        var cat = rect.getAttribute('data-cat');
+        var rows = series.map(function(s, si) {
+            var r = g.querySelectorAll('rect[data-cat="' + cat + '"]')[si];
+            return { color: s.color, name: s.name, value: (r ? r.getAttribute('data-val') : s.vals[0]) + 'M ha' };
+        });
+        ttShow(e, cat, rows);
+    });
+    svg.addEventListener('mouseout', function(e) {
+        if (e.target.tagName !== 'rect') return;
+        e.target.style.opacity = '1';
+        ttHide();
+    });
+
+    // Animate in
+    setTimeout(function() {
+        g.querySelectorAll('rect[data-cat]').forEach(function(rect) {
+            rect.style.transition = 'y 0.9s cubic-bezier(0.25,1,0.5,1), height 0.9s cubic-bezier(0.25,1,0.5,1)';
+            rect.setAttribute('y', rect._targetY);
+            rect.setAttribute('height', rect._targetH);
+        });
+    }, 150);
+})();
+
+
+// ─── 2. Donut Chart ─────────────────────────────────────────────────────────
+(function() {
+    var svg   = document.getElementById('chart-donut');
+    var cx = 150, cy = 136;
+    var outerR = 100, innerR = 58;
+    var ns = 'http://www.w3.org/2000/svg';
+
+    var segments = [
+        { label: 'Smallholder Farmers', value: 62, color: '#0FFBAB' },
+        { label: 'Community Groups',    value: 21, color: '#B8FA1A' },
+        { label: 'NGO Projects',        value: 11, color: '#F2AA00' },
+        { label: 'Gov. Programs',       value:  6, color: '#FA6B01' }
+    ];
+    var total = segments.reduce(function(s, d) { return s + d.value; }, 0);
+
+    function toXY(cx, cy, r, deg) {
+        var rad = (deg - 90) * Math.PI / 180;
+        return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+    }
+
+    function arcPath(startDeg, endDeg) {
+        var o1 = toXY(cx, cy, outerR, startDeg);
+        var o2 = toXY(cx, cy, outerR, endDeg);
+        var i1 = toXY(cx, cy, innerR, endDeg);
+        var i2 = toXY(cx, cy, innerR, startDeg);
+        var large = (endDeg - startDeg) > 180 ? 1 : 0;
+        return 'M ' + o1.x + ' ' + o1.y +
+               ' A ' + outerR + ' ' + outerR + ' 0 ' + large + ' 1 ' + o2.x + ' ' + o2.y +
+               ' L ' + i1.x + ' ' + i1.y +
+               ' A ' + innerR + ' ' + innerR + ' 0 ' + large + ' 0 ' + i2.x + ' ' + i2.y + ' Z';
+    }
+
+    function el(tag, attrs) {
+        var e = document.createElementNS(ns, tag);
+        Object.keys(attrs).forEach(function(k) { e.setAttribute(k, attrs[k]); });
+        return e;
+    }
+
+    var cumAngle = 0;
+
+    segments.forEach(function(seg, i) {
+        var sweep = (seg.value / total) * 360;
+        var start = cumAngle;
+        var end   = cumAngle + sweep - 1.8; // gap between segments
+        cumAngle += sweep;
+
+        var path = el('path', {
+            d: arcPath(start, end),
+            fill: seg.color,
+            opacity: 0,
+            'data-label': seg.label,
+            'data-val': seg.value,
+            'data-color': seg.color,
+            style: 'cursor:pointer; transition: opacity 0.15s;'
+        });
+        svg.appendChild(path);
+
+        // Animate in with delay
+        setTimeout(function() {
+            path.setAttribute('opacity', '1');
+            path.style.transition = 'opacity 0.4s ease';
+        }, 80 + i * 80);
+    });
+
+    // Center label
+    var t1 = el('text', { x: cx, y: cy - 4, 'font-size': 26, 'font-family': 'FatFrank,sans-serif', fill: '#fff', 'text-anchor': 'middle', 'dominant-baseline': 'auto' });
+    t1.textContent = '27';
+    svg.appendChild(t1);
+
+    var t2 = el('text', { x: cx, y: cy + 16, 'font-size': 10, 'font-family': 'Lato,sans-serif', fill: 'rgba(255,255,255,0.35)', 'text-anchor': 'middle' });
+    t2.textContent = 'Countries';
+    svg.appendChild(t2);
+
+    // Donut legend — 2 columns
+    var legendY = cy + outerR + 22;
+    segments.forEach(function(seg, i) {
+        var col = (i % 2 === 0) ? 20 : 158;
+        var row = Math.floor(i / 2);
+        var ry  = legendY + row * 22;
+
+        var r = el('rect', { x: col, y: ry, width: 8, height: 8, fill: seg.color, rx: 2 });
+        svg.appendChild(r);
+
+        var t = el('text', { x: col + 14, y: ry + 8, 'font-size': 11, 'font-family': 'Lato,sans-serif', fill: 'rgba(255,255,255,0.45)' });
+        t.textContent = seg.label;
+        svg.appendChild(t);
+    });
+
+    // Hover
+    svg.addEventListener('mouseover', function(e) {
+        var path = e.target;
+        if (path.tagName !== 'path' || !path.getAttribute('data-label')) return;
+        path.setAttribute('opacity', '0.75');
+        ttShow(e, path.getAttribute('data-label'), [{
+            color: path.getAttribute('data-color'),
+            name:  'Share',
+            value: path.getAttribute('data-val') + '%'
+        }]);
+    });
+    svg.addEventListener('mouseout', function(e) {
+        if (e.target.tagName !== 'path') return;
+        e.target.setAttribute('opacity', '1');
+        ttHide();
+    });
+})();
+
+
+// ─── 3. Radar Chart ─────────────────────────────────────────────────────────
+(function() {
+    var svg = document.getElementById('chart-radar');
+    var cx = 170, cy = 145, maxR = 108, levels = 4;
+    var ns = 'http://www.w3.org/2000/svg';
+
+    var axes = [
+        { label: 'Soil Health',     before: 30, after: 80 },
+        { label: 'Crop Yield',      before: 28, after: 72 },
+        { label: 'Biodiversity',    before: 20, after: 88 },
+        { label: 'Income',          before: 35, after: 68 },
+        { label: 'Water Retention', before: 24, after: 76 }
+    ];
+    var n = axes.length;
+
+    function pt(r, i) {
+        var angle = (i / n) * 2 * Math.PI - Math.PI / 2;
+        return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+    }
+
+    function ptsStr(vals) {
+        return vals.map(function(v, i) {
+            var p = pt((v / 100) * maxR, i);
+            return p.x + ',' + p.y;
+        }).join(' ');
+    }
+
+    function el(tag, attrs) {
+        var e = document.createElementNS(ns, tag);
+        Object.keys(attrs).forEach(function(k) { e.setAttribute(k, attrs[k]); });
+        return e;
+    }
+
+    // Grid rings
+    for (var l = 1; l <= levels; l++) {
+        var r = (l / levels) * maxR;
+        var pts = Array.from({ length: n }, function(_, i) {
+            var p = pt(r, i);
+            return p.x + ',' + p.y;
+        }).join(' ');
+        svg.appendChild(el('polygon', { points: pts, fill: 'none', stroke: 'rgba(255,255,255,0.06)', 'stroke-width': 1 }));
+    }
+
+    // Axis spokes
+    axes.forEach(function(ax, i) {
+        var end = pt(maxR, i);
+        svg.appendChild(el('line', { x1: cx, y1: cy, x2: end.x, y2: end.y, stroke: 'rgba(255,255,255,0.08)', 'stroke-width': 1 }));
+
+        // Label
+        var lp  = pt(maxR + 20, i);
+        var anchor = lp.x < cx - 6 ? 'end' : lp.x > cx + 6 ? 'start' : 'middle';
+        var t = el('text', {
+            x: lp.x, y: lp.y + 4,
+            'font-size': 10, 'font-family': 'Lato,sans-serif',
+            'font-weight': 700, fill: 'rgba(255,255,255,0.45)',
+            'text-anchor': anchor
+        });
+        t.textContent = ax.label;
+        svg.appendChild(t);
+    });
+
+    // Before polygon
+    var beforeVals = axes.map(function(a) { return a.before; });
+    svg.appendChild(el('polygon', {
+        points: ptsStr(beforeVals),
+        fill: 'rgba(255,255,255,0.07)',
+        stroke: 'rgba(255,255,255,0.18)',
+        'stroke-width': 1.5
+    }));
+
+    // After polygon — animate from centre
+    var afterVals  = axes.map(function(a) { return a.after; });
+    var zeroPoints = Array.from({ length: n }, function() { return cx + ',' + cy; }).join(' ');
+    var afterPoly  = el('polygon', {
+        points: zeroPoints,
+        fill: 'rgba(15,251,171,0.15)',
+        stroke: '#0FFBAB',
+        'stroke-width': 2
+    });
+    svg.appendChild(afterPoly);
+
+    // After dots + hover
+    axes.forEach(function(ax, i) {
+        var p = pt((ax.after / 100) * maxR, i);
+        var circle = el('circle', {
+            cx: p.x, cy: p.y, r: 4,
+            fill: '#0FFBAB',
+            stroke: '#111', 'stroke-width': 1.5,
+            'data-label': ax.label,
+            'data-before': ax.before,
+            'data-after': ax.after,
+            style: 'cursor:pointer; opacity:0; transition: opacity 0.3s;'
+        });
+        svg.appendChild(circle);
+        setTimeout(function() { circle.style.opacity = '1'; }, 700);
+    });
+
+    svg.addEventListener('mouseover', function(e) {
+        var c = e.target;
+        if (c.tagName !== 'circle' || !c.getAttribute('data-label')) return;
+        ttShow(e, c.getAttribute('data-label'), [
+            { color: 'rgba(255,255,255,0.3)', name: 'Before', value: c.getAttribute('data-before') },
+            { color: '#0FFBAB',               name: 'After',  value: c.getAttribute('data-after')  }
+        ]);
+    });
+    svg.addEventListener('mouseout', function(e) {
+        if (e.target.tagName !== 'circle') return;
+        ttHide();
+    });
+
+    // Animate after polygon via rAF
+    var duration = 900;
+    var start = null;
+    function animateRadar(ts) {
+        if (!start) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        // ease out quart
+        var eased = 1 - Math.pow(1 - progress, 4);
+        var interp = afterVals.map(function(v, i) { return eased * v; });
+        afterPoly.setAttribute('points', ptsStr(interp));
+        if (progress < 1) requestAnimationFrame(animateRadar);
+    }
+    setTimeout(function() { requestAnimationFrame(animateRadar); }, 200);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Form Field — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; max-width: 900px; }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+        .demo-fields { display: flex; flex-direction: column; gap: 24px; max-width: 400px; }
+        .field-group label { display: block; font-size: 13px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 6px; }
+        .field-group input, .field-group select, .field-group textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--color-border-subtle); border-radius: 8px; font-family: var(--font-body); font-size: 15px; color: var(--color-text-primary); transition: border-color 0.2s; }
+        .field-group input:focus, .field-group select:focus, .field-group textarea:focus { outline: none; border-color: var(--color-green); box-shadow: 0 0 0 3px rgba(7,125,87,0.1); }
+        .field-group textarea { min-height: 100px; resize: vertical; }
+        @media (max-width: 768px) { body { padding: 48px 24px; } .demo-area { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <span class="block-label">Core Block</span>
+    <h2 class="block-title">Form Field</h2>
+    <p class="block-desc">Label + input/textarea/select — text, email, dropdown and message variants.</p>
+    <div class="demo-area">
+        <div class="demo-fields">
+            <div class="field-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your name">
+            </div>
+            <div class="field-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="you@organisation.com">
+            </div>
+            <div class="field-group">
+                <label>Organisation Type</label>
+                <select>
+                    <option>Select...</option>
+                    <option>NGO / Implementer</option>
+                    <option>Government</option>
+                    <option>Faith-based</option>
+                    <option>Funder / Donor</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label>Message</label>
+                <textarea placeholder="Tell us about your interest in FMNR..."></textarea>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Split Bio — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f0f0f0; overflow-x: hidden; }
+        .demo-frame { max-width: 1280px; margin: 40px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+
+        .bio-section { background: var(--wp--preset--color--black); padding: 0; overflow: hidden; }
+        .bio-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; min-height: 680px; }
+        .bio-photo { position: relative; overflow: hidden; min-height: 580px; }
+        .bio-photo img { width: 100%; height: 100%; object-fit: cover; display: block; object-position: center top; }
+        .bio-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, #000 100%); }
+        .bio-text { padding: 80px 80px 80px 64px; display: flex; flex-direction: column; justify-content: center; gap: 24px; }
+        .bio-label { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); }
+        .bio-name { font-family: var(--font-heading); font-size: clamp(40px, 4vw, 60px); line-height: 0.95; text-transform: uppercase; color: var(--wp--preset--color--white); }
+        .bio-title { font-family: var(--font-body); font-size: 16px; font-weight: 700; color: var(--color-teal); text-transform: uppercase; letter-spacing: 0.06em; }
+        .bio-text p { font-family: var(--font-body); font-size: 17px; line-height: 1.65; color: rgba(255,255,255,0.65); }
+        .bio-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .bio-tag { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.55); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 14px; border-radius: 980px; }
+
+        @media (max-width: 1024px) {
+            .bio-inner { grid-template-columns: 1fr; }
+            .bio-photo { min-height: 420px; }
+            .bio-photo-overlay { background: linear-gradient(to bottom, transparent 60%, #000 100%); }
+            .bio-text { padding: 48px; }
+        }
+        @media (max-width: 768px) {
+            .bio-text { padding: 40px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="bio-section">
+            <div class="bio-inner">
+                <div class="bio-photo">
+                    <img src="images/brand/tony-2.jpg" alt="Tony Rinaudo portrait">
+                    <div class="bio-photo-overlay"></div>
+                </div>
+                <div class="bio-text">
+                    <span class="bio-label">About</span>
+                    <h2 class="bio-name">Tony<br>Rinaudo</h2>
+                    <span class="bio-title">Principal Advisor &amp; FMNR Pioneer</span>
+                    <p>Tony grew up in rural Australia with a deep love of the land. After completing his agricultural studies he moved to Niger in 1981 with his wife Liz, not knowing that a chance observation beside a dusty road would set the course for the rest of his life.</p>
+                    <p>Over four decades he has dedicated himself to demonstrating that degraded land is not dead land — and that the communities who live on that land hold the keys to its restoration.</p>
+                    <div class="bio-tags">
+                        <span class="bio-tag">Right Livelihood Laureate 2018</span>
+                        <span class="bio-tag">The Forest Maker</span>
+                        <span class="bio-tag">World Vision Principal Advisor</span>
+                        <span class="bio-tag">26 Countries</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

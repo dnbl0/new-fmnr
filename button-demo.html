@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Button — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); min-height: 100vh; padding: 80px 48px; }
+        .block-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 24px; }
+        .block-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 8px; line-height: 1.1; }
+        .block-desc { font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 600px; }
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; max-width: 900px; }
+        .variant-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); margin-bottom: 16px; display: block; }
+        .demo-buttons { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 28px; border-radius: 980px; font-family: var(--font-body); font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; border: 2px solid transparent; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn--primary { background: var(--color-green); color: var(--color-white); border-color: var(--color-green); }
+        .btn--secondary { background: transparent; color: var(--color-green); border-color: var(--color-green); }
+        .btn--ghost { background: transparent; color: var(--color-text-primary); border-color: transparent; text-decoration: underline; text-underline-offset: 3px; }
+        @media (max-width: 768px) { body { padding: 48px 24px; } .demo-area { padding: 32px 24px; } }
+    </style>
+</head>
+<body>
+    <span class="block-label">Core Block</span>
+    <h2 class="block-title">Button</h2>
+    <p class="block-desc">Primary (green), Secondary (outline), and Ghost variants with hover states.</p>
+    <div class="demo-area">
+        <span class="variant-label">All Variants</span>
+        <div class="demo-buttons">
+            <a class="btn btn--primary" href="#">Get Involved</a>
+            <a class="btn btn--secondary" href="#">Learn More</a>
+            <a class="btn btn--ghost" href="#">Read the report →</a>
+        </div>
+    </div>
+</body>
+</html>

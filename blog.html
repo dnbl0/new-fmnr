@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stories &amp; Impact — FMNR Hub</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-text-primary); background: var(--color-white); -webkit-font-smoothing: antialiased; }
+
+        /* ── Hero ── */
+        .stories-hero { text-align: center; padding: 80px 48px 56px; }
+        .stories-hero .logo-mark { font-family: var(--font-heading); font-size: 18px; text-transform: uppercase; color: var(--color-green); letter-spacing: 0.06em; margin-bottom: 8px; }
+        .stories-hero h1 { font-family: var(--font-heading); font-size: clamp(40px, 5vw, 64px); text-transform: uppercase; line-height: 1; margin-bottom: 16px; }
+        .stories-hero p { font-size: 17px; color: var(--color-text-secondary); max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+        /* ── Featured story (full-width) ── */
+        .featured { max-width: 980px; margin: 0 auto 64px; padding: 0 48px; }
+        .featured-img { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin-bottom: 24px; }
+        .featured-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .featured-tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 12px; border-radius: 20px; background: var(--color-green); color: var(--color-white); margin-bottom: 12px; }
+        .featured h2 { font-size: clamp(24px, 3vw, 36px); font-weight: 700; line-height: 1.2; margin-bottom: 8px; max-width: 680px; }
+        .featured .featured-meta { font-size: 13px; color: var(--color-text-muted); }
+
+        /* ── Grid sections ── */
+        .stories-section { max-width: 980px; margin: 0 auto; padding: 0 48px 64px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 48px; }
+
+        .story-card { text-decoration: none; color: inherit; display: block; }
+        .story-card:hover .story-card__img img { transform: scale(1.03); }
+        .story-card__img { border-radius: 16px; overflow: hidden; aspect-ratio: 3/2; margin-bottom: 14px; }
+        .story-card__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+        .story-card__tag { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 10px; border-radius: 14px; margin-bottom: 8px; }
+        .story-card__tag--green { background: rgba(7,125,87,0.1); color: var(--color-green); }
+        .story-card__tag--orange { background: rgba(250,107,1,0.1); color: var(--color-orange); }
+        .story-card h3 { font-size: 18px; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
+        .story-card .story-card__meta { font-size: 12px; color: var(--color-text-muted); }
+
+        /* ── Quote block ── */
+        .quote-block { max-width: 980px; margin: 0 auto; padding: 0 48px 64px; }
+        .quote-inner { background: var(--color-bg-light); border-radius: 24px; padding: 56px 64px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+        .quote-inner blockquote { font-size: 22px; font-weight: 700; line-height: 1.4; margin-bottom: 24px; }
+        .quote-inner blockquote::before { content: '\201C'; }
+        .quote-inner blockquote::after { content: '\201D'; }
+        .quote-cite { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: 20px; }
+        .quote-cite strong { color: var(--color-text-primary); display: block; }
+        .quote-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--color-text-primary); text-decoration: none; padding: 10px 20px; border: 1px solid var(--wp--preset--color--contrast); border-radius: 20px; transition: all 0.15s; }
+        .quote-btn:hover { background: var(--color-text-primary); color: var(--color-white); }
+        .quote-img { border-radius: 16px; overflow: hidden; }
+        .quote-img img { width: 100%; display: block; border-radius: 16px; }
+        .quote-caption { font-size: 11px; color: var(--color-text-muted); margin-top: 10px; line-height: 1.4; }
+
+        /* ── Grid 4 ── */
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 48px; }
+        .grid-4 .story-card h3 { font-size: 16px; }
+
+        /* ── Spotlight ── */
+        .spotlight { max-width: 980px; margin: 0 auto; padding: 0 48px 64px; }
+        .spotlight-inner { background: var(--color-text-primary); border-radius: 24px; padding: 48px 56px; color: var(--color-white); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .spotlight-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); margin-bottom: 8px; }
+        .spotlight-inner h3 { font-size: 24px; font-weight: 700; line-height: 1.3; margin-bottom: 12px; }
+        .spotlight-inner p { font-size: 14px; color: var(--color-text-muted); line-height: 1.6; }
+        .spotlight-img { border-radius: 16px; overflow: hidden; }
+        .spotlight-img img { width: 100%; display: block; border-radius: 16px; }
+
+        /* ── View archive ── */
+        .view-archive { text-align: center; padding: 16px 0 80px; }
+        .view-archive a { font-size: 14px; font-weight: 600; color: var(--color-green); text-decoration: none; border: 1px solid var(--color-green); padding: 12px 28px; border-radius: 24px; transition: all 0.15s; }
+        .view-archive a:hover { background: var(--color-green); color: var(--color-white); }
+
+        /* ── Newsletter ── */
+        .newsletter { text-align: center; padding: 56px 48px 80px; border-top: 1px solid var(--color-border); }
+        .newsletter-logo { font-family: var(--font-heading); font-size: 14px; text-transform: uppercase; color: var(--color-text-primary); margin-bottom: 12px; }
+        .newsletter p { font-size: 15px; color: var(--color-text-secondary); margin-bottom: 20px; }
+        .newsletter a { font-size: 13px; font-weight: 600; color: var(--color-white); background: var(--color-green); padding: 10px 24px; border-radius: 20px; text-decoration: none; transition: background 0.15s; }
+        .newsletter a:hover { background: #065f44; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .stories-hero { padding: 48px 24px 32px; }
+            .featured, .stories-section, .quote-block, .spotlight { padding-left: 24px; padding-right: 24px; }
+            .grid-2, .grid-4 { grid-template-columns: 1fr; }
+            .quote-inner { grid-template-columns: 1fr; padding: 32px; }
+            .spotlight-inner { grid-template-columns: 1fr; padding: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <div class="stories-hero">
+        <p class="logo-mark">FMNR Hub</p>
+        <h1>Stories</h1>
+        <p>Real-world experiences, reflections and insights from FMNR champions, practitioners and communities around the world.</p>
+    </div>
+
+    <!-- Featured story -->
+    <a href="blog-post-niger.html" class="featured" style="text-decoration:none;color:inherit;display:block;">
+        <div class="featured-img">
+            <img src="https://fmnrhub.com.au/wp-content/uploads/2025/11/1-Trailor-circa-1983.jpg" alt="Niger FMNR landscape" loading="lazy">
+        </div>
+        <span class="featured-tag">Featured</span>
+        <h2>How Niger&rsquo;s FMNR experience has inspired a global scaling movement</h2>
+        <p class="featured-meta">By Tony Rinaudo &nbsp;&middot;&nbsp; October 2025</p>
+    </a>
+
+    <!-- Two-up grid -->
+    <div class="stories-section">
+        <div class="grid-2">
+            <a href="blog-post-senetwo.html" class="story-card">
+                <div class="story-card__img">
+                    <img src="https://fmnrhub.com.au/wp-content/uploads/2026/01/W485-0444-002.jpg" alt="Senetwo landscape restoration" loading="lazy">
+                </div>
+                <span class="story-card__tag story-card__tag--green">Field Report</span>
+                <h3>From Deforestation to Restoration: How FMNR is Transforming Senetwo Sublocation, West Pokot</h3>
+                <p class="story-card__meta">By Hellen Owuor &nbsp;&middot;&nbsp; January 2026</p>
+            </a>
+            <a href="blog-post-zambia.html" class="story-card">
+                <div class="story-card__img">
+                    <img src="https://fmnrhub.com.au/wp-content/uploads/2026/01/AU395-0060-06-768x512.jpg" alt="FMNR champion in Zambia" loading="lazy">
+                </div>
+                <span class="story-card__tag story-card__tag--orange">Community</span>
+                <h3>FMNR Champion Leads Her Village in Land Restoration</h3>
+                <p class="story-card__meta">By Agatha Mali &nbsp;&middot;&nbsp; January 2026</p>
+            </a>
+        </div>
+
+        <div class="grid-2">
+            <a href="blog-post-honey.html" class="story-card">
+                <div class="story-card__img">
+                    <img src="https://fmnrhub.com.au/wp-content/uploads/2025/10/Picture3.jpg" alt="Ivan Opio apiary farmer" loading="lazy">
+                </div>
+                <span class="story-card__tag story-card__tag--green">Livelihoods</span>
+                <h3>Turning honey into money &ndash; Ivan Opio&rsquo;s journey as an apiary farmer</h3>
+                <p class="story-card__meta">By Tabitha Avola &nbsp;&middot;&nbsp; October 2025</p>
+            </a>
+            <a href="blog-post-kenya.html" class="story-card">
+                <div class="story-card__img">
+                    <img src="https://fmnrhub.com.au/wp-content/uploads/2026/03/IMG_4198-768x511.jpg" alt="Communities in Kenya" loading="lazy">
+                </div>
+                <span class="story-card__tag story-card__tag--green">Field Report</span>
+                <h3>Improving the living standards of communities through Farmer Managed Natural Regeneration</h3>
+                <p class="story-card__meta">By Hellen Owuor &nbsp;&middot;&nbsp; March 2026</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Pull quote block -->
+    <div class="quote-block">
+        <div class="quote-inner">
+            <div>
+                <blockquote>I used to think the trees were dead. Now I know they were just waiting. FMNR gave us the eyes to see what was already there.</blockquote>
+                <p class="quote-cite"><strong>Tony Rinaudo</strong>Principal Climate Action Advisor, World Vision Australia</p>
+                <a href="blog-post-niger.html" class="quote-btn">Read Story</a>
+            </div>
+            <div>
+                <div class="quote-img">
+                    <img src="https://fmnrhub.com.au/wp-content/uploads/2025/11/1-Trailor-circa-1983.jpg" alt="Tony Rinaudo in the field" loading="lazy">
+                </div>
+                <p class="quote-caption">Tony Rinaudo has championed FMNR across Africa and beyond for over four decades.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- More stories -->
+    <div class="stories-section">
+        <div class="grid-4">
+            <a href="blog-post-tigray.html" class="story-card">
+                <div class="story-card__img">
+                    <img src="https://fmnrhub.com.au/wp-content/uploads/2025/10/Picture1.jpg" alt="Niger FMNR" loading="lazy">
+                </div>
+                <span class="story-card__tag story-card__tag--orange">Leadership</span>
+                <h3>&ldquo;Tony the Second&rdquo; of Tigray</h3>
+                <p class="story-card__meta">By Alemayehu Markos &nbsp;&middot;&nbsp; 2026</p>
+            </a>
+            <a href="blog-post-niger.html" class="story-card">
+                <div class="story-card__img">
+                    <img src="https://fmnrhub.com.au/wp-content/uploads/2026/01/W485-0444-002.jpg" alt="FMNR field" loading="lazy">
+                </div>
+                <span class="story-card__tag story-card__tag--green">Scale</span>
+                <h3>How Niger&rsquo;s FMNR experience has inspired a global movement</h3>
+                <p class="story-card__meta">By Tony Rinaudo &nbsp;&middot;&nbsp; October 2025</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- View archive -->
+    <div class="view-archive">
+        <a href="https://fmnrhub.com.au/blog-home/">View Archive</a>
+    </div>
+
+    <!-- Spotlight / Photo feature -->
+    <div class="spotlight">
+        <div class="spotlight-inner">
+            <div>
+                <p class="spotlight-label">Photo Spotlight</p>
+                <h3>A lens into community-led restoration</h3>
+                <p>Photography from the field captures the human side of FMNR &mdash; the farmers, families and landscapes being transformed across Africa, Asia and the Pacific. These images tell the stories that data alone cannot.</p>
+            </div>
+            <div class="spotlight-img">
+                <img src="https://fmnrhub.com.au/wp-content/uploads/2026/01/AU395-0060-06-768x512.jpg" alt="FMNR community photo" loading="lazy">
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter CTA -->
+    <div class="newsletter">
+        <p class="newsletter-logo">FMNR Hub</p>
+        <p>The latest stories and updates,<br>direct from the field.</p>
+        <a href="#">Subscribe</a>
+    </div>
+
+</body>
+</html>

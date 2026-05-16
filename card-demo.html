@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Card — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-white); color: var(--color-text-primary); }
+
+        header { padding: 80px 48px 0; max-width: 1280px; margin: 0 auto; }
+        header h1 { font-family: var(--font-heading); font-size: clamp(28px, 4vw, 42px); text-transform: uppercase; line-height: 1; color: var(--color-text-primary); }
+        header p { font-size: 15px; color: var(--color-text-secondary); line-height: 1.5; margin-top: 8px; max-width: 560px; }
+
+        .block-section { max-width: 1280px; margin: 0 auto; padding: 64px 48px; }
+        .block-section + .block-section { border-top: 1px solid var(--color-border); }
+        .block-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: 8px; }
+        .block-title { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; line-height: 1.1; color: var(--color-text-primary); margin-bottom: 6px; }
+        .block-desc { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 32px; max-width: 480px; }
+
+        .demo-area { background: var(--color-bg-light); border-radius: 16px; padding: 48px; display: flex; justify-content: center; }
+        .demo-area--dark { background: var(--color-bg-dark); }
+
+        /* ── Card base ── */
+        .card { position: relative; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; color: var(--color-white); border-radius: 8px; overflow: hidden; width: 100%; max-width: 380px; height: 440px; transition: box-shadow .25s, transform .25s; }
+        .card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.18); transform: translateY(-3px); }
+        .card__media { position: absolute; inset: 0; }
+        .card__media img,
+        .card__media video { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+        .card:hover .card__media img,
+        .card:hover .card__media video { transform: scale(1.05); }
+        .card__overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 40%, transparent 70%); pointer-events: none; z-index: 1; }
+        .card__body { position: relative; z-index: 2; padding: 28px; display: flex; flex-direction: column; gap: 4px; margin-top: auto; }
+        .card__title { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; line-height: 1.1; color: var(--color-white); }
+        .card__desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.4; max-width: 360px; }
+        .card__cta { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; color: var(--color-white); margin-top: 6px; }
+
+        /* ── Video badge ── */
+        .card__video-badge { position: absolute; top: 16px; right: 16px; z-index: 3; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--color-white); text-transform: uppercase; letter-spacing: 0.04em; }
+        .card__video-badge svg { width: 12px; height: 12px; }
+
+        /* ── Icon card ── */
+        .card--icon { background: var(--color-bg-light); height: 320px; }
+        .card--icon .card__overlay { display: none; }
+        .card--icon .card__body { padding: 28px; gap: 4px; }
+        .card--icon .card__icon { width: 48px; height: 48px; margin-bottom: 12px; }
+        .card--icon .card__title { color: var(--color-text-primary); font-size: 20px; }
+        .card--icon .card__desc { color: var(--color-text-secondary); }
+        .card--icon .card__cta { color: var(--color-green); }
+
+        /* ── Blog card ── */
+        .card--blog { background: var(--color-white); border: 1px solid var(--color-border); height: auto; min-height: 0; }
+        .card--blog .card__overlay { display: none; }
+        .card--blog .card__thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px 12px 0 0; }
+        .card--blog .card__thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+        .card--blog:hover .card__thumb img { transform: scale(1.04); }
+        .card--blog .card__body { padding: 24px; position: static; gap: 6px; }
+        .card--blog .card__meta { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-green); }
+        .card--blog .card__title { color: var(--color-text-primary); font-size: 18px; }
+        .card--blog .card__desc { color: var(--color-text-secondary); }
+        .card--blog .card__cta { color: var(--color-green); }
+
+        /* ── Podcast card ── */
+        .card--podcast { background: var(--color-bg-dark); height: auto; min-height: 0; border-radius: 8px; }
+        .card--podcast .card__overlay { display: none; }
+        .card--podcast .card__body { padding: 28px; position: static; gap: 8px; }
+        .card--podcast .card__play { width: 48px; height: 48px; border-radius: 50%; background: var(--color-green); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; flex-shrink: 0; }
+        .card--podcast .card__play svg { width: 18px; height: 18px; color: var(--color-white); margin-left: 2px; }
+        .card--podcast .card__meta { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); }
+        .card--podcast .card__title { color: var(--color-white); font-size: 18px; }
+        .card--podcast .card__desc { color: rgba(255,255,255,0.5); }
+        .card--podcast .card__cta { color: var(--color-teal); }
+
+        /* ── Award card ── */
+        .card--award { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); height: auto; min-height: 0; text-align: center; }
+        .card--award .card__overlay { display: none; }
+        .card--award .card__body { padding: 40px 28px; position: static; align-items: center; gap: 8px; }
+        .card--award .card__badge { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #f5a623 0%, #f7c948 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .card--award .card__badge svg { width: 28px; height: 28px; color: #1a1a2e; }
+        .card--award .card__title { color: var(--color-white); font-size: 18px; text-align: center; }
+        .card--award .card__desc { color: rgba(255,255,255,0.5); text-align: center; }
+        .card--award .card__year { font-family: var(--font-heading); font-size: 13px; color: #f5a623; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* ── Horizontal card ── */
+        .card--horizontal { flex-direction: row; height: 220px; max-width: 640px; border: 1px solid var(--color-border); background: var(--color-white); }
+        .card--horizontal .card__media { position: relative; width: 240px; flex-shrink: 0; height: 100%; }
+        .card--horizontal .card__overlay { display: none; }
+        .card--horizontal .card__body { position: static; padding: 24px; justify-content: center; gap: 6px; }
+        .card--horizontal .card__title { color: var(--color-text-primary); font-size: 18px; }
+        .card--horizontal .card__desc { color: var(--color-text-secondary); }
+        .card--horizontal .card__cta { color: var(--color-green); }
+
+        @media (max-width: 600px) {
+            header { padding: 48px 24px 0; }
+            .block-section { padding: 48px 24px; }
+            .demo-area { padding: 32px 24px; }
+            .card { max-width: 100%; }
+            .card--horizontal { flex-direction: column; height: auto; max-width: 380px; }
+            .card--horizontal .card__media { width: 100%; height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Card</h1>
+        <p>Single card component shown in isolation. Six variants: image, video, icon, blog, podcast, award, and horizontal layout.</p>
+    </header>
+
+    <!-- Image Card -->
+    <div class="block-section" id="image">
+        <p class="block-label">Variant</p>
+        <h2 class="block-title">Image Card</h2>
+        <p class="block-desc">Full-bleed image background with gradient overlay and bottom-anchored text.</p>
+        <div class="demo-area">
+            <a href="#" class="card">
+                <div class="card__media"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_18_Image_0003.jpg" alt="Faith Partners"></div>
+                <div class="card__overlay"></div>
+                <div class="card__body">
+                    <p class="card__title">Faith Communities</p>
+                    <p class="card__desc">Churches and faith organisations mobilising members to restore land.</p>
+                    <span class="card__cta">Explore ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Video Card -->
+    <div class="block-section" id="video">
+        <p class="block-label">Variant</p>
+        <h2 class="block-title">Video Card</h2>
+        <p class="block-desc">Autoplay muted video background with gradient overlay and video badge.</p>
+        <div class="demo-area">
+            <a href="#" class="card">
+                <div class="card__media"><video src="forest.mp4" autoplay muted loop playsinline></video></div>
+                <div class="card__overlay"></div>
+                <span class="card__video-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+                    Video
+                </span>
+                <div class="card__body">
+                    <p class="card__title">FMNR In Action</p>
+                    <p class="card__desc">See how communities are regenerating forests through simple pruning techniques.</p>
+                    <span class="card__cta">Watch ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Icon Card -->
+    <div class="block-section" id="icon">
+        <p class="block-label">Variant</p>
+        <h2 class="block-title">Icon Card</h2>
+        <p class="block-desc">Light-background card with icon, title, description, and CTA link.</p>
+        <div class="demo-area">
+            <a href="#" class="card card--icon">
+                <div class="card__body">
+                    <img class="card__icon" src="icons/leaf.svg" alt="">
+                    <p class="card__title">Restoration</p>
+                    <p class="card__desc">Regenerating degraded lands through community-driven natural processes.</p>
+                    <span class="card__cta">Learn more ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Blog Card -->
+    <div class="block-section" id="blog">
+        <p class="block-label">Variant</p>
+        <h2 class="block-title">Blog Card</h2>
+        <p class="block-desc">Article card with 16:9 thumbnail, meta line, title, description and CTA.</p>
+        <div class="demo-area">
+            <a href="#" class="card card--blog">
+                <div class="card__thumb"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_04_Image_0001.jpg" alt=""></div>
+                <div class="card__body">
+                    <span class="card__meta">Research · 5 min read</span>
+                    <p class="card__title">How FMNR Outperforms Conventional Tree Planting</p>
+                    <p class="card__desc">A meta-analysis of 78% survival rates versus 20-30% for planted seedlings.</p>
+                    <span class="card__cta">Read article ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Podcast Card -->
+    <div class="block-section" id="podcast">
+        <p class="block-label">Variant</p>
+        <h2 class="block-title">Podcast Card</h2>
+        <p class="block-desc">Dark card with play button, episode meta, and teal CTA.</p>
+        <div class="demo-area demo-area--dark">
+            <a href="#" class="card card--podcast">
+                <div class="card__body">
+                    <div class="card__play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg></div>
+                    <span class="card__meta">Episode 12 · 34 min</span>
+                    <p class="card__title">The Forest Maker: Tony Rinaudo's Story</p>
+                    <p class="card__desc">How one man's persistence led to a global movement restoring millions of hectares.</p>
+                    <span class="card__cta">Listen now ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Award Card -->
+    <div class="block-section" id="award">
+        <p class="block-label">Variant</p>
+        <h2 class="block-title">Award Card</h2>
+        <p class="block-desc">Dark gradient card with gold badge, year, title and description.</p>
+        <div class="demo-area demo-area--dark">
+            <a href="#" class="card card--award">
+                <div class="card__body">
+                    <div class="card__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M9 14l-3 8 6-3 6 3-3-8"/></svg></div>
+                    <span class="card__year">2018</span>
+                    <p class="card__title">Right Livelihood Award</p>
+                    <p class="card__desc">Awarded to Tony Rinaudo for demonstrating on a large scale how drylands can be greened.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Horizontal Card -->
+    <div class="block-section" id="horizontal">
+        <p class="block-label">Variant</p>
+        <h2 class="block-title">Horizontal Card</h2>
+        <p class="block-desc">Side-by-side layout with image on the left and content on the right.</p>
+        <div class="demo-area">
+            <a href="#" class="card card--horizontal">
+                <div class="card__media"><img src="images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_22_Image_0001.jpg" alt="Corporate Partners"></div>
+                <div class="card__body">
+                    <p class="card__title">Corporate Partners</p>
+                    <p class="card__desc">Businesses aligning carbon and sustainability goals with restoration.</p>
+                    <span class="card__cta">Explore ›</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

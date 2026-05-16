@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Image Hero — FMNR Components</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f0f0f0; overflow-x: hidden; }
+        .demo-frame { max-width: 1280px; margin: 40px auto; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,.15); }
+
+        .hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.75) 100%); }
+        .hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 96px 80px; max-width: 1400px; }
+        .hero-eyebrow { display: inline-block; font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); margin-bottom: 20px; }
+        .hero-title { font-family: var(--font-heading); font-size: clamp(52px, 7vw, 96px); line-height: 0.95; text-transform: uppercase; color: var(--wp--preset--color--white); max-width: 860px; }
+        .hero-title em { color: var(--color-teal); font-style: normal; }
+        .hero-scroll { position: absolute; bottom: 36px; right: 96px; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+        .hero-scroll-line { width: 1px; height: 40px; background: rgba(255,255,255,0.3); }
+
+        @media (max-width: 768px) {
+            .hero-content { padding: 0 24px 56px; }
+            .hero-scroll { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-frame">
+        <div class="hero">
+            <img class="hero-img" src="images/brand/tony.jpg" alt="Tony Rinaudo in the field in Africa">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <span class="hero-eyebrow">Founder of FMNR</span>
+                <h1 class="hero-title">The man who<br><em>refused</em> to give<br>up on the land.</h1>
+            </div>
+            <div class="hero-scroll">
+                <div class="hero-scroll-line"></div>
+                <span>Scroll</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

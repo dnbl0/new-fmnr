@@ -8,7 +8,7 @@
     <link href="design-tokens.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); color: var(--color-charcoal); background: #fff; overflow-x: hidden; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: var(--wp--preset--color--white); overflow-x: hidden; }
         section { display: none; }
         section.active { display: block; }
 
@@ -18,25 +18,25 @@
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.75) 100%); }
         .hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 96px 80px; max-width: 1400px; }
         .hero-eyebrow { display: inline-block; font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); margin-bottom: 20px; }
-        .hero-title { font-family: var(--font-heading); font-size: clamp(52px, 7vw, 96px); line-height: 0.95; text-transform: uppercase; color: #fff; max-width: 860px; }
+        .hero-title { font-family: var(--font-heading); font-size: clamp(52px, 7vw, 96px); line-height: 0.95; text-transform: uppercase; color: var(--wp--preset--color--white); max-width: 860px; }
         .hero-title em { color: var(--color-teal); font-style: normal; }
         .hero-scroll { position: absolute; bottom: 36px; right: 96px; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
         .hero-scroll-line { width: 1px; height: 40px; background: rgba(255,255,255,0.3); }
 
         /* ── Timeline ── */
-        .timeline-section { background: #fff; padding: 96px; }
+        .timeline-section { background: var(--wp--preset--color--white); padding: 96px; }
         .timeline-inner { max-width: 1120px; margin: 0 auto; }
         .section-eyebrow { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-green); margin-bottom: 16px; }
-        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: #000; margin-bottom: 64px; }
+        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 64px; }
         .timeline-entries { display: flex; flex-direction: column; gap: 0; border-top: 1px solid rgba(0,0,0,0.08); }
         .timeline-entry { border-bottom: 1px solid rgba(0,0,0,0.08); }
         .timeline-entry-header { display: grid; grid-template-columns: 120px 1fr auto; gap: 40px; align-items: center; padding: 28px 0; cursor: pointer; user-select: none; }
         .timeline-year { font-family: var(--font-heading); font-size: 36px; color: var(--color-green); line-height: 1; }
-        .timeline-headline { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: #000; line-height: 1.1; }
+        .timeline-headline { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: var(--wp--preset--color--black); line-height: 1.1; }
         .timeline-toggle { width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s, background 0.2s; }
         .timeline-toggle svg { width: 12px; height: 12px; color: rgba(0,0,0,0.4); transition: transform 0.3s, color 0.2s; }
         .timeline-entry.open .timeline-toggle { border-color: var(--color-green); background: var(--color-green); }
-        .timeline-entry.open .timeline-toggle svg { color: #fff; transform: rotate(45deg); }
+        .timeline-entry.open .timeline-toggle svg { color: var(--wp--preset--color--white); transform: rotate(45deg); }
         .timeline-body { display: grid; grid-template-columns: 120px 1fr; gap: 40px; overflow: hidden; max-height: 0; transition: max-height 0.5s cubic-bezier(0.25,1,0.5,1); }
         .timeline-entry.open .timeline-body { max-height: 800px; }
         .timeline-body-content { padding-bottom: 40px; }
@@ -45,14 +45,14 @@
         .timeline-images img { height: 160px; width: auto; border-radius: 10px; object-fit: cover; flex: 1; min-width: 140px; max-width: 280px; }
 
         /* ── Bio ── */
-        .bio-section { background: #000; padding: 0; overflow: hidden; }
+        .bio-section { background: var(--wp--preset--color--black); padding: 0; overflow: hidden; }
         .bio-inner { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; min-height: 680px; }
         .bio-photo { position: relative; overflow: hidden; min-height: 580px; }
         .bio-photo img { width: 100%; height: 100%; object-fit: cover; display: block; object-position: center top; }
         .bio-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, #000 100%); }
         .bio-text { padding: 80px 80px 80px 64px; display: flex; flex-direction: column; justify-content: center; gap: 24px; }
         .bio-label { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); }
-        .bio-name { font-family: var(--font-heading); font-size: clamp(40px, 4vw, 60px); line-height: 0.95; text-transform: uppercase; color: #fff; }
+        .bio-name { font-family: var(--font-heading); font-size: clamp(40px, 4vw, 60px); line-height: 0.95; text-transform: uppercase; color: var(--wp--preset--color--white); }
         .bio-title { font-family: var(--font-body); font-size: 16px; font-weight: 700; color: var(--color-teal); text-transform: uppercase; letter-spacing: 0.06em; }
         .bio-text p { font-family: var(--font-body); font-size: 17px; line-height: 1.65; color: rgba(255,255,255,0.65); }
         .bio-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
@@ -62,53 +62,53 @@
         .quote-section { background: var(--color-green); padding: 96px; }
         .quote-inner { max-width: 900px; margin: 0 auto; text-align: center; }
         .quote-mark { font-family: var(--font-heading); font-size: 120px; line-height: 0.6; color: rgba(255,255,255,0.15); margin-bottom: 0; }
-        .quote-text { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 44px); line-height: 1.1; text-transform: uppercase; color: #fff; margin-bottom: 32px; }
+        .quote-text { font-family: var(--font-heading); font-size: clamp(28px, 3.5vw, 44px); line-height: 1.1; text-transform: uppercase; color: var(--wp--preset--color--white); margin-bottom: 32px; }
         .quote-attribution { font-family: var(--font-body); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
 
         /* ── Pillars ── */
-        .pillars-section { background: #f5f5f7; padding: 96px; }
+        .pillars-section { background: var(--wp--preset--color--base); padding: 96px; }
         .pillars-inner { max-width: 1120px; margin: 0 auto; }
         .pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-        .pillar { background: #fff; padding: 48px 40px; }
+        .pillar { background: var(--wp--preset--color--white); padding: 48px 40px; }
         .pillar:first-child { border-radius: 16px 0 0 16px; }
         .pillar:last-child { border-radius: 0 16px 16px 0; }
         .pillar-number { font-family: var(--font-heading); font-size: 72px; line-height: 1; color: var(--color-teal); margin-bottom: 24px; }
-        .pillar h3 { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: #000; margin-bottom: 16px; }
+        .pillar h3 { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 16px; }
         .pillar p { font-family: var(--font-body); font-size: 16px; line-height: 1.6; color: rgba(0,0,0,0.55); }
 
         /* ── Awards ── */
-        .awards-section { background: #f5f5f7; padding: 96px; }
+        .awards-section { background: var(--wp--preset--color--base); padding: 96px; }
         .awards-inner { max-width: 1120px; margin: 0 auto; }
         .section-subline { font-family: var(--font-body); font-size: 18px; line-height: 1.6; color: rgba(0,0,0,0.55); max-width: 680px; margin: -40px 0 48px; }
         .awards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
-        .award-card { background: #fff; border-radius: 16px; padding: 40px 32px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(0,0,0,0.04); }
+        .award-card { background: var(--wp--preset--color--white); border-radius: 16px; padding: 40px 32px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(0,0,0,0.04); }
         .award-icon { width: fit-content; background: rgba(7,125,87,0.08); color: var(--color-green); border-radius: 980px; padding: 7px 12px; font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
         .award-year { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-green); }
-        .award-name { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: #000; line-height: 1.1; }
+        .award-name { font-family: var(--font-heading); font-size: 22px; text-transform: uppercase; color: var(--wp--preset--color--black); line-height: 1.1; }
         .award-body { font-family: var(--font-body); font-size: 15px; line-height: 1.55; color: rgba(0,0,0,0.55); }
         .award-source { margin-top: auto; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--color-green); text-decoration: none; }
 
         /* ── Media Cards ── */
-        .media-section { background: #fff; padding: 96px; }
+        .media-section { background: var(--wp--preset--color--white); padding: 96px; }
         .media-inner { max-width: 1120px; margin: 0 auto; }
-        .media-heading { font-family: var(--font-heading); font-size: 30px; line-height: 1; text-transform: uppercase; color: #000; margin-bottom: 24px; }
+        .media-heading { font-family: var(--font-heading); font-size: 30px; line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 24px; }
         .media-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-        .media-card { background: #f5f5f7; border-radius: 14px; padding: 28px 24px; color: inherit; text-decoration: none; min-height: 230px; display: flex; flex-direction: column; gap: 12px; transition: transform 0.25s, background 0.25s, box-shadow 0.25s; }
-        .media-card:hover { transform: translateY(-4px); background: #fff; box-shadow: 0 18px 48px rgba(0,0,0,0.1); }
+        .media-card { background: var(--wp--preset--color--base); border-radius: 14px; padding: 28px 24px; color: inherit; text-decoration: none; min-height: 230px; display: flex; flex-direction: column; gap: 12px; transition: transform 0.25s, background 0.25s, box-shadow 0.25s; }
+        .media-card:hover { transform: translateY(-4px); background: var(--wp--preset--color--white); box-shadow: 0 18px 48px rgba(0,0,0,0.1); }
         .media-card-type { font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-green); }
-        .media-card h4 { font-family: var(--font-heading); font-size: 20px; line-height: 1.05; text-transform: uppercase; color: #000; }
+        .media-card h4 { font-family: var(--font-heading); font-size: 20px; line-height: 1.05; text-transform: uppercase; color: var(--wp--preset--color--black); }
         .media-card p { font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: rgba(0,0,0,0.55); }
         .media-card-link { margin-top: auto; font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--color-green); }
 
         /* ── CTA band ── */
-        .cta-band { background: #000; padding: 96px; text-align: center; }
-        .cta-band h2 { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 56px); text-transform: uppercase; color: #fff; margin-bottom: 20px; line-height: 1; }
+        .cta-band { background: var(--wp--preset--color--black); padding: 96px; text-align: center; }
+        .cta-band h2 { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 56px); text-transform: uppercase; color: var(--wp--preset--color--white); margin-bottom: 20px; line-height: 1; }
         .cta-band p { font-family: var(--font-body); font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.55); max-width: 560px; margin: 0 auto 40px; }
         .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        .btn-primary { background: var(--color-green); color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 14px 32px; border-radius: 980px; text-decoration: none; transition: background 0.2s; }
-        .btn-primary:hover { background: #065e42; color: #fff; }
-        .btn-ghost { background: transparent; color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 13px 32px; border-radius: 980px; border: 1px solid rgba(255,255,255,0.25); text-decoration: none; transition: border-color 0.2s, background 0.2s; }
-        .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.5); color: #fff; }
+        .btn-primary { background: var(--color-green); color: var(--wp--preset--color--white); font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 14px 32px; border-radius: 980px; text-decoration: none; transition: background 0.2s; }
+        .btn-primary:hover { background: var(--wp--preset--color--custom-dark-green-fmnr); color: var(--wp--preset--color--white); }
+        .btn-ghost { background: transparent; color: var(--wp--preset--color--white); font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 13px 32px; border-radius: 980px; border: 1px solid rgba(255,255,255,0.25); text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.5); color: var(--wp--preset--color--white); }
 
         /* ── Responsive ── */
         @media (max-width: 1024px) {

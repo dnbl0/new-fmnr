@@ -8,24 +8,24 @@
     <link href="design-tokens.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; padding: 80px 48px; max-width: 1080px; margin: 0 auto; }
+        body { font-family: var(--font-body); color: var(--wp--preset--color--contrast); background: var(--wp--preset--color--white); -webkit-font-smoothing: antialiased; padding: 80px 48px; max-width: 1080px; margin: 0 auto; }
         h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; margin-bottom: 8px; }
-        .subtitle { font-size: 17px; color: #6e6e73; margin-bottom: 48px; line-height: 1.5; }
-        .persona { background: #f5f5f7; border-radius: 16px; padding: 32px; margin-bottom: 48px; }
+        .subtitle { font-size: 17px; color: var(--wp--preset--color--contrast-2); margin-bottom: 48px; line-height: 1.5; }
+        .persona { background: var(--wp--preset--color--base); border-radius: 16px; padding: 32px; margin-bottom: 48px; }
         .persona h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-        .persona p { font-size: 15px; color: #6e6e73; line-height: 1.6; }
+        .persona p { font-size: 15px; color: var(--wp--preset--color--contrast-2); line-height: 1.6; }
         .persona .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-        .persona .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: #fff; border: 1px solid #e5e5e5; border-radius: 100px; padding: 6px 14px; color: #6e6e73; }
+        .persona .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: var(--wp--preset--color--white); border: 1px solid #e5e5e5; border-radius: 100px; padding: 6px 14px; color: var(--wp--preset--color--contrast-2); }
 
         .journey { position: relative; padding-left: 32px; }
         .journey::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: #e5e5e5; }
         .step { position: relative; margin-bottom: 40px; }
-        .step::before { content: ''; position: absolute; left: -32px; top: 6px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--color-green); background: #fff; }
+        .step::before { content: ''; position: absolute; left: -32px; top: 6px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--color-green); background: var(--wp--preset--color--white); }
         .step.active::before { background: var(--color-green); }
         .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-        .step .action { font-size: 14px; color: #1d1d1f; margin-bottom: 4px; }
+        .step .action { font-size: 14px; color: var(--wp--preset--color--contrast); margin-bottom: 4px; }
         .step .page { font-size: 13px; color: var(--color-green); font-weight: 600; }
-        .step .need { font-size: 13px; color: #86868b; margin-top: 4px; }
+        .step .need { font-size: 13px; color: var(--wp--preset--color--contrast-3); margin-top: 4px; }
 
         @media (max-width: 768px) { body { padding: 40px 24px; } }
     </style>

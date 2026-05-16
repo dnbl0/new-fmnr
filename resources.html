@@ -8,7 +8,7 @@
     <link href="design-tokens.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); color: var(--color-charcoal); background: #fff; overflow-x: hidden; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: var(--wp--preset--color--white); overflow-x: hidden; }
 
         /* ── Header ── */
         .site-header { background: rgba(255,255,255,0.0); display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; transition: background 0.4s, box-shadow 0.4s, backdrop-filter 0.4s; }
@@ -24,12 +24,12 @@
         .site-header.scrolled .nav-links a.active { color: var(--color-green); }
         .header-actions { display: flex; align-items: center; gap: 20px; }
         .header-search-btn { background: transparent; border: none; border-radius: 5px; padding: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; width: 44px; height: 44px; }
-        .header-search-btn svg { width: 20px; height: 20px; stroke: #fff; color: #fff; transition: color 0.3s, stroke 0.3s, filter 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
+        .header-search-btn svg { width: 20px; height: 20px; stroke: #fff; color: var(--wp--preset--color--white); transition: color 0.3s, stroke 0.3s, filter 0.3s; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
         .header-search-btn:hover svg { color: var(--color-teal); stroke: var(--color-teal); }
         .site-header.scrolled .header-search-btn svg { color: var(--color-charcoal); stroke: var(--color-charcoal); filter: none; }
         .site-header.scrolled .header-search-btn:hover svg { color: var(--color-green); stroke: var(--color-green); }
-        .btn-donate { background: var(--color-green); color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 20px; border-radius: 980px; border: none; cursor: pointer; text-decoration: none; transition: background 0.2s; }
-        .btn-donate:hover { background: #065e42; color: #fff; }
+        .btn-donate { background: var(--color-green); color: var(--wp--preset--color--white); font-family: var(--font-body); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 20px; border-radius: 980px; border: none; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+        .btn-donate:hover { background: var(--wp--preset--color--custom-dark-green-fmnr); color: var(--wp--preset--color--white); }
 
         /* ── Hero ── */
         .hero { position: relative; height: 100vh; min-height: 640px; overflow: hidden; }
@@ -37,17 +37,17 @@
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 55%, rgba(0,0,0,0.75) 100%); }
         .hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 0 96px 80px; }
         .hero-eyebrow { display: inline-block; font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); margin-bottom: 20px; }
-        .hero-title { font-family: var(--font-heading); font-size: clamp(52px, 7vw, 96px); line-height: 0.95; text-transform: uppercase; color: #fff; max-width: 860px; }
+        .hero-title { font-family: var(--font-heading); font-size: clamp(52px, 7vw, 96px); line-height: 0.95; text-transform: uppercase; color: var(--wp--preset--color--white); max-width: 860px; }
         .hero-title em { color: var(--color-teal); font-style: normal; }
         .hero-scroll { position: absolute; bottom: 36px; right: 96px; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
         .hero-scroll-line { width: 1px; height: 40px; background: rgba(255,255,255,0.3); animation: scrollLine 2s ease-in-out infinite; transform-origin: top; }
         @keyframes scrollLine { 0%,100% { transform: scaleY(1); opacity: 0.3; } 50% { transform: scaleY(0.5); opacity: 0.8; } }
 
         /* ── Intro band ── */
-        .intro-band { background: #000; padding: 96px; }
+        .intro-band { background: var(--wp--preset--color--black); padding: 96px; }
         .intro-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
         .intro-label { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-teal); margin-bottom: 20px; }
-        .intro-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: #fff; }
+        .intro-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--white); }
         .intro-headline em { color: var(--color-teal); font-style: normal; }
         .intro-body p { font-family: var(--font-body); font-size: 18px; line-height: 1.65; color: rgba(255,255,255,0.6); margin-bottom: 20px; }
         .intro-body p:last-child { margin-bottom: 0; }
@@ -57,24 +57,24 @@
 
         /* ── Section shared ── */
         .content-section { padding: 96px; }
-        .content-section--grey { background: #f5f5f7; }
-        .content-section--white { background: #fff; }
+        .content-section--grey { background: var(--wp--preset--color--base); }
+        .content-section--white { background: var(--wp--preset--color--white); }
         .section-inner { max-width: 1120px; margin: 0 auto; }
         .section-eyebrow { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-green); margin-bottom: 12px; }
-        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: #000; margin-bottom: 8px; }
+        .section-headline { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 52px); line-height: 1; text-transform: uppercase; color: var(--wp--preset--color--black); margin-bottom: 8px; }
         .section-subline { font-family: var(--font-body); font-size: 18px; line-height: 1.5; color: rgba(0,0,0,0.5); margin-bottom: 56px; max-width: 600px; }
         .section-view-all { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--color-green); text-decoration: none; margin-top: 32px; }
         .section-view-all:hover { text-decoration: underline; }
 
         /* ── Featured card (horizontal) ── */
-        .featured-card { display: grid; grid-template-columns: 1fr 1fr; background: #fff; border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; margin-bottom: 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.05); }
+        .featured-card { display: grid; grid-template-columns: 1fr 1fr; background: var(--wp--preset--color--white); border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; margin-bottom: 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.05); }
         .featured-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.12); }
-        .content-section--grey .featured-card { background: #fff; }
-        .content-section--white .featured-card { background: #f5f5f7; }
+        .content-section--grey .featured-card { background: var(--wp--preset--color--white); }
+        .content-section--white .featured-card { background: var(--wp--preset--color--base); }
         .featured-card-img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 340px; }
         .featured-card-body { padding: 48px 48px; display: flex; flex-direction: column; justify-content: center; gap: 16px; }
         .featured-card-tag { font-family: var(--font-body); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-green); }
-        .featured-card-body h3 { font-family: var(--font-heading); font-size: 32px; line-height: 1.05; text-transform: uppercase; color: #1d1d1f; }
+        .featured-card-body h3 { font-family: var(--font-heading); font-size: 32px; line-height: 1.05; text-transform: uppercase; color: var(--wp--preset--color--contrast); }
         .featured-card-body p { font-family: var(--font-body); font-size: 17px; line-height: 1.6; color: rgba(0,0,0,0.55); }
         .featured-card-arrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 14px; font-weight: 700; color: var(--color-green); margin-top: 8px; }
 
@@ -85,13 +85,13 @@
         .card-grid + .card-grid { margin-top: 20px; }
 
         /* ── Story card ── */
-        .story-card { background: #fff; border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+        .story-card { background: var(--wp--preset--color--white); border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.25,1,0.5,1), box-shadow 0.4s; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
         .story-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
-        .content-section--white .story-card { background: #f5f5f7; box-shadow: none; }
+        .content-section--white .story-card { background: var(--wp--preset--color--base); box-shadow: none; }
         .story-card-img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
         .story-card-body { padding: 24px 24px 28px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .story-card-tag { font-family: var(--font-body); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-green); }
-        .story-card-body h3 { font-family: var(--font-heading); font-size: 22px; line-height: 1.1; text-transform: uppercase; color: #1d1d1f; }
+        .story-card-body h3 { font-family: var(--font-heading); font-size: 22px; line-height: 1.1; text-transform: uppercase; color: var(--wp--preset--color--contrast); }
         .story-card-body p { font-family: var(--font-body); font-size: 15px; line-height: 1.5; color: rgba(0,0,0,0.55); }
         .card-grid--2 .story-card-body h3 { font-size: 26px; }
 
@@ -99,37 +99,37 @@
         .quote-band { background: var(--color-green); padding: 72px 96px; }
         .quote-band-inner { max-width: 900px; margin: 0 auto; text-align: center; }
         .quote-band .quote-mark { font-family: var(--font-heading); font-size: 100px; line-height: 0.6; color: rgba(255,255,255,0.15); }
-        .quote-band .quote-text { font-family: var(--font-heading); font-size: clamp(24px, 3vw, 38px); line-height: 1.1; text-transform: uppercase; color: #fff; margin-bottom: 24px; }
+        .quote-band .quote-text { font-family: var(--font-heading); font-size: clamp(24px, 3vw, 38px); line-height: 1.1; text-transform: uppercase; color: var(--wp--preset--color--white); margin-bottom: 24px; }
         .quote-band .quote-attr { font-family: var(--font-body); font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
 
         /* ── Footer ── */
-        #footer { background: #1d1d1f; padding: 80px 120px 48px; color: #fff; }
+        #footer { background: var(--wp--preset--color--contrast); padding: 80px 120px 48px; color: var(--wp--preset--color--white); }
         .footer-inner { max-width: 1120px; margin: 0 auto; }
         .footer-top { display: flex; gap: 100px; margin-bottom: 60px; }
         .footer-brand { flex: 0 0 280px; display: flex; flex-direction: column; gap: 16px; }
         .footer-brand img { height: 36px; filter: brightness(0) invert(1); }
         .footer-brand p { font-family: var(--font-body); font-size: 14px; line-height: 1.4; color: rgba(255,255,255,0.5); }
         .footer-nav { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 40px; }
-        .footer-nav-col h4 { font-family: var(--font-heading); font-size: 14px; text-transform: uppercase; color: #fff; margin-bottom: 14px; line-height: 1.2; }
+        .footer-nav-col h4 { font-family: var(--font-heading); font-size: 14px; text-transform: uppercase; color: var(--wp--preset--color--white); margin-bottom: 14px; line-height: 1.2; }
         .footer-nav-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
         .footer-nav-col a { font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
-        .footer-nav-col a:hover { color: #fff; }
+        .footer-nav-col a:hover { color: var(--wp--preset--color--white); }
         .footer-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; }
         .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.35); }
         .footer-social { display: flex; gap: 16px; }
         .footer-social a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
-        .footer-social a:hover { color: #fff; }
+        .footer-social a:hover { color: var(--wp--preset--color--white); }
         .footer-social svg { width: 16px; height: 16px; }
 
         /* ── CTA band ── */
-        .cta-band { background: #000; padding: 96px; text-align: center; }
-        .cta-band h2 { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 56px); text-transform: uppercase; color: #fff; margin-bottom: 20px; line-height: 1; }
+        .cta-band { background: var(--wp--preset--color--black); padding: 96px; text-align: center; }
+        .cta-band h2 { font-family: var(--font-heading); font-size: clamp(36px, 4vw, 56px); text-transform: uppercase; color: var(--wp--preset--color--white); margin-bottom: 20px; line-height: 1; }
         .cta-band p { font-family: var(--font-body); font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.55); max-width: 560px; margin: 0 auto 40px; }
         .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        .btn-primary { background: var(--color-green); color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 14px 32px; border-radius: 980px; text-decoration: none; transition: background 0.2s; }
-        .btn-primary:hover { background: #065e42; color: #fff; }
-        .btn-ghost { background: transparent; color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 13px 32px; border-radius: 980px; border: 1px solid rgba(255,255,255,0.25); text-decoration: none; transition: border-color 0.2s, background 0.2s; }
-        .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.5); color: #fff; }
+        .btn-primary { background: var(--color-green); color: var(--wp--preset--color--white); font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 14px 32px; border-radius: 980px; text-decoration: none; transition: background 0.2s; }
+        .btn-primary:hover { background: var(--wp--preset--color--custom-dark-green-fmnr); color: var(--wp--preset--color--white); }
+        .btn-ghost { background: transparent; color: var(--wp--preset--color--white); font-family: var(--font-body); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; padding: 13px 32px; border-radius: 980px; border: 1px solid rgba(255,255,255,0.25); text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+        .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.5); color: var(--wp--preset--color--white); }
 
         /* ── Reveal ── */
         .reveal { opacity: 0; transform: translateY(32px); }

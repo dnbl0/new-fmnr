@@ -35,7 +35,7 @@
         /* ── Modal ── */
         .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.35s; }
         .modal-backdrop.open { opacity: 1; pointer-events: auto; }
-        .modal-container { width: 100%; height: 95vh; background: #fff; border-radius: 20px 20px 0 0; overflow: hidden; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -8px 60px rgba(0,0,0,0.25); }
+        .modal-container { width: 100%; height: 95dvh; max-height: -webkit-fill-available; background: #fff; border-radius: 20px 20px 0 0; overflow: hidden; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -8px 60px rgba(0,0,0,0.25); }
         .modal-backdrop.open .modal-container { transform: translateY(0); }
         .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid rgba(0,0,0,0.06); flex-shrink: 0; background: #fff; }
         .modal-header h3 { font-size: 15px; font-weight: 700; }
@@ -49,29 +49,65 @@
         .modal-body iframe.mobile-view { width: 390px; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; background: #fff; }
 
         /* Modal tabs */
-        .modal-tabs { display: flex; background: #f0f0f0; border-radius: 8px; padding: 3px; gap: 2px; }
-        .modal-tabs button { border: none; background: transparent; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 13px; font-weight: 600; color: #86868b; transition: background 0.2s, color 0.2s; }
+        .modal-tabs { display: flex; background: #f0f0f0; border-radius: 8px; padding: 3px; gap: 2px; flex-shrink: 0; }
+        .modal-tabs button { border: none; background: transparent; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 13px; font-weight: 600; color: #86868b; transition: background 0.2s, color 0.2s; white-space: nowrap; }
         .modal-tabs button.active { background: #fff; color: #1d1d1f; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
         /* Docs panel & WP panel — shared base */
-        .modal-docs, .modal-wp { position: absolute; inset: 0; background: #fff; overflow-y: auto; padding: 64px 48px; display: none; }
+        .modal-docs, .modal-wp { position: absolute; inset: 0; background: #fafafa; overflow-y: auto; display: none; }
         .modal-docs.visible, .modal-wp.visible { display: block; }
+        .doc-inner { max-width: 860px; margin: 0 auto; padding: 56px 48px 80px; }
+        .doc-header { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid #e5e5e5; }
         .modal-docs .doc-label, .modal-wp .doc-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 16px; }
         .modal-wp .doc-label { color: #21759b; background: rgba(33,117,155,0.1); }
-        .modal-docs .doc-title, .modal-wp .doc-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: #1d1d1f; margin-bottom: 8px; line-height: 1.1; }
-        .modal-docs .doc-desc, .modal-wp .doc-desc { font-size: 15px; color: #6e6e73; line-height: 1.6; margin-bottom: 32px; max-width: 600px; }
-        .modal-docs .doc-section, .modal-wp .doc-section { margin-bottom: 32px; }
-        .modal-docs .doc-section h4, .modal-wp .doc-section h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #1d1d1f; margin-bottom: 10px; }
-        .modal-docs .doc-section ul, .modal-wp .doc-section ul { list-style: none; padding: 0; }
-        .modal-docs .doc-section li, .modal-wp .doc-section li { font-size: 14px; color: #6e6e73; line-height: 1.6; padding: 6px 0; border-bottom: 1px solid #f0f0f0; padding-left: 16px; position: relative; }
-        .modal-docs .doc-section li::before { content: ""; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: var(--color-green); }
-        .modal-wp .doc-section li::before { content: ""; position: absolute; left: 0; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: #21759b; }
-        .modal-docs .doc-where, .modal-wp .doc-where { font-size: 14px; color: #1d1d1f; font-weight: 600; margin-bottom: 4px; }
+        .modal-docs .doc-title, .modal-wp .doc-title { font-family: var(--font-heading); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; color: #1d1d1f; margin-bottom: 10px; line-height: 1.1; }
+        .modal-docs .doc-desc, .modal-wp .doc-desc { font-size: 15px; color: #6e6e73; line-height: 1.6; margin-bottom: 0; max-width: 640px; }
+        .modal-docs .doc-where, .modal-wp .doc-where { font-size: 13px; color: #1d1d1f; font-weight: 600; margin-top: 12px; }
         .modal-docs .doc-where span, .modal-wp .doc-where span { font-weight: 400; color: #6e6e73; }
-        .modal-wp .wp-plugin-tag { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #21759b; background: rgba(33,117,155,0.08); padding: 3px 8px; border-radius: 4px; margin-right: 6px; margin-bottom: 6px; }
+        .doc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 48px; }
+        .doc-grid--full { grid-template-columns: 1fr; }
+        .modal-docs .doc-section, .modal-wp .doc-section { background: #fff; border-radius: 12px; padding: 24px; border: 1px solid #e5e5e5; }
+        .modal-docs .doc-section h4, .modal-wp .doc-section h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #86868b; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; }
+        .modal-docs .doc-section ul, .modal-wp .doc-section ul { list-style: none; padding: 0; }
+        .modal-docs .doc-section li, .modal-wp .doc-section li { font-size: 13px; color: #4a4a4a; line-height: 1.6; padding: 8px 0; border-bottom: 1px solid #f5f5f5; padding-left: 18px; position: relative; }
+        .modal-docs .doc-section li:last-child, .modal-wp .doc-section li:last-child { border-bottom: none; }
+        .modal-docs .doc-section li::before { content: ""; position: absolute; left: 0; top: 15px; width: 6px; height: 6px; border-radius: 50%; background: var(--color-green); }
+        .modal-wp .doc-section li::before { content: ""; position: absolute; left: 0; top: 15px; width: 6px; height: 6px; border-radius: 50%; background: #21759b; }
+        .modal-wp .wp-plugin-tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #21759b; background: rgba(33,117,155,0.08); padding: 3px 8px; border-radius: 4px; margin-right: 6px; }
+        @media (max-width: 768px) {
+            .doc-inner { padding: 32px 20px 60px; }
+            .doc-grid { grid-template-columns: 1fr; }
+            .modal-header { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+            .modal-tabs { width: 100%; justify-content: center; }
+            .modal-tabs button { padding: 6px 10px; font-size: 12px; }
+            .modal-actions { width: 100%; justify-content: center; }
+            .device-toggle { display: none; }
+            .doc-table { font-size: 12px; }
+            .doc-table th, .doc-table td { padding: 8px 10px; }
+        }
         .modal-actions { display: flex; align-items: center; gap: 12px; }
         .modal-open-btn { font-size: 13px; font-weight: 700; color: var(--color-green); background: rgba(7,125,87,0.08); border: none; border-radius: 6px; padding: 8px 14px; cursor: pointer; text-decoration: none; }
         .modal-open-btn:hover { background: rgba(7,125,87,0.14); }
+
+        /* Code tables */
+        .doc-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+        .doc-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #86868b; padding: 10px 14px; border-bottom: 2px solid #e5e5e5; background: #fafafa; }
+        .doc-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; color: #4a4a4a; line-height: 1.5; }
+        .doc-table tr:last-child td { border-bottom: none; }
+        .doc-table tr:hover td { background: #f9f9fb; }
+        .doc-table code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: #f0f0f5; padding: 2px 6px; border-radius: 4px; color: #1d1d1f; word-break: break-all; }
+        .doc-table .cell-tag { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: var(--color-green); font-weight: 600; white-space: nowrap; }
+        .doc-table .cell-prop { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: #6366f1; }
+        .doc-table .cell-val { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; color: #1d1d1f; }
+        .doc-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid #e5e5e5; max-width: 100%; }
+        .doc-table { table-layout: fixed; }
+        .doc-table col.col-selector { width: 35%; }
+        .doc-table col.col-property { width: 25%; }
+        .doc-table col.col-value { width: 40%; }
+        .doc-table col.col-element { width: 15%; }
+        .doc-table col.col-sel { width: 35%; }
+        .doc-table col.col-role { width: 50%; }
+        .doc-table td { word-wrap: break-word; overflow-wrap: break-word; }
 
         /* Device toggle */
         .device-toggle { display: flex; background: #f0f0f0; border-radius: 8px; padding: 3px; gap: 2px; }
@@ -85,6 +121,27 @@
         .modal-wp .wp-screenshot-item { border-radius: 8px; overflow: hidden; border: 1px solid #e5e5e5; background: #fafafa; }
         .modal-wp .wp-screenshot-item img { width: 100%; height: auto; display: block; }
         .modal-wp .wp-screenshot-item figcaption { font-size: 11px; color: #86868b; padding: 6px 10px; border-top: 1px solid #f0f0f0; line-height: 1.4; }
+
+        /* Anatomy / Blocks */
+        .doc-anatomy { display: flex; flex-direction: column; }
+        .doc-anatomy-item { display: flex; align-items: baseline; gap: 16px; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+        .doc-anatomy-item:last-child { border-bottom: none; }
+        .doc-anatomy-tag { font-family: monospace; font-size: 12px; font-weight: 600; color: var(--color-green); min-width: 200px; flex-shrink: 0; line-height: 1.5; }
+        .doc-anatomy-role { font-size: 13px; color: #6e6e73; line-height: 1.5; }
+        .doc-anatomy-depth-0 .doc-anatomy-tag { padding-left: 0; }
+        .doc-anatomy-depth-1 .doc-anatomy-tag { padding-left: 16px; }
+        .doc-anatomy-depth-2 .doc-anatomy-tag { padding-left: 32px; }
+        .doc-anatomy-depth-1 .doc-anatomy-tag::before { content: "└ "; color: #d0d0d0; }
+        .doc-anatomy-depth-2 .doc-anatomy-tag::before { content: "  └ "; color: #d0d0d0; }
+
+        /* Design tokens */
+        .doc-tokens-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .doc-token { display: flex; align-items: center; gap: 10px; border: 1px solid #e5e5e5; border-radius: 8px; padding: 10px 14px; background: #fafafa; min-width: 180px; }
+        .doc-token-swatch { width: 36px; height: 36px; border-radius: 6px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.08); }
+        .doc-token-swatch.font { background: #1d1d1f; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
+        .doc-token-info { display: flex; flex-direction: column; gap: 2px; }
+        .doc-token-name { font-family: monospace; font-size: 11px; color: #86868b; }
+        .doc-token-value { font-size: 12px; font-weight: 700; color: #1d1d1f; }
 
         @media (max-width: 1100px) { .showcase-grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 768px) {
@@ -102,130 +159,338 @@
         <p>All blocks and pages delivered for the FMNR website — a living reference for design and development.</p>
     </header>
 
-    <!-- BLOCKS -->
+    <!-- CORE BLOCKS — Indivisible primitive elements (Atoms) -->
     <section class="category">
-        <p class="category-label">Blocks</p>
+        <p class="category-label">Core Blocks (Atoms)</p>
         <div class="showcase-grid">
 
-            <a href="index.html" class="showcase-card" data-title="Video Hero Banner">
-                <h3 class="showcase-card__title">Video Hero Banner</h3>
-                <p class="showcase-card__desc">Full-viewport autoplay video with gradient overlay and text toggle</p>
+            <a href="heading-demo.html" class="showcase-card" data-title="Heading">
+                <h3 class="showcase-card__title">Heading</h3>
+                <p class="showcase-card__desc">FatFrank display heading (H1–H4) with clamp() responsive sizing</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="mega-menu-demo.html" class="showcase-card" data-title="Mega Menu">
-                <h3 class="showcase-card__title">Mega Menu</h3>
-                <p class="showcase-card__desc">Desktop mega dropdown & mobile hamburger navigation</p>
+            <a href="body-text-demo.html" class="showcase-card" data-title="Body Text">
+                <h3 class="showcase-card__title">Body Text</h3>
+                <p class="showcase-card__desc">Lato paragraph — regular, small, and caption variants with token-based line height</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="search-demo.html" class="showcase-card" data-title="Search">
-                <h3 class="showcase-card__title">Search</h3>
-                <p class="showcase-card__desc">Predictive search overlay with results page</p>
+            <a href="button-demo.html" class="showcase-card" data-title="Button">
+                <h3 class="showcase-card__title">Button</h3>
+                <p class="showcase-card__desc">Primary (green), Secondary (outline), and Ghost variants with hover states</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="contact-demo.html" class="showcase-card" data-title="Contact & Newsletter">
-                <h3 class="showcase-card__title">Contact & Newsletter</h3>
-                <p class="showcase-card__desc">Form layout with newsletter sign-up</p>
+            <a href="icon-demo.html" class="showcase-card" data-title="Icon">
+                <h3 class="showcase-card__title">Icon</h3>
+                <p class="showcase-card__desc">Inline SVG from the 18-icon library — scalable, token-coloured</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="map-demo.html" class="showcase-card" data-title="Interactive Map">
-                <h3 class="showcase-card__title">Interactive Map</h3>
-                <p class="showcase-card__desc">Leaflet map with country cards and mobile carousel</p>
+            <a href="image-demo.html" class="showcase-card" data-title="Image">
+                <h3 class="showcase-card__title">Image</h3>
+                <p class="showcase-card__desc">Responsive image with optional Ken Burns animation class</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="partner-cards-demo.html" class="showcase-card" data-title="Cards">
-                <h3 class="showcase-card__title">Cards</h3>
-                <p class="showcase-card__desc">Image & video cards with 1–4 column layout options</p>
+            <a href="video-demo.html" class="showcase-card" data-title="Video">
+                <h3 class="showcase-card__title">Video</h3>
+                <p class="showcase-card__desc">Autoplay/muted video embed with optional poster frame</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="scroll-animations-demo.html" class="showcase-card" data-title="Scroll Animations">
-                <h3 class="showcase-card__title">Scroll Animations</h3>
-                <p class="showcase-card__desc">8 documented animation patterns: fade-up, stagger, parallax, scale-in, count-up, slide-in, bar chart & Ken Burns</p>
+            <a href="tag-demo.html" class="showcase-card" data-title="Tag">
+                <h3 class="showcase-card__title">Tag</h3>
+                <p class="showcase-card__desc">Pill label for categories or dates (e.g. "Agriculture", "2024")</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="tony-blocks-demo.html#hero" class="showcase-card" data-title="Image Hero with Overlay">
-                <h3 class="showcase-card__title">Image Hero with Overlay</h3>
-                <p class="showcase-card__desc">Full-viewport image hero with gradient overlay, eyebrow label and Ken Burns animation</p>
+            <a href="stat-number-demo.html" class="showcase-card" data-title="Stat Number">
+                <h3 class="showcase-card__title">Stat Number</h3>
+                <p class="showcase-card__desc">Animated count-up figure in FatFrank — pear or teal colour token</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="tony-blocks-demo.html#timeline" class="showcase-card" data-title="Timeline Accordion">
-                <h3 class="showcase-card__title">Timeline Accordion</h3>
-                <p class="showcase-card__desc">Expandable year-based timeline with images — reusable for any chronological content</p>
+            <a href="divider-demo.html" class="showcase-card" data-title="Divider">
+                <h3 class="showcase-card__title">Divider</h3>
+                <p class="showcase-card__desc">Coloured horizontal rule — green, orange, or any token-based colour</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="tony-blocks-demo.html#bio" class="showcase-card" data-title="Split Bio Panel">
-                <h3 class="showcase-card__title">Split Bio Panel</h3>
-                <p class="showcase-card__desc">Photo + text split layout with tags — reusable for team members or profiles</p>
+            <a href="spacer-demo.html" class="showcase-card" data-title="Spacer">
+                <h3 class="showcase-card__title">Spacer</h3>
+                <p class="showcase-card__desc">Token-based vertical spacing (--space-sm through --space-xl)</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="tony-blocks-demo.html#quote" class="showcase-card" data-title="Pull Quote Band">
-                <h3 class="showcase-card__title">Pull Quote Band</h3>
-                <p class="showcase-card__desc">Full-width coloured quote section with attribution — reusable on any page</p>
+            <a href="form-field-demo.html" class="showcase-card" data-title="Form Field">
+                <h3 class="showcase-card__title">Form Field</h3>
+                <p class="showcase-card__desc">Label + input/textarea/select — text, email, dropdown and message variants</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="tony-blocks-demo.html#pillars" class="showcase-card" data-title="Numbered Pillars">
-                <h3 class="showcase-card__title">Numbered Pillars</h3>
-                <p class="showcase-card__desc">Three-column numbered feature cards — reusable for values, steps or principles</p>
+            <a href="list-item-demo.html" class="showcase-card" data-title="List Item">
+                <h3 class="showcase-card__title">List Item</h3>
+                <p class="showcase-card__desc">Single row item with optional icon, used in search results and link lists</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="tony-blocks-demo.html#awards" class="showcase-card" data-title="Awards Grid">
-                <h3 class="showcase-card__title">Awards Grid</h3>
-                <p class="showcase-card__desc">Three-column card grid with icon badges — reusable for awards, milestones or features</p>
+        </div>
+    </section>
+
+    <!-- CUSTOM BLOCKS — Single-purpose reusable blocks (Molecules) -->
+    <section class="category">
+        <p class="category-label">Custom Blocks (Molecules)</p>
+        <div class="showcase-grid">
+
+            <a href="pull-quote-demo.html" class="showcase-card" data-title="Pull Quote Band">
+                <h3 class="showcase-card__title">Pull Quote</h3>
+                <p class="showcase-card__desc">Full-width coloured quote band with attribution text</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="tony-blocks-demo.html#media-cards" class="showcase-card" data-title="Media Cards Grid">
-                <h3 class="showcase-card__title">Media Cards Grid</h3>
-                <p class="showcase-card__desc">Four-column link cards for podcasts, articles or external resources</p>
-                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </a>
-
-            <a href="tony-blocks-demo.html#cta" class="showcase-card" data-title="CTA Band">
+            <a href="cta-band-demo.html" class="showcase-card" data-title="CTA Band">
                 <h3 class="showcase-card__title">CTA Band</h3>
                 <p class="showcase-card__desc">Dark full-width call-to-action with dual buttons — reusable section closer</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-        </div>
-    </section>
-
-    <!-- DATA VISUALISATION -->
-    <section class="category">
-        <p class="category-label">Data Visualisation</p>
-        <div class="showcase-grid">
-
-            <a href="data-viz-demo.html" class="showcase-card" data-title="Impact Stats">
-                <h3 class="showcase-card__title">Impact Stats</h3>
-                <p class="showcase-card__desc">Animated counting numbers with suffix labels — reusable on any page</p>
+            <a href="card-demo.html" class="showcase-card" data-title="Card">
+                <h3 class="showcase-card__title">Card</h3>
+                <p class="showcase-card__desc">Single card component with image, video, icon, blog, podcast, award and horizontal variants</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
             <a href="bar-chart-demo.html" class="showcase-card" data-title="Bar Chart">
                 <h3 class="showcase-card__title">Bar Chart</h3>
-                <p class="showcase-card__desc">Animated horizontal bar graph with percentage fills — reusable for any dataset</p>
+                <p class="showcase-card__desc">Animated horizontal bar graph with percentage fills</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="map-demo.html" class="showcase-card" data-title="Interactive Map">
-                <h3 class="showcase-card__title">Interactive Map</h3>
-                <p class="showcase-card__desc">Leaflet map with data cards — reusable for any geographic dataset</p>
+            <a href="data-viz-demo.html" class="showcase-card" data-title="Stat Tile">
+                <h3 class="showcase-card__title">Stat Tile</h3>
+                <p class="showcase-card__desc">Single stat number with suffix label and count-up animation</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="mega-menu-demo.html" class="showcase-card" data-title="Nav Item">
+                <h3 class="showcase-card__title">Nav Item</h3>
+                <p class="showcase-card__desc">Icon + title + description navigation link used inside mega menu panels</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="scroll-animations-demo.html" class="showcase-card" data-title="Scroll Animation">
+                <h3 class="showcase-card__title">Scroll Animation</h3>
+                <p class="showcase-card__desc">Wrapper block with animation attribute — fade-up, stagger, parallax, scale-in, count-up, slide-in, bar-fill & Ken Burns</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="timeline-demo.html" class="showcase-card" data-title="Timeline Entry">
+                <h3 class="showcase-card__title">Timeline Entry</h3>
+                <p class="showcase-card__desc">Single expandable year row — tag + heading + body text + image</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="pillars-demo.html" class="showcase-card" data-title="Pillar Card">
+                <h3 class="showcase-card__title">Pillar Card</h3>
+                <p class="showcase-card__desc">Numbered feature card with stat-number + heading + body text</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="awards-demo.html" class="showcase-card" data-title="Award Card">
+                <h3 class="showcase-card__title">Award Card</h3>
+                <p class="showcase-card__desc">Icon badge + heading + description — used in awards grids</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="search-demo.html" class="showcase-card" data-title="Search Result">
+                <h3 class="showcase-card__title">Search Result</h3>
+                <p class="showcase-card__desc">Result row with heading + description + category tag</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="media-cards-demo.html" class="showcase-card" data-title="Media Card">
+                <h3 class="showcase-card__title">Media Card</h3>
+                <p class="showcase-card__desc">Video or image thumbnail card with heading + tag — used in media grids</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="video-hero-demo.html" class="showcase-card" data-title="Video Controls">
+                <h3 class="showcase-card__title">Video Controls</h3>
+                <p class="showcase-card__desc">Play/pause and mute toggle buttons for hero background video</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="video-hero-demo.html" class="showcase-card" data-title="Progress Bar">
+                <h3 class="showcase-card__title">Progress Bar</h3>
+                <p class="showcase-card__desc">Fixed top scroll-progress indicator with scale-X animation</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="video-hero-demo.html" class="showcase-card" data-title="Scroll Hint">
+                <h3 class="showcase-card__title">Scroll Hint</h3>
+                <p class="showcase-card__desc">Animated bounce indicator at bottom of hero sections</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- BLOCK PATTERNS — Section-level compositions of multiple blocks -->
+    <section class="category">
+        <p class="category-label">Block Patterns (Organisms)</p>
+        <div class="showcase-grid">
+
+            <a href="card-grid-demo.html" class="showcase-card" data-title="Card Grid">
+                <h3 class="showcase-card__title">Card Grid</h3>
+                <p class="showcase-card__desc">1–4 column responsive grid with image, video, icon, blog, podcast and award card variants</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="video-hero-demo.html" class="showcase-card" data-title="Video Hero Banner">
+                <h3 class="showcase-card__title">Hero Video</h3>
+                <p class="showcase-card__desc">Full-viewport autoplay video with gradient overlay, heading and text toggle</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="image-hero-demo.html" class="showcase-card" data-title="Image Hero with Overlay">
+                <h3 class="showcase-card__title">Hero Image</h3>
+                <p class="showcase-card__desc">Full-viewport image hero with gradient overlay, eyebrow label and Ken Burns animation</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="split-bio-demo.html" class="showcase-card" data-title="Split Bio Panel">
+                <h3 class="showcase-card__title">Split Bio</h3>
+                <p class="showcase-card__desc">Photo + text split layout with tags — reusable for team members or profiles</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="timeline-demo.html" class="showcase-card" data-title="Timeline Accordion">
+                <h3 class="showcase-card__title">Timeline</h3>
+                <p class="showcase-card__desc">Expandable year-based timeline with images — reusable for any chronological content</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="pillars-demo.html" class="showcase-card" data-title="Numbered Pillars">
+                <h3 class="showcase-card__title">Numbered Pillars</h3>
+                <p class="showcase-card__desc">Three-column numbered feature cards — reusable for values, steps or principles</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="awards-demo.html" class="showcase-card" data-title="Awards Grid">
+                <h3 class="showcase-card__title">Awards Grid</h3>
+                <p class="showcase-card__desc">Three-column card grid with icon badges — reusable for awards, milestones or features</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="media-cards-demo.html" class="showcase-card" data-title="Media Cards Grid">
+                <h3 class="showcase-card__title">Media Grid</h3>
+                <p class="showcase-card__desc">Four-column link cards for podcasts, articles or external resources</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="contact-demo.html" class="showcase-card" data-title="Contact Form">
+                <h3 class="showcase-card__title">Contact Form</h3>
+                <p class="showcase-card__desc">Form layout with grouped fields and newsletter sign-up</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="map-demo.html" class="showcase-card" data-title="Map Section">
+                <h3 class="showcase-card__title">Map Section</h3>
+                <p class="showcase-card__desc">Interactive Leaflet map with country data cards and mobile carousel</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
             <a href="stat-stack-demo.html" class="showcase-card" data-title="Stat Stack">
                 <h3 class="showcase-card__title">Stat Stack</h3>
-                <p class="showcase-card__desc">Vertical stack of bold headline statistics with animated count-up numbers and staggered reveal</p>
+                <p class="showcase-card__desc">Responsive grid of stat tiles with animated count-up numbers</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="search-demo.html" class="showcase-card" data-title="Search Overlay">
+                <h3 class="showcase-card__title">Search Overlay</h3>
+                <p class="showcase-card__desc">Full-screen predictive search with categorised results</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="intro-strip-demo.html" class="showcase-card" data-title="Intro Strip">
+                <h3 class="showcase-card__title">Intro Strip</h3>
+                <p class="showcase-card__desc">Two-column text block with large statement left and body copy right</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="editorial-band-demo.html" class="showcase-card" data-title="Editorial Band">
+                <h3 class="showcase-card__title">Editorial Band</h3>
+                <p class="showcase-card__desc">Full-bleed parallax image with gradient scrim, eyebrow, stat headline and body text</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="twin-panels-demo.html" class="showcase-card" data-title="Twin Panels">
+                <h3 class="showcase-card__title">Twin Panels</h3>
+                <p class="showcase-card__desc">Two side-by-side image cards with overlay text, tag and link</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="photo-grid-demo.html" class="showcase-card" data-title="Photo Grid">
+                <h3 class="showcase-card__title">Photo Grid</h3>
+                <p class="showcase-card__desc">Three-column image grid with overlay captions</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="hub-section-demo.html" class="showcase-card" data-title="Hub Section">
+                <h3 class="showcase-card__title">Hub Section</h3>
+                <p class="showcase-card__desc">Media + content split with icon link list — learning hub layout</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="stories-carousel-demo.html" class="showcase-card" data-title="Stories Carousel">
+                <h3 class="showcase-card__title">Stories Carousel</h3>
+                <p class="showcase-card__desc">Horizontal scrollable story cards with progress bar and prev/next controls</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="story-block-demo.html" class="showcase-card" data-title="Story Block">
+                <h3 class="showcase-card__title">Story Block</h3>
+                <p class="showcase-card__desc">Full-bleed image with parallax, gradient scrim, blockquote and CTA button</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="growth-steps-demo.html" class="showcase-card" data-title="Growth Steps">
+                <h3 class="showcase-card__title">Growth Steps</h3>
+                <p class="showcase-card__desc">Four-step numbered grid with illustrations — how-it-works pattern</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="newsletter-demo.html" class="showcase-card" data-title="Newsletter">
+                <h3 class="showcase-card__title">Newsletter</h3>
+                <p class="showcase-card__desc">Centered email sign-up section with heading, body and inline form</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- TEMPLATE PARTS — Reusable site-wide structural elements -->
+    <section class="category">
+        <p class="category-label">Template Parts</p>
+        <div class="showcase-grid">
+
+            <a href="mega-menu-demo.html" class="showcase-card" data-title="Mega Menu">
+                <h3 class="showcase-card__title">Header</h3>
+                <p class="showcase-card__desc">Site header with mega menu navigation, search trigger and CTA button</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="mega-menu-v2-demo.html" class="showcase-card" data-title="Mega Menu Alternate Layouts">
+                <h3 class="showcase-card__title">Mega Menu Alternate Layouts</h3>
+                <p class="showcase-card__desc">Three alternate layout variations — Standard 3-col, Compact List and Immersive Dark</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="footer-demo.html" class="showcase-card" data-title="Footer">
+                <h3 class="showcase-card__title">Footer</h3>
+                <p class="showcase-card__desc">Site footer with nav links, newsletter sign-up and social icons</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
@@ -233,9 +498,9 @@
     </section>
 
 
-    <!-- PAGES -->
+    <!-- TEMPLATES — Full page compositions -->
     <section class="category">
-        <p class="category-label">Pages</p>
+        <p class="category-label">Templates (Pages)</p>
         <div class="showcase-grid">
 
             <a href="index.html" class="showcase-card" data-title="Homepage">
@@ -274,6 +539,60 @@
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
+            <a href="blog.html" class="showcase-card" data-title="Blog">
+                <h3 class="showcase-card__title">Blog</h3>
+                <p class="showcase-card__desc">Blog listing page with featured post and card grid</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="blog-post-niger.html" class="showcase-card" data-title="Blog Post">
+                <h3 class="showcase-card__title">Blog Post</h3>
+                <p class="showcase-card__desc">Single blog post article template with hero image and sidebar</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="search.html" class="showcase-card" data-title="Search">
+                <h3 class="showcase-card__title">Search</h3>
+                <p class="showcase-card__desc">Site-wide search results page with filtering</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="resources-fundamentals.html" class="showcase-card" data-title="Resources — Fundamentals">
+                <h3 class="showcase-card__title">Resources — Fundamentals</h3>
+                <p class="showcase-card__desc">FMNR fundamentals resource collection page</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="resources-research.html" class="showcase-card" data-title="Resources — Research">
+                <h3 class="showcase-card__title">Resources — Research</h3>
+                <p class="showcase-card__desc">Academic research and evidence collection page</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="resources-case-studies.html" class="showcase-card" data-title="Resources — Case Studies">
+                <h3 class="showcase-card__title">Resources — Case Studies</h3>
+                <p class="showcase-card__desc">Country and project case study collection page</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="resources-country.html" class="showcase-card" data-title="Resources — Country Profiles">
+                <h3 class="showcase-card__title">Resources — Country Profiles</h3>
+                <p class="showcase-card__desc">Country-specific FMNR data and resources</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="resources-ecourse.html" class="showcase-card" data-title="Resources — E-Course">
+                <h3 class="showcase-card__title">Resources — E-Course</h3>
+                <p class="showcase-card__desc">Online learning modules and training course page</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="mega-menu-v2-demo.html" class="showcase-card" data-title="Mega Menu Alternate Layouts">
+                <h3 class="showcase-card__title">Mega Menu Alternate Layouts</h3>
+                <p class="showcase-card__desc">Three alternate layout variations with switchable section data</p>
+                <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
         </div>
     </section>
 
@@ -282,7 +601,7 @@
         <p class="category-label">Information Architecture</p>
         <div class="showcase-grid">
 
-            <a href="sitemap.html" class="showcase-card" data-title="Sitemap">
+            <a href="sitemap.html#tree" class="showcase-card" data-title="Sitemap">
                 <h3 class="showcase-card__title">Sitemap</h3>
                 <p class="showcase-card__desc">Complete site structure showing all pages, hierarchy and navigation paths</p>
                 <span class="showcase-card__link">Preview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
@@ -361,6 +680,10 @@
             </div>
         </div>
     </div>
+
+    <!-- Lucide icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
 
     <script>
     (function() {
@@ -455,6 +778,20 @@
                 label: "Block",
                 desc: "Full-viewport autoplay video with gradient overlay, animated headline and dual CTA buttons.",
                 where: "Homepage",
+                blocks: [
+                    { tag: 'section.hero', role: 'Full-viewport wrapper — position: relative, overflow: hidden', depth: 0 },
+                    { tag: 'video', role: 'Background media — autoplay muted loop, object-fit: cover', depth: 1 },
+                    { tag: '.hero-overlay', role: 'Gradient scrim — rgba black → transparent, ensures text contrast', depth: 1 },
+                    { tag: '.hero-content', role: 'Text layer — absolute centered flex column', depth: 1 },
+                    { tag: 'h1', role: 'Headline — FatFrank uppercase, clamp(40px, 6vw, 96px)', depth: 2 },
+                    { tag: '.btn-group', role: 'CTA pair — primary fill + secondary outline', depth: 2 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Primary Green' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Headings' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Body' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Charcoal' },
+                ],
                 behaviour: [
                     "Video autoplays muted and loops on desktop; pauses on mobile to save data",
                     "Dark gradient overlay ensures text readability over any video frame",
@@ -493,6 +830,23 @@
                 label: "Block",
                 desc: "Multi-column navigation dropdown on desktop with full-screen hamburger drawer on mobile.",
                 where: "All pages",
+                blocks: [
+                    { tag: 'header.site-header', role: 'Sticky top bar — z-index 1000, white background', depth: 0 },
+                    { tag: 'nav.nav-links', role: 'Top-level nav items — flex row, hover triggers mega panel', depth: 1 },
+                    { tag: '.mega-menu', role: 'Dropdown shell — absolute, full-width, opacity transition', depth: 1 },
+                    { tag: '.mega-col-heading', role: 'Col 1: Section title (FatFrank 48px green) + description + link', depth: 2 },
+                    { tag: '.mega-col-cards', role: 'Col 2: Stacked nav item cards with icon box, label and description', depth: 2 },
+                    { tag: '.mega-card', role: 'Individual nav item — bordered card, icon (80×60px) + text body', depth: 3 },
+                    { tag: '.mega-col-feature', role: 'Col 3: Full-height feature card with gradient image and overlay', depth: 2 },
+                    { tag: '.mega-backdrop', role: 'Blurred overlay behind dropdown — closes menu on click', depth: 1 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Active states, icons, borders' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Section title' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Labels and descriptions' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Body text' },
+                    { token: 'shadow', value: 'rgba(0,0,0,0.05)', type: 'color', label: 'drop-shadow(0 12px 16px)' },
+                ],
                 behaviour: [
                     "Desktop: hover triggers mega dropdown with columns of categorised links",
                     "Each column has a heading and 4-6 sub-links with descriptions",
@@ -533,6 +887,20 @@
                 label: "Block",
                 desc: "Full-screen search overlay with predictive results that appear as the user types.",
                 where: "All pages (via navigation bar)",
+                blocks: [
+                    { tag: '.search-trigger', role: 'Icon button in header — opens overlay on click or "/" keypress', depth: 0 },
+                    { tag: '.search-overlay', role: 'Full-screen fixed panel — backdrop-filter blur, z-index 9999', depth: 0 },
+                    { tag: '.search-input', role: 'Text input — autofocused, debounced at 200ms', depth: 1 },
+                    { tag: '.search-results', role: 'Results list — grouped by category (Pages, Resources, Topics)', depth: 1 },
+                    { tag: '.result-item', role: 'Individual result — icon + label + description, keyboard navigable', depth: 2 },
+                    { tag: '.recent-searches', role: 'Shown when input is empty — last 5 searches from localStorage', depth: 1 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Result highlights, focus ring' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Input and results text' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Result labels' },
+                    { token: 'blur', value: 'backdrop-filter: blur(12px)', type: 'size', label: 'Overlay blur' },
+                ],
                 behaviour: [
                     "Click search icon or press '/' to open overlay",
                     "Results filter instantly as user types (client-side matching)",
@@ -571,6 +939,20 @@
                 label: "Block",
                 desc: "Split-panel contact form with inline newsletter email capture.",
                 where: "Partner page, footer",
+                blocks: [
+                    { tag: '.contact-section', role: 'Two-column wrapper — 50/50 split, stacks on mobile at 768px', depth: 0 },
+                    { tag: '.contact-form', role: 'Left column — Name, Email, Message fields + Submit button', depth: 1 },
+                    { tag: 'input, textarea', role: 'Form controls — HTML5 validation, custom error states', depth: 2 },
+                    { tag: '.form-error', role: 'Inline validation message — red border + helper text on blur', depth: 2 },
+                    { tag: '.newsletter-panel', role: 'Right column — email-only signup with success state', depth: 1 },
+                    { tag: '.newsletter-input', role: 'Email input + submit — shows tick animation on success', depth: 2 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Submit buttons, success states' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Form labels and inputs' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Field text' },
+                    { token: 'error', value: '#c0392b', type: 'color', label: '#c0392b — Validation error state' },
+                ],
                 behaviour: [
                     "Form validates fields inline on blur (name, email, message required)",
                     "Submit button disabled until all required fields pass validation",
@@ -612,6 +994,20 @@
                 label: "Block / Data Vis",
                 desc: "Leaflet.js interactive map with pin markers that reveal rich data cards on click.",
                 where: "Homepage, Impact page",
+                blocks: [
+                    { tag: '.map-section', role: 'Outer wrapper — contains map and sidebar', depth: 0 },
+                    { tag: '#leaflet-map', role: 'Leaflet.js canvas — OpenStreetMap tiles, custom green pin markers', depth: 1 },
+                    { tag: '.map-marker', role: 'Country pin — custom SVG icon, click opens popup card', depth: 2 },
+                    { tag: '.map-popup', role: 'Data card — country name, hectares, people, trees stats', depth: 2 },
+                    { tag: '.country-carousel', role: 'Mobile view — swipeable card strip shown below map', depth: 1 },
+                    { tag: '.country-card', role: 'Individual country card — flag, key stats, CTA link', depth: 2 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Map pins and card accents' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Country names' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Stats and labels' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Body text' },
+                ],
                 behaviour: [
                     "Map loads centred on Africa with zoom level showing all FMNR countries",
                     "Custom green pin markers for each country",
@@ -652,6 +1048,21 @@
                 label: "Block",
                 desc: "Responsive card grid supporting image, video and text variants in 1-4 column layouts.",
                 where: "Partner page, Resources page",
+                blocks: [
+                    { tag: '.cards-grid', role: 'CSS Grid wrapper — 1–4 columns, gap 24px, auto-responsive', depth: 0 },
+                    { tag: '.card', role: 'Individual card — <a> tag, border-radius 12px, hover lift shadow', depth: 1 },
+                    { tag: '.card-media', role: 'Image or video container — aspect-ratio box, object-fit: cover', depth: 2 },
+                    { tag: '.card-body', role: 'Text area — flex column, padding 16px', depth: 2 },
+                    { tag: '.card-label', role: 'Eyebrow label — uppercase 11px, category or content type', depth: 3 },
+                    { tag: '.card-title', role: 'Card heading — 16px bold, 2-line clamp', depth: 3 },
+                    { tag: '.card-cta', role: 'Arrow link — green, appears on hover', depth: 3 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — CTA links and hover states' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Card titles' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Labels and descriptions' },
+                    { token: 'shadow', value: 'rgba(0,0,0,0.08)', type: 'color', label: '0 8px 30px — Hover shadow' },
+                ],
                 behaviour: [
                     "Cards support three variants: image thumbnail, video embed, text-only",
                     "Hover state: subtle lift with shadow transition",
@@ -691,6 +1102,22 @@
                 label: "Interaction",
                 desc: "8 animation patterns used across the site, all triggered on scroll using GSAP + ScrollTrigger.",
                 where: "All pages",
+                blocks: [
+                    { tag: '[data-animate]', role: 'Any element with this attribute is observed by IntersectionObserver', depth: 0 },
+                    { tag: '.fade-up', role: 'Fades in + rises 24px — general content reveal', depth: 1 },
+                    { tag: '.stagger-group > *', role: 'Children animate sequentially with 80ms delay per item', depth: 1 },
+                    { tag: '.parallax', role: 'Moves at a fraction of scroll speed — depth effect on images', depth: 1 },
+                    { tag: '.scale-in', role: 'Grows from 92% → 100% opacity 0 → 1 on enter', depth: 1 },
+                    { tag: '.count-up[data-target]', role: 'Counts from 0 to data-target value using rAF loop', depth: 1 },
+                    { tag: '.slide-left / .slide-right', role: 'Slides in from 40px off-axis — for split layouts', depth: 1 },
+                    { tag: '.bar-fill[data-pct]', role: 'Expands width from 0 to data-pct% — horizontal bar animation', depth: 1 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Bar fills and highlights' },
+                    { token: 'duration', value: '0.6s', type: 'size', label: 'Base animation duration' },
+                    { token: 'easing', value: 'cubic-bezier(0.4,0,0.2,1)', type: 'size', label: 'Material easing curve' },
+                    { token: 'stagger', value: '80ms', type: 'size', label: 'Stagger delay between children' },
+                ],
                 behaviour: [
                     "Fade-up: elements slide up 32px and fade in as they enter viewport",
                     "Stagger: grid items animate sequentially with 80ms delay between each",
@@ -733,6 +1160,20 @@
                 label: "Block",
                 desc: "Full-viewport image hero with Ken Burns animation, dark gradient overlay and eyebrow label.",
                 where: "Tony Rinaudo page",
+                blocks: [
+                    { tag: 'section.image-hero', role: 'Full-viewport wrapper — position: relative, overflow: hidden', depth: 0 },
+                    { tag: 'img.hero-bg', role: 'Background image — object-fit: cover, Ken Burns scale animation', depth: 1 },
+                    { tag: '.hero-gradient', role: 'Gradient overlay — dark bottom to transparent, ensures readability', depth: 1 },
+                    { tag: '.hero-eyebrow', role: 'Label chip — uppercase 11px, above main heading', depth: 1 },
+                    { tag: 'h1.hero-heading', role: 'Main title — FatFrank uppercase, white, clamp sizing', depth: 1 },
+                    { tag: '.hero-cta', role: 'Primary action button — green fill, tracks into view on load', depth: 1 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — CTA button' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Hero title' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Eyebrow label' },
+                    { token: 'ken-burns', value: 'scale(1.08)', type: 'size', label: 'Ken Burns end scale' },
+                ],
                 behaviour: [
                     "Image fills 100vh with slow Ken Burns zoom animation (12s loop)",
                     "Dark gradient overlay from bottom ensures text readability",
@@ -772,6 +1213,21 @@
                 label: "Block",
                 desc: "Vertical timeline with expandable year entries revealing detail text and images.",
                 where: "Tony Rinaudo page",
+                blocks: [
+                    { tag: '.timeline', role: 'Vertical list container — CSS grid with left timeline rail', depth: 0 },
+                    { tag: '.timeline-item', role: 'Year entry — collapsed by default, expanded on click', depth: 1 },
+                    { tag: '.timeline-year', role: 'Year label + toggle button — FatFrank green, click handler', depth: 2 },
+                    { tag: '.timeline-dot', role: 'Circle on the rail — green when active, grey when collapsed', depth: 2 },
+                    { tag: '.timeline-content', role: 'Expandable area — image + text, height transitions 0 → auto', depth: 2 },
+                    { tag: '.timeline-image', role: 'Optional photo — 16:9 aspect ratio, object-fit: cover', depth: 3 },
+                    { tag: '.timeline-text', role: 'Body copy for the year event', depth: 3 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Active dot, year label' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Year number' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Event description' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Collapsed text' },
+                ],
                 behaviour: [
                     "Vertical line connects all timeline entries",
                     "Each entry shows year and title — click to expand",
@@ -812,6 +1268,21 @@
                 label: "Block",
                 desc: "50/50 image-text split layout with role tags and multi-paragraph biography.",
                 where: "Tony Rinaudo page",
+                blocks: [
+                    { tag: '.bio-section', role: '50/50 two-column wrapper — CSS Grid, stacks on mobile', depth: 0 },
+                    { tag: '.bio-image-col', role: 'Left column — full-bleed image with optional Ken Burns', depth: 1 },
+                    { tag: 'img.bio-photo', role: 'Portrait or action photo — object-fit: cover, full column height', depth: 2 },
+                    { tag: '.bio-text-col', role: 'Right column — padded flex column, vertically centred', depth: 1 },
+                    { tag: '.bio-tags', role: 'Pill tags — role, affiliation or topic labels', depth: 2 },
+                    { tag: 'h2.bio-name', role: 'Subject name — FatFrank uppercase', depth: 2 },
+                    { tag: '.bio-body', role: 'Description paragraphs — Lato Regular 16px', depth: 2 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Tag pills and accents' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Name heading' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Bio text' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Body text colour' },
+                ],
                 behaviour: [
                     "Left: large rounded portrait photo",
                     "Right: role tags (green pills), name heading, multi-paragraph bio",
@@ -850,6 +1321,18 @@
                 label: "Block",
                 desc: "Full-width coloured band with large italic quotation and attribution.",
                 where: "Tony Rinaudo, Impact pages",
+                blocks: [
+                    { tag: 'section.quote-band', role: 'Full-bleed band — background colour, padding 96px top/bottom', depth: 0 },
+                    { tag: '.quote-mark', role: 'Decorative opening quote character — oversized, low opacity', depth: 1 },
+                    { tag: 'blockquote', role: 'Quote text — FatFrank or large Lato, centred, max-width 800px', depth: 1 },
+                    { tag: 'cite.quote-attribution', role: 'Speaker name and title — smaller text below quote', depth: 1 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Band background (green variant)' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Band background (dark variant)' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Quote text' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Attribution' },
+                ],
                 behaviour: [
                     "Full-bleed green background breaks up page content visually",
                     "Large italic quote text (serif or heading font for contrast)",
@@ -889,6 +1372,20 @@
                 label: "Block",
                 desc: "Three-column numbered feature cards for values, steps or principles.",
                 where: "Tony Rinaudo page",
+                blocks: [
+                    { tag: '.pillars-section', role: 'Section wrapper — max-width 1280px, centred', depth: 0 },
+                    { tag: '.pillars-grid', role: 'Three-column CSS Grid — gap 32px, collapses to 1 col on mobile', depth: 1 },
+                    { tag: '.pillar-card', role: 'Individual pillar — flex column, border-radius 12px, hover shadow', depth: 2 },
+                    { tag: '.pillar-number', role: 'Large numeral — FatFrank ~72px, green or low-opacity charcoal', depth: 3 },
+                    { tag: 'h3.pillar-heading', role: 'Pillar title — 20px bold', depth: 3 },
+                    { tag: 'p.pillar-body', role: 'Supporting description — 15px regular', depth: 3 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Numeral colour' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Large numeral' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Pillar body text' },
+                    { token: 'stagger', value: '120ms', type: 'size', label: 'Scroll stagger delay' },
+                ],
                 behaviour: [
                     "Three cards in a row, each with large numeral (01, 02, 03)",
                     "Below numeral: heading and supporting paragraph",
@@ -927,6 +1424,21 @@
                 label: "Block",
                 desc: "Three-column card grid with trophy icons, year badges and award details.",
                 where: "Tony Rinaudo page",
+                blocks: [
+                    { tag: '.awards-section', role: 'Section wrapper — max-width 1280px, centred', depth: 0 },
+                    { tag: '.awards-grid', role: 'Three-column CSS Grid — collapses to 1 col on mobile', depth: 1 },
+                    { tag: '.award-card', role: 'Individual card — border-radius 12px, hover lift shadow', depth: 2 },
+                    { tag: '.award-icon', role: 'Trophy or badge SVG — inline, 40px, green stroke', depth: 3 },
+                    { tag: '.award-year', role: 'Pill badge — small uppercase, grey background', depth: 3 },
+                    { tag: 'h3.award-name', role: 'Award title — 16px bold', depth: 3 },
+                    { tag: 'p.award-body', role: 'Issuing body or description — 14px regular', depth: 3 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Trophy icon stroke' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Card text' },
+                    { token: 'shadow', value: 'rgba(0,0,0,0.08)', type: 'color', label: '0 8px 24px — Hover shadow' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#464646 — Body text' },
+                ],
                 behaviour: [
                     "Cards show: trophy icon, year, award name, issuing body",
                     "Stagger-animate on scroll (cascade effect)",
@@ -965,6 +1477,19 @@
                 label: "Block",
                 desc: "Four-column grid of external link cards with thumbnails and source labels.",
                 where: "Tony Rinaudo page",
+                blocks: [
+                    { tag: '.media-grid', role: 'Four-column grid — responsive, collapses to 2 then 1 on mobile', depth: 0 },
+                    { tag: '.media-card', role: 'External link card — <a target="_blank">, hover lift', depth: 1 },
+                    { tag: '.media-card-thumb', role: 'Thumbnail — aspect-ratio 16/9, object-fit: cover, hover scale', depth: 2 },
+                    { tag: '.media-card-source', role: 'Source label — uppercase 11px (e.g. "BBC News")', depth: 2 },
+                    { tag: '.media-card-title', role: 'Article or podcast title — 2-line clamp', depth: 2 },
+                    { tag: '.media-card-ext', role: 'External link icon — small SVG, signals page exit', depth: 2 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Source label and hover accents' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Card labels and titles' },
+                    { token: 'shadow', value: 'rgba(0,0,0,0.08)', type: 'color', label: '0 8px 30px — Hover shadow' },
+                ],
                 behaviour: [
                     "Each card links to an external resource (opens in new tab)",
                     "Shows: thumbnail image, source label (e.g. 'BBC'), title",
@@ -1003,6 +1528,19 @@
                 label: "Block",
                 desc: "Dark charcoal full-width band with heading, supporting text and dual action buttons.",
                 where: "All pages (before footer)",
+                blocks: [
+                    { tag: 'section.cta-band', role: 'Full-bleed dark section — background #1d1d1f, padding 96px', depth: 0 },
+                    { tag: '.cta-inner', role: 'Centred text container — max-width 700px, flex column', depth: 1 },
+                    { tag: 'h2.cta-heading', role: 'Call-to-action headline — FatFrank uppercase, white', depth: 2 },
+                    { tag: 'p.cta-sub', role: 'Supporting text — Lato Regular, muted white', depth: 2 },
+                    { tag: '.cta-buttons', role: 'Button pair — primary green fill + secondary white outline', depth: 2 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Primary button' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#1d1d1f — Band background' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — CTA heading' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Supporting text' },
+                ],
                 behaviour: [
                     "Full-bleed dark background creates visual separation before footer",
                     "Heading + short supporting paragraph centred",
@@ -1042,6 +1580,20 @@
                 label: "Data Visualisation",
                 desc: "Animated counting numbers that count up from zero when scrolled into view.",
                 where: "Homepage, Impact, Partner pages",
+                blocks: [
+                    { tag: 'section.stats-band', role: 'Full-bleed green band — background var(--color-green), white text', depth: 0 },
+                    { tag: '.stats-grid', role: 'Four-column grid — flex row, wraps on mobile to 2×2', depth: 1 },
+                    { tag: '.stat-item', role: 'Individual stat — flex column, centred', depth: 2 },
+                    { tag: '.stat-number', role: 'Animated counter — FatFrank, counts 0 → target via rAF loop', depth: 3 },
+                    { tag: '.stat-suffix', role: 'Unit label — M, K, + — inline with number', depth: 3 },
+                    { tag: '.stat-label', role: 'Metric description — Lato 14px, below number', depth: 3 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Band background' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Counter numbers' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Stat labels' },
+                    { token: 'counter-duration', value: '2000ms', type: 'size', label: 'Count-up animation duration' },
+                ],
                 behaviour: [
                     "Green band with 4 stat counters in a row",
                     "Numbers animate from 0 to target value over ~2 seconds",
@@ -1083,6 +1635,21 @@
                 label: "Data Visualisation",
                 desc: "Animated horizontal bar chart with percentage fills on dark background.",
                 where: "Impact page",
+                blocks: [
+                    { tag: 'section.chart-section', role: 'Dark full-bleed wrapper — background #1d1d1f', depth: 0 },
+                    { tag: '.chart-grid', role: 'Vertical list of bar rows — flex column, gap 16px', depth: 1 },
+                    { tag: '.chart-row', role: 'Single metric row — label + bar track + percentage value', depth: 2 },
+                    { tag: '.bar-label', role: 'Metric name — left-aligned, 14px Lato', depth: 3 },
+                    { tag: '.bar-track', role: 'Full-width background rail — rounded, dark grey', depth: 3 },
+                    { tag: '.bar-fill', role: 'Animated fill — teal, width transitions 0% → data-pct% on scroll', depth: 4 },
+                    { tag: '.bar-pct', role: 'Percentage text — right-aligned, appears as bar fills', depth: 3 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Bar fill colour' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#1d1d1f — Chart background' },
+                    { token: '--font-body', value: 'Lato', type: 'font', label: 'Lato — Labels and values' },
+                    { token: 'bar-duration', value: '1.2s', type: 'size', label: 'Bar fill animation duration' },
+                ],
                 behaviour: [
                     "Horizontal bars animate from 0% width to target percentage",
                     "Animation triggers on scroll into viewport",
@@ -1124,6 +1691,19 @@
                 label: "Data Visualisation",
                 desc: "Vertical stack of bold headline statistics separated by rules — numbers animate on scroll.",
                 where: "Country pages (Ethiopia, Uganda), Homepage, World Vision FMNR page on fmnrhub.com.au",
+                blocks: [
+                    { tag: 'section.stat-stack', role: 'Container — max-width 900px, centred, background #f5f5f7', depth: 0 },
+                    { tag: '.stat-stack-item', role: 'Full-width stat row — flex row, separated by 2px rule', depth: 1 },
+                    { tag: 'hr.stat-divider', role: 'Dark horizontal rule — 2px solid #1d1d1f between items', depth: 1 },
+                    { tag: 'h3.stat-sentence', role: 'Stat sentence — FatFrank clamp(28px,4vw,48px), green colour', depth: 2 },
+                    { tag: 'span.stat-number', role: 'Animated counter — data-target holds end value, rAF count-up', depth: 3 },
+                ],
+                tokens: [
+                    { token: '--color-green', value: '#077D57', type: 'color', label: '#077D57 — Stat number colour' },
+                    { token: '--font-heading', value: 'FatFrank', type: 'font', label: 'FatFrank — Stat sentences' },
+                    { token: '--color-charcoal', value: '#464646', type: 'color', label: '#1d1d1f — Divider lines' },
+                    { token: 'stagger', value: '150ms', type: 'size', label: 'Reveal stagger between rows' },
+                ],
                 behaviour: [
                     "Each stat is a full-width sentence with an embedded animated number",
                     "Items separated by dark horizontal rules for visual rhythm",
@@ -1175,6 +1755,7 @@
                     iframe.style.display = 'none';
                     docsPanel.classList.add('visible');
                     wpPanel.classList.remove('visible');
+                    extractCodeFromIframe(titleEl.textContent);
                 } else if (tab === 'wordpress') {
                     iframe.style.display = 'none';
                     docsPanel.classList.remove('visible');
@@ -1187,60 +1768,236 @@
             });
         });
 
+        // Alias map: data-title → docs key
+        var docsAlias = {
+            "Search Overlay": "Search",
+            "Contact Form": "Contact & Newsletter",
+            "Map Section": "Interactive Map",
+            "Scroll Animation": "Scroll Animations",
+            "Card Grid": "Cards",
+            "Mega Menu": "Mega Menu",
+            "Stat Stack": "Stat Stack"
+        };
+
+        // Auto-generated docs for components without manual entries
+        var autoDocs = {
+            "Video Controls": { label:"Custom Block", desc:"Play/pause and mute toggle buttons for the hero background video. Positioned in the bottom-right corner of the hero viewport.", where:"Homepage", behaviour:["Play/pause toggles video playback and swaps icon state","Mute/unmute toggles audio and updates icon","Buttons use backdrop-filter blur for legibility over video","Hidden on mobile to save space — video autoplays muted"], technical:["Pure JS click handlers on button elements","SVG icon swap via style.display toggling","Positioned absolute within hero section, z-index above overlay","Accessible: aria-label on each button"], wordpress:{ desc:"Add play/pause and mute controls to a Cover block video using a small Custom HTML block positioned inside the Cover.", plugins:["None — uses core Custom HTML block"], steps:["Add a Cover block with a video background","Inside the Cover, add a Custom HTML block at the bottom","Paste the button SVG markup with onclick handlers","Style with inline CSS or add classes and use Additional CSS"], technical:["Cover block videos autoplay muted by default — mute toggle adds user control","Position the HTML block with position:absolute; bottom:24px; right:24px in Additional CSS","Video element is accessible via the Cover block's DOM — target it with querySelector in your script"] } },
+            "Progress Bar": { label:"Custom Block", desc:"Fixed scroll-progress indicator bar at the very top of the viewport. Width scales from 0% to 100% as user scrolls.", where:"Homepage", behaviour:["Bar width = scroll percentage of total page height","Fixed to top of viewport, always visible","Uses GSAP ScrollTrigger with scrub for smooth tracking","Height: 3px, green colour, no interaction"], technical:["GSAP gsap.to() with scaleX and scrub:true","Transform-origin: left so it grows from left to right","z-index above header","Position: fixed, top: 0, left: 0, width: 100%"], wordpress:{ desc:"Add a scroll progress bar using a lightweight JavaScript snippet in a Custom HTML widget or your theme's header.", plugins:["None — pure CSS + JS snippet"], steps:["Go to Appearance > Editor (or Customizer > Header)","Add a Custom HTML block at the very top of your header template","Paste a <div> with fixed positioning and a small JS scroll listener","Style the bar: height 3px, background var(--color-green), transform scaleX(0), transform-origin left"], technical:["JS: window.addEventListener('scroll', ...) to calculate scrollY / (docHeight - viewportHeight)","Apply the ratio as scaleX transform on the bar element","Performance: use requestAnimationFrame or passive scroll listener","Works with any theme — no plugin dependencies"] } },
+            "Scroll Hint": { label:"Custom Block", desc:"Animated 'Scroll' text with bouncing arrow indicator anchored to the bottom of hero sections.", where:"Homepage", behaviour:["Bouncing animation loops continuously via CSS keyframes","Fades out as user begins scrolling (opacity tied to scroll position)","Only visible on hero/full-viewport sections","Accessible: decorative only, hidden from screen readers"], technical:["CSS @keyframes bounce: translateY 0→8px→0","Opacity transition triggered by ScrollTrigger or IntersectionObserver","SVG arrow icon inline","aria-hidden='true' since it's decorative"], wordpress:{ desc:"Add a scroll hint using a Custom HTML block inside your Cover block hero.", plugins:["None — uses core Custom HTML block"], steps:["Inside your hero Cover block, add a Custom HTML block","Paste the SVG arrow and 'Scroll' text markup","Add a <style> tag with the bounce keyframe animation","Position it at the bottom centre with CSS"], technical:["Use position:absolute; bottom:32px; left:50%; transform:translateX(-50%)","Animation: @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }","Add aria-hidden='true' to keep it accessible","Optional: fade out on scroll with a small IntersectionObserver script"] } },
+            "Intro Strip": { label:"Block Pattern", desc:"Two-column text layout with a large statement on the left and supporting body copy with a link on the right.", where:"Homepage", behaviour:["Left column: large italic statement text with <em> highlight","Right column: body paragraph + arrow link","Stacks vertically on mobile","Content fades up on scroll"], technical:["Flexbox two-column layout with gap","Left: font-size clamp(24px, 3vw, 36px)","Right: standard body text 16px","Breakpoint: stacks at 900px"], wordpress:{ desc:"Use the core Columns block with a 50/50 split — no plugins needed.", plugins:["None — uses core Gutenberg Columns block"], steps:["Add a Columns block, select 50/50 layout","In the left column, add a Paragraph block with large font size (XL or 2XL)","In the right column, add a Paragraph block + a Buttons block styled as a text link","Set the outer Group/Columns block to max-width 1280px"], technical:["For the italic highlight: wrap text in <em> using the inline formatting toolbar","Arrow link: use a Button block set to 'Link' style, or a plain paragraph with an anchor","Responsive stacking is automatic with the Columns block"] } },
+            "Editorial Band": { label:"Block Pattern", desc:"Full-bleed parallax image with dark gradient scrim, eyebrow label, large stat headline and body text overlay.", where:"Homepage", behaviour:["Image parallax effect on scroll (moves slower than content)","Dark gradient overlay ensures text legibility","Eyebrow label above main stat text","Content fades up on scroll entry"], technical:["CSS parallax via GSAP yPercent with scrub","Linear-gradient overlay: transparent to rgba(0,0,0,0.7)","Image: object-fit cover, full-width","Responsive: padding reduces on mobile"], wordpress:{ desc:"Use the core Cover block with a fixed background image for parallax effect.", plugins:["None — Cover block with fixed background"], steps:["Add a Cover block, upload the background image","Enable 'Fixed background' in block settings for parallax effect","Set overlay opacity to 60-70%","Add inner blocks: Paragraph (eyebrow), Heading (stat), Paragraph (body)","Set alignment to Full Width"], technical:["Fixed background creates a CSS parallax effect without JavaScript","For true smooth parallax: add Templately animation to the Cover block","Overlay: use the built-in Cover overlay colour + opacity controls","Full-bleed requires theme support for wide alignment"] } },
+            "Twin Panels": { label:"Block Pattern", desc:"Two side-by-side image cards with gradient overlay, tag label, heading and link — used for section navigation.", where:"Homepage", behaviour:["Two equal-width cards with full-bleed images","Dark gradient overlay anchors text to bottom","Hover: subtle scale on image","Stacks vertically on mobile"], technical:["CSS Grid 2-column, 1fr 1fr","Image: object-fit cover, full card height","Overlay: linear-gradient bottom to transparent","Breakpoint: stacks at 768px"], wordpress:{ desc:"Use Kadence Blocks Row Layout with two columns, each containing a Cover block.", plugins:["Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"], steps:["Add a Kadence Row Layout block, set to 2 equal columns","In each column, add a Cover block with an image","Set overlay opacity and add inner Heading + Button blocks","Link the entire Cover block if supported, or use a Button as the CTA"], technical:["Kadence Row Layout handles equal-height columns automatically","Cover blocks handle the image + overlay + text layout natively","For the hover zoom effect: add a CSS class and use Additional CSS with transform:scale on hover","Responsive: Kadence columns stack on tablet breakpoint by default"] } },
+            "Photo Grid": { label:"Block Pattern", desc:"Three-column image grid with overlay captions (title + description) shown on hover or always visible.", where:"Homepage", behaviour:["Three equal images in a row","Caption overlays at bottom of each image","Images scale slightly on hover","Stacks to single column on mobile"], technical:["CSS Grid: repeat(3, 1fr)","Image container with overflow:hidden and border-radius","Caption: positioned absolute at bottom with gradient","Responsive: stacks at 768px"], wordpress:{ desc:"Use the core Gallery block set to 3 columns with caption overlay enabled.", plugins:["None — core Gallery block"], steps:["Add a Gallery block and upload your 3 images","Set columns to 3 in block settings","Add captions to each image in the gallery","For overlay styling: add a custom CSS class and style captions as overlays in Additional CSS"], technical:["Gallery block renders a <figure> grid — columns are set via the block sidebar","Caption overlay requires Additional CSS: position the figcaption absolutely over the image","Alternative: Kadence Gallery block has built-in caption overlay options","Images are responsive and maintain aspect ratio by default"] } },
+            "Hub Section": { label:"Block Pattern", desc:"Split layout with a large image on the left and content (eyebrow, heading, body, icon link list) on the right.", where:"Homepage", behaviour:["Left: large image (rounded corners)","Right: eyebrow, heading, body text, list of icon+text links","Links have hover state with arrow indicator","Stacks image-above-text on mobile"], technical:["Flexbox layout with gap:80px","Image: border-radius 16px, object-fit cover","Icon links: flex row with SVG icon + text","Breakpoint: stacks at 1024px"], wordpress:{ desc:"Use the core Media & Text block for the image/content split, with a List block for the icon links.", plugins:["None — core Media & Text block"], steps:["Add a Media & Text block, upload the image to the media side","In the text side: add Paragraph (eyebrow), Heading, Paragraph (body)","Add a List block for the icon links — use emoji or inline SVGs for icons","Set the block to 50/50 split in the toolbar"], technical:["Media & Text block handles responsive stacking automatically","For icon links: use Kadence Icon List block for proper SVG icons with links","Or use a custom class on list items and add icon via CSS ::before","Border-radius on image: set in the Image block settings or via Additional CSS"] } },
+            "Stories Carousel": { label:"Block Pattern", desc:"Horizontally scrollable story cards with a progress bar indicator and previous/next navigation buttons.", where:"Homepage", behaviour:["Cards scroll horizontally with momentum/snap","Progress bar fills proportionally to scroll position","Prev/next buttons advance one card at a time","Responsive: fewer visible cards on smaller screens"], technical:["CSS overflow-x scroll with scroll-snap-type","Progress bar width calculated from scrollLeft / maxScroll","JS click handlers for prev/next buttons","Visible cards: 3 on desktop, 2 on tablet, 1 on mobile"], wordpress:{ desc:"Use Kadence Blocks' Posts Carousel or the Jesuspended Starter Templates carousel pattern.", plugins:["Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"], steps:["Add a Kadence Posts block and switch to Carousel layout in block settings","Select your post type (e.g. Stories custom post type or Posts category)","Set visible columns: 3 desktop, 2 tablet, 1 mobile","Enable navigation arrows and dots/progress indicator","Style card appearance in the Design tab"], technical:["Kadence Posts Carousel uses Splide.js under the hood — performant and accessible","For a custom progress bar: add a Custom HTML block below with a JS scroll listener","Alternative: Jesuspended Starter Templates (free) includes a Story carousel pattern","Cards pull from WordPress posts — create a 'Stories' category for easy filtering"] } },
+            "Story Block": { label:"Block Pattern", desc:"Full-bleed image with parallax scroll, dark gradient overlay, large blockquote and CTA button.", where:"Homepage", behaviour:["Background image has parallax scroll effect","Dark gradient ensures quote text readability","Large italic blockquote with attribution","CTA button below quote"], technical:["GSAP parallax: image yPercent on scrub","Gradient: linear-gradient from transparent to rgba(0,0,0,0.7)","Blockquote: FatFrank heading font, italic","Full-viewport height with flex centering"], wordpress:{ desc:"Use a Cover block with fixed background and inner Quote + Button blocks.", plugins:["None — core Gutenberg blocks"], steps:["Add a Cover block with your background image","Enable 'Fixed background' for parallax effect","Set overlay to 50-60% dark","Inside the Cover, add a Quote block with the testimonial text","Add a Buttons block below the Quote for the CTA","Set alignment to Full Width"], technical:["Fixed background provides the parallax effect on most browsers","Quote block renders semantic <blockquote> — good for accessibility","Style the quote font-size to XL or 2XL for impact","For stronger parallax: use Templately's parallax option on the Cover"] } },
+            "Growth Steps": { label:"Block Pattern", desc:"Four-step numbered grid with illustrations, step numbers, titles and body text — a how-it-works pattern.", where:"Homepage", behaviour:["4 cards in a row, each with illustration, number, title and text","Sequential numbering (Step 01, 02, 03, 04)","Cards stagger-animate on scroll","Stacks to 2-column then single on mobile"], technical:["CSS Grid: repeat(4, 1fr)","Illustration: img with fixed aspect ratio","Step number: 11px uppercase label","Responsive: 2 cols at 900px, 1 col at 560px"], wordpress:{ desc:"Use Kadence Blocks Info Box in a 4-column Row Layout for a visual step-by-step.", plugins:["Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"], steps:["Add a Kadence Row Layout, set to 4 equal columns","In each column, add a Kadence Info Box block","Upload the step illustration as the icon/image","Set number as a Paragraph above (styled small uppercase)","Add heading and body text in the Info Box content area","Set responsive columns: 2 on tablet, 1 on mobile"], technical:["Kadence Info Box supports image + heading + text + button in one block","For step numbers: use a Paragraph block with a custom class styled via Additional CSS","Stagger animation: use Templately entrance animation with increasing delay per column","Images should be consistent size — recommend 200×200px illustrations"] } },
+            "Newsletter": { label:"Block Pattern", desc:"Centered email sign-up section with eyebrow, heading, body text, inline email form and legal text.", where:"Homepage", behaviour:["Centered layout with max-width constraint","Email input + submit button inline","Success state replaces form with confirmation message","Legal disclaimer text below"], technical:["Text-align center, max-width 560px","Form: flexbox row with input + button","Success state: JS toggles visibility","Background: subtle gradient or solid colour"], wordpress:{ desc:"Use Mailchimp for WordPress plugin with a simple email form block.", plugins:["Mailchimp for WordPress (free) — wordpress.org/plugins/mailchimp-for-wp"], steps:["Install Mailchimp for WP and connect your Mailchimp account","Create a new form with just an Email field and Submit button","On your page, add a Group block with centered text alignment","Add Heading and Paragraph blocks for the intro text","Add the MC4WP Form block below","Add a small Paragraph for the legal text"], technical:["MC4WP handles subscription, double opt-in and error messages automatically","Style the form inline: use Additional CSS to set the form to display:flex","Success message is configurable in the plugin's form settings","The Group block provides the centered max-width container"] } },
+            "Card": { label:"Custom Block", desc:"Single card component supporting multiple variants: image, video, icon, blog, podcast, award and horizontal layout.", where:"Partner page, Resources, Homepage", behaviour:["Image card: full-bleed background with gradient overlay and bottom text","Video card: autoplay muted background with video badge","Icon card: light background with icon, title and CTA","Blog card: thumbnail + meta + title + description","Podcast card: dark background with play button","Award card: gradient background with gold badge","Horizontal card: side-by-side image + text layout"], technical:["Base: flex column, border-radius 12px, overflow hidden","Hover: translateY(-3px) + box-shadow transition","Image/video: object-fit cover with scale on hover","Variants via BEM modifier classes (.card--icon, .card--blog, etc.)"], wordpress:{ desc:"Use Kadence Blocks Info Box for most card variants, with Cover block for image/video cards.", plugins:["Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"], steps:["For image cards: use a Cover block with inner Heading + Paragraph","For icon cards: use Kadence Info Box with icon, heading, text and button","For blog cards: use Kadence Posts block set to Card layout","For horizontal layout: use Media & Text block","Wrap in a Row Layout for grid arrangements"], technical:["Each variant maps to a different Gutenberg block or Kadence block","Kadence Info Box is the most versatile — handles icon, image, text and CTA in one block","Cover block handles the full-bleed image/video card pattern","Consistent border-radius: set in block settings or via Additional CSS class"] } },
+            "Footer": { label:"Template Part", desc:"Site-wide footer with brand column, 5-column navigation grid, copyright line and social media icons.", where:"All pages", behaviour:["Brand: logo (white via invert filter) + short description","Navigation: 5 columns with heading and link lists","Bottom bar: copyright + social icons","Links highlight teal on hover","Responsive: stacks to 2-column grid on mobile"], technical:["Background: #131313 (near-black)","Footer-nav: CSS Grid repeat(5, 1fr)","Social icons: inline SVGs with currentColor","Breakpoint: stacks at 900px"], wordpress:{ desc:"Use the Site Editor Footer template part with a Columns block for the navigation grid.", plugins:["None — uses core Site Editor"], steps:["Go to Appearance > Editor > Template Parts > Footer","Add a Group block with dark background (#131313)","Add a Columns block: first column for brand (Image + Paragraph), remaining for nav","Use Navigation blocks or List blocks for each nav column","Add a separator, then a Group with Paragraph (copyright) + Social Icons block"], technical:["Site Editor Footer template part applies to all pages automatically","Social Icons block supports X/Twitter, LinkedIn, Facebook and many more","For the white logo: upload a white version or use a CSS filter class","Navigation blocks allow menu editing directly in the footer template"] } },
+            "Heading": { label:"Core Block", desc:"FatFrank display heading (H1–H4) with clamp() responsive sizing and uppercase transform.", where:"All pages", behaviour:["Four levels: H1 (hero), H2 (section), H3 (subsection), H4 (label)","Responsive sizing via clamp()","Uppercase text-transform","Line-height: 1 for tight leading"], technical:["Font-family: var(--font-heading) / FatFrank","Sizes: H1 clamp(40px,6vw,96px), H2 clamp(28px,4vw,48px), H3 22px, H4 14px","Color: #1d1d1f (charcoal)","No letter-spacing adjustment needed — FatFrank is naturally tracked"], wordpress:{ desc:"Use the core Heading block with the FatFrank font loaded via your theme or a plugin.", plugins:["None — core Heading block (font loaded via theme)"], steps:["Add a Heading block and select the level (H1–H4)","The theme should load FatFrank via @font-face or Typekit","Text will automatically inherit the heading font-family from theme styles","Adjust font size in block settings if needed — use the preset sizes that match the design"], technical:["FatFrank must be enqueued in your theme's functions.php or via a font plugin","Add a class .has-heading-font and set font-family in theme.json typography","Clamp() sizing: define fluid typography in theme.json for automatic responsive sizing","Uppercase: set text-transform in the Global Styles > Typography section"] } },
+            "Body Text": { label:"Core Block", desc:"Lato paragraph text in regular, small and caption variants with token-based line height.", where:"All pages", behaviour:["Regular: 16px, line-height 1.6","Small: 14px for secondary text","Caption: 12px uppercase for labels","Color: #464646 (charcoal) or #6e6e73 (grey)"], technical:["Font-family: var(--font-body) / Lato","Loaded via Typekit or Google Fonts","Max-width on paragraphs for readability (640px)","Variants via font-size and color changes, same font-family"], wordpress:{ desc:"Use the core Paragraph block — Lato is set as the body font in your theme.", plugins:["None — core Paragraph block"], steps:["Add a Paragraph block — it inherits the theme body font (Lato)","For small text: reduce font size to 'Small' preset in block toolbar","For captions: use font size 'Extra Small' and set uppercase via Additional CSS class","Colour variants: use the colour picker in block settings"], technical:["Lato should be defined as the body font in theme.json","Line-height: set in Global Styles > Typography > Body","For a max-width on paragraphs: set content width in theme.json layout settings","Caption style: create a block style variation 'Caption' in your theme"] } },
+            "Button": { label:"Core Block", desc:"Primary (green fill), Secondary (outline) and Ghost (text-only) button variants with hover states.", where:"All pages", behaviour:["Primary: green background, white text, hover darkens","Secondary: green border, green text, hover fills","Ghost: no border, green text with underline on hover","All: border-radius 8px, font-weight 700, uppercase"], technical:["Background: var(--color-green)","Border-radius: 8px","Padding: 14px 28px","Transition: background 0.2s, transform 0.1s"], wordpress:{ desc:"Use the core Buttons block with colour presets matching the design tokens.", plugins:["None — core Buttons block"], steps:["Add a Buttons block","For Primary: set background to #077D57, text white","For Secondary: set style to 'Outline', border colour #077D57","For Ghost: set style to 'Outline' with no border, just text colour #077D57","Adjust padding and border-radius in block settings"], technical:["Define button presets in theme.json under styles > blocks > core/button","Create block style variations: 'Primary', 'Secondary', 'Ghost' in your theme","Border-radius: set globally in theme.json or per-button in block settings","Hover states: defined via CSS in your theme stylesheet"] } },
+            "Icon": { label:"Core Block", desc:"Inline SVG from the site icon library — scalable, token-coloured, used across navigation, cards and UI elements.", where:"All pages", behaviour:["Scalable to any size via width/height","Coloured with currentColor (inherits text colour)","Used inline for crisp rendering at any resolution","Common sizes: 16px (UI), 24px (nav), 48px (cards)"], technical:["Inline SVG elements — not img tags or icon fonts","stroke/fill use currentColor for theming","Consistent viewBox: 0 0 24 24","18-icon library covering all site needs"], wordpress:{ desc:"Use Kadence Blocks Icon block or inline SVGs in Custom HTML blocks.", plugins:["Kadence Blocks (free) — for the Icon block"], steps:["Add a Kadence Icon block and choose from the icon library","Set size, colour and alignment in block settings","Alternatively: add a Custom HTML block and paste inline SVG code","For icon + text combos: use Kadence Icon List block"], technical:["Kadence Icon block includes 1500+ icons from multiple libraries","Custom SVGs: paste directly in Custom HTML blocks","Icons inherit theme colours when using currentColor","For consistent sizing: set a custom class with fixed width/height"] } },
+            "Image": { label:"Core Block", desc:"Responsive image block with optional Ken Burns animation class for subtle zoom effect.", where:"All pages", behaviour:["Responsive: max-width 100%, height auto","Optional Ken Burns: slow zoom animation on load or scroll","Border-radius: 0 (full-bleed) or 12px (cards)","Lazy loading via loading='lazy' attribute"], technical:["Standard <img> tag with srcset for responsive images","Ken Burns: CSS @keyframes scale from 1 to 1.05 over 12s","Object-fit: cover for fixed-aspect containers","loading='lazy' for performance"], wordpress:{ desc:"Use the core Image block — Ken Burns can be added via Kadence Cover block or CSS class.", plugins:["None for basic images; Kadence Blocks for Ken Burns"], steps:["Add an Image block and upload your image","Set alignment (full-width, wide, center) in the toolbar","For rounded corners: set border-radius in block settings","For Ken Burns: wrap in a Kadence Cover block with Ken Burns enabled"], technical:["WordPress generates srcset automatically for responsive images","Lazy loading is enabled by default in WordPress 5.5+","Border-radius: available in core Image block settings panel","Ken Burns: Kadence Cover block has a built-in toggle for this effect"] } },
+            "Video": { label:"Core Block", desc:"Autoplay muted inline video embed with optional poster frame for loading state.", where:"Homepage, hero sections", behaviour:["Autoplays muted and loops (browser requirement for autoplay)","Poster image shows during load","Object-fit: cover fills container","Pauses when out of viewport (IntersectionObserver)"], technical:["<video> tag with autoplay muted loop playsinline attributes","Poster attribute for loading placeholder","Object-fit: cover in fixed-height containers","IntersectionObserver pauses off-screen videos"], wordpress:{ desc:"Use the core Video block or Cover block with video background.", plugins:["None — core blocks"], steps:["For inline video: add a Video block, upload your MP4","Enable Autoplay, Loop and Muted in block settings","For background video: use a Cover block with video source","Set poster image via the Poster Image option in Video block settings"], technical:["WordPress Video block supports MP4, WebM and OGG formats","Autoplay requires muted attribute — this is browser-enforced","Cover block video: autoplays muted by default, perfect for hero backgrounds","Compress videos under 10MB for performance — use HandBrake or similar"] } },
+            "Tag": { label:"Core Block", desc:"Small pill label for categories, dates or status — available in green, orange and charcoal colour variants.", where:"Cards, timelines, bio sections", behaviour:["Small uppercase text in a rounded pill shape","Colour variants: green, orange, charcoal","Non-interactive (label only, not clickable)","Used to categorise or tag content items"], technical:["Display: inline-block","Padding: 4px 12px, border-radius: 20px","Font: 11px uppercase, letter-spacing 0.06em","Background: rgba colour with matching text colour"], wordpress:{ desc:"Style using a custom block style on the Paragraph block or use non-linked Button blocks.", plugins:["None — custom CSS class on core blocks"], steps:["Add a Paragraph block with the tag text","Add a custom CSS class (e.g. 'fmnr-tag') in Advanced settings","In Additional CSS: style .fmnr-tag with pill styling","Alternative: use a Button block set to non-linked with small padding"], technical:["Define the pill style in Additional CSS or theme stylesheet","For multiple colours: create classes .fmnr-tag--green, .fmnr-tag--orange, .fmnr-tag--charcoal","Apply via the Advanced > Additional CSS Class(es) field","Keep font-size at 11px with text-transform: uppercase for consistency"] } },
+            "Stat Number": { label:"Core Block", desc:"Large animated count-up figure in FatFrank with optional suffix — pear or teal colour token variants.", where:"Impact section, stat stacks", behaviour:["Counts from 0 to target value on scroll entry","Suffix appended (%, M+, K, etc.)","Font: FatFrank at large size (48-72px)","Colour: pear (#DDEB4A) or teal (#0FFBAB) variants"], technical:["GSAP counter animation or requestAnimationFrame loop","data-target and data-suffix attributes drive the animation","IntersectionObserver triggers once on viewport entry","Duration: ~2 seconds with ease-out"], wordpress:{ desc:"Use Essential Blocks Counter block for animated count-up numbers.", plugins:["Essential Blocks (free) — wordpress.org/plugins/essential-blocks"], steps:["Add an Essential Blocks Counter block","Set the end number (target value) and suffix","Choose animation duration (2s recommended)","Style font-family to FatFrank via Additional CSS class","Set colour to match the pear or teal token"], technical:["Essential Blocks Counter animates on scroll entry automatically","Font styling: add a class and set font-family: fatfrank in Additional CSS","For the suffix: the Counter block has a built-in suffix field","If you don't need animation, a styled Heading block with the number works too"] } },
+            "Divider": { label:"Core Block", desc:"Horizontal separator line in green, orange, teal or thin grey variants — used between content sections.", where:"All pages", behaviour:["Simple horizontal line separator","Colour variants match design tokens","Thin variant: 1px solid light grey for subtle separation","Standard: 2-3px with colour for emphasis"], technical:["<hr> element or border-top on container","Width: 100% or max-width constraint","Margin: provides vertical spacing above and below","Colour via border-color CSS property"], wordpress:{ desc:"Use the core Separator block with custom colour presets.", plugins:["None — core Separator block"], steps:["Add a Separator block between content sections","Choose style: Default, Wide or Dots in the toolbar","Set colour in the block colour settings (green, orange, or teal)","For thin grey: use default style with light grey colour"], technical:["Separator block renders a semantic <hr> element","Colour presets can be defined in theme.json palette","Width: 'Wide' style stretches to content width, 'Default' is centered short line","Custom thickness: set border-width via Additional CSS on a custom class"] } },
+            "Spacer": { label:"Core Block", desc:"Invisible vertical spacing block — available in XS (16px) through XL (120px) preset sizes.", where:"All pages", behaviour:["Adds vertical whitespace between blocks","Drag handle to adjust height or set exact px","Presets: XS 16px, SM 32px, MD 48px, LG 80px, XL 120px","Invisible — no visual rendering, only space"], technical:["Renders an empty <div> with fixed height","No background, border or content","Used for precise spacing control between sections","Responsive: consider reducing on mobile via custom CSS"], wordpress:{ desc:"Use the core Spacer block with preset height values.", plugins:["None — core Spacer block"], steps:["Add a Spacer block between sections","Drag the handle to set height, or type exact pixels in the sidebar","Use consistent heights: 16, 32, 48, 80 or 120px to match the design system","For responsive spacing: the block maintains its height on all screens"], technical:["Spacer renders an empty div with inline height style","For responsive adjustment: override heights at breakpoints via Additional CSS","Alternative: use block spacing (padding/margin) on adjacent blocks instead of Spacer","Theme.json can define spacing presets that appear in the Spacer block"] } },
+            "Form Field": { label:"Core Block", desc:"Input elements — text, email, select dropdown and textarea with consistent label, border and focus styling.", where:"Contact page, newsletter", behaviour:["Label above input, placeholder text inside","Focus state: green border ring","Error state: red border with helper text below","Consistent height (48px) and border-radius (8px)"], technical:["Border: 1px solid #e5e5e5, radius 8px","Focus: border-color var(--color-green), box-shadow","Padding: 14px 16px","Font: Lato 15px, colour #1d1d1f"], wordpress:{ desc:"Form fields are created within WPForms or the theme's form styling.", plugins:["WPForms Lite (free) — wordpress.org/plugins/wpforms-lite"], steps:["Create a form in WPForms with your desired fields","The plugin handles label placement, validation and styling","For custom styling: add CSS to match border-radius, focus colour and padding","Add the form to any page via the WPForms block"], technical:["WPForms fields can be styled via Additional CSS targeting .wpforms-field input","Match focus colour: .wpforms-field input:focus { border-color: #077D57; box-shadow: 0 0 0 3px rgba(7,125,87,0.1); }","Border-radius: set on all inputs with .wpforms-field input { border-radius: 8px; }","WPForms handles validation, error states and accessibility automatically"] } },
+            "List Item": { label:"Core Block", desc:"Single list item with optional leading icon — used in hub links, footer nav and feature lists.", where:"Hub section, footer, feature lists", behaviour:["Icon + text in a horizontal row","Hover: text colour or underline change","Used in groups/lists for navigation or features","Consistent vertical spacing between items"], technical:["Flexbox row: align-items center, gap 12px","Icon: 20px SVG with currentColor","Text: 14-15px Lato","Hover transition on colour"], wordpress:{ desc:"Use the core List block or Kadence Icon List for icon+text list items.", plugins:["Kadence Blocks (free) — for Icon List block"], steps:["For simple lists: use the core List block","For icon + text: use Kadence Icon List block","Choose icons from the library for each item","Set spacing and alignment in block settings"], technical:["Core List block: style bullets via Additional CSS","Kadence Icon List: built-in icon picker with size and colour options","Both support links on individual items","Consistent spacing: set gap in block settings or via CSS"] } },
+            "Pull Quote Band": { label:"Custom Block", desc:"Full-width coloured band with large italic quotation and attribution text.", where:"Tony Rinaudo, Impact pages", behaviour:["Full-bleed green background breaks up page visually","Large italic quote text (heading font)","Attribution below: name + role","Fades in on scroll"], technical:["Background: var(--color-green), white text","Max-width container inside full-bleed wrapper","Font-size: clamp() for responsive sizing","Padding: 96px top/bottom"], wordpress:{ desc:"Use a Cover block with solid green background and inner Quote block.", plugins:["None — core blocks"], steps:["Add a Cover block, set solid background #077D57","Set alignment to Full Width","Add a Quote block inside with your text","Set Quote colour to white, font-size XL or 2XL","Add citation in the Citation field"], technical:["Cover block solid colour mode: no image needed","Quote block Citation renders as <cite> element","For wider quote text: add a Group inside with max-width constraint","Responsive: text scales automatically with theme fluid typography"] } },
+            "CTA Band": { label:"Custom Block", desc:"Dark full-width call-to-action with dual buttons — reusable section closer.", where:"Tony Rinaudo, all pages", behaviour:["Dark background (charcoal or black)","Centered heading + body text","Two CTA buttons: primary + secondary","Full-bleed width, constrained inner content"], technical:["Background: #1d1d1f or #111","Text: white, centered","Buttons: flex row, gap 16px","Padding: 96px top/bottom"], wordpress:{ desc:"Use a Cover block with dark background and inner Heading + Buttons blocks.", plugins:["None — core blocks"], steps:["Add a Cover block, set background to #1d1d1f","Set alignment to Full Width","Add Heading (white), Paragraph (white), and Buttons blocks inside","Style buttons as Primary and Secondary variants","Center-align all inner content"], technical:["Cover block with solid dark colour — no image needed","Buttons block supports multiple buttons inline","Text colour: set to white in the block colour settings","Padding: adjust in the Cover block spacing settings"] } },
+            "Bar Chart": { label:"Custom Block", desc:"Animated horizontal bar graph with percentage fills and labels.", where:"Impact page, data sections", behaviour:["Bars animate width from 0% to target on scroll","Label + value shown inline with each bar","Colour: green fill on grey background","Stagger animation between bars"], technical:["Width animation via CSS transform or GSAP","data-pct attribute drives target width","Duration: 1.2s per bar with stagger","IntersectionObserver triggers once"], wordpress:{ desc:"Use wpDataTables for dynamic charts or a styled Group block for static bar displays.", plugins:["wpDataTables (free) — wordpress.org/plugins/wpdatatables"], steps:["For dynamic: install wpDataTables, create a chart, set type to Horizontal Bar","For static: use Group blocks with constrained inner widths and green backgrounds","Add labels with Paragraph blocks beside each bar","Insert the chart via the wpDataTables block"], technical:["wpDataTables renders responsive Chart.js charts","For static bars: a styled div with width:X% and transition achieves the same effect","Animation on scroll: add Templately entrance animation (Grow Width)","Colour: set chart/bar colour to #077D57 in chart settings"] } },
+            "Stat Tile": { label:"Custom Block", desc:"Single stat number with suffix label and count-up animation.", where:"Impact section, stat stacks", behaviour:["Large number with suffix animates on scroll","Below: description label text","Colour: pear or teal background, dark text","Rounded container with padding"], technical:["Container: border-radius 12px, padding 32px","Number: FatFrank 48px","Animation: count-up from 0 to target","data-target and data-suffix attributes"], wordpress:{ desc:"Use Essential Blocks Counter or a styled Group block with heading.", plugins:["Essential Blocks (free) — wordpress.org/plugins/essential-blocks"], steps:["Add Essential Blocks Counter block","Set target number and suffix","Style container with background colour","Add description text below the counter"], technical:["Counter animates on scroll entry automatically","Background: set on a wrapping Group block","For static display: use a Heading block with the number + Paragraph below","Grid layout: wrap multiple stat tiles in a Columns or Row Layout block"] } },
+            "Nav Item": { label:"Custom Block", desc:"Icon + title + description navigation link used inside mega menu panels.", where:"Mega menu", behaviour:["Icon box (bordered) + text body in a row","Hover: border turns green, subtle background","Title: bold 16px, Description: regular 14px","Click navigates to target page"], technical:["Flexbox row, gap 16px","Icon container: 80×60px bordered box","Border: 1px solid #d5d5d5, hover: var(--color-green)","Transition on border-color and background"], wordpress:{ desc:"Nav items are rendered automatically by the Max Mega Menu plugin from your WordPress menu structure.", plugins:["Max Mega Menu (free) — wordpress.org/plugins/megamenu"], steps:["Set up your menu in Appearance > Menus","For each menu item, add a Description in the item settings (enable via Screen Options)","Max Mega Menu renders the icon + title + description layout automatically","Style the nav item appearance in Mega Menu > Menu Themes"], technical:["Descriptions: enable 'Description' field via Screen Options on the Menus page","Icons: Max Mega Menu supports custom icons per item via the item settings","The bordered card layout is a Max Mega Menu theme setting","Hover states are configured in the Menu Themes > Flyout section"] } },
+            "Timeline Entry": { label:"Custom Block", desc:"Single timeline item with year, dot connector, title and expandable content.", where:"Tony Rinaudo page", behaviour:["Year label on the timeline rail","Dot connector on the vertical line","Title visible by default, detail expands on click","Smooth height animation on expand"], technical:["Grid: timeline rail + content area","Dot: absolute positioned circle on rail","Expand: max-height transition","Click handler toggles .open class"], wordpress:{ desc:"Use Essential Blocks Timeline or Accordion block for expandable timeline entries.", plugins:["Essential Blocks (free) — wordpress.org/plugins/essential-blocks"], steps:["Add Essential Blocks Timeline block","Enter year, title and content for each entry","Style the connector line and dots in block settings","For accordion behaviour: use Accordion block with year labels as triggers"], technical:["Timeline block draws the connecting line automatically","Accordion block provides the expand/collapse interaction","Combine both for a full interactive timeline","All content editable in the block editor"] } },
+            "Pillar Card": { label:"Custom Block", desc:"Numbered feature card with large numeral, heading and body text.", where:"Tony Rinaudo page", behaviour:["Large numeral (01, 02, 03) at top","Heading below numeral","Body text description","Hover: subtle shadow lift"], technical:["Flex column layout, border-radius 12px","Numeral: FatFrank 64px, green or low-opacity","Content padding: 32px","Equal height in grid context"], wordpress:{ desc:"Use Kadence Info Box block with a large number as the icon area.", plugins:["Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"], steps:["Add Kadence Info Box block","For the numeral: use a Custom HTML or Paragraph block above the Info Box","Set heading and text content in the Info Box","Wrap in a Row Layout for 3-column grid"], technical:["Large numeral: styled Paragraph with heading font at 64px","Kadence Info Box handles heading + text + button layout","Row Layout provides the column grid with equal heights","Hover shadow: set in Info Box Advanced > Box Shadow"] } },
+            "Award Card": { label:"Custom Block", desc:"Dark gradient card with gold badge icon, year, title and description.", where:"Tony Rinaudo page", behaviour:["Dark gradient background (navy tones)","Gold circular badge with icon at top","Year in gold, title in white, description in muted white","Used in grids of 3-4 columns"], technical:["Background: linear-gradient(135deg, #1a1a2e, #16213e)","Badge: 64px circle with gold gradient fill","Font: FatFrank for title, Lato for description","Border-radius: 12px"], wordpress:{ desc:"Use Kadence Info Box with dark background and a custom badge image.", plugins:["Kadence Blocks (free) — wordpress.org/plugins/kadence-blocks"], steps:["Add Kadence Info Box block","Set background to dark gradient in Advanced settings","Upload a gold badge image or use an icon with gold colour","Add year (small text), title and description content","Wrap in Row Layout for multi-column grid"], technical:["Info Box background: set via gradient in Advanced > Background","Badge: use the icon setting with custom colour #f5a623","For true gradient badge: use a Custom HTML block with SVG","Text colours: set individually in Typography settings"] } },
+            "Search Result": { label:"Custom Block", desc:"Individual search result item with icon, title, description and category label.", where:"Search overlay", behaviour:["Icon + title + description in a row","Category label (green pill) at right","Hover: background highlight","Keyboard navigable (arrow keys)"], technical:["Flexbox row, padding 12px","Hover: background rgba(0,0,0,0.04)","Category: same pill style as Tag block","Focus ring for keyboard navigation"], wordpress:{ desc:"Search results are rendered by the SearchWP Live Search plugin template.", plugins:["SearchWP Live Search (free)"], steps:["Install SearchWP Live Search","Results template is generated automatically from post data","Customise the template via the plugin's template file (copy to your theme)","Style results via Additional CSS to match the FMNR design"], technical:["SearchWP uses a PHP template for result items — copy to your theme to customise","Default template shows thumbnail + title + excerpt","Add category labels by modifying the template to include get_the_category()","Keyboard navigation is handled by the plugin's JavaScript"] } },
+            "Media Card": { label:"Custom Block", desc:"Video or image thumbnail card with heading and tag — used in media/podcast grids.", where:"Resources, media sections", behaviour:["Thumbnail image or video poster","Tag label (pill) for content type","Title and optional description","Hover: image scale, shadow lift"], technical:["Border-radius 12px, overflow hidden","Image: aspect-ratio container, object-fit cover","Tag: positioned absolute top-left","Hover: transform scale(1.03) on image"], wordpress:{ desc:"Use Kadence Info Box or Posts block with featured image for media cards.", plugins:["Kadence Blocks (free)"], steps:["For manual cards: use Kadence Info Box with image, heading and tag","For dynamic: use Kadence Posts block filtered by media category","Set image aspect ratio in block settings","Add tag/category display in Posts block settings"], technical:["Info Box handles image + text + button in one block","Posts block auto-pulls from WordPress content","Featured images are used as thumbnails automatically","Category tags can be shown/hidden in Posts block display settings"] } },
+            "Mega Menu Variations": { label:"Template Part", desc:"Desktop and mobile variations of the mega menu navigation — 5 sections with feature cards.", where:"All pages (header)", behaviour:["Desktop: 3-column layout (heading + cards + feature)","Mobile: stacked accordion with simplified cards","5 sections: Partner, Learn, Adopt, Impact, About","Smooth open/close transitions"], technical:["Desktop: flex layout with column dividers","Mobile: full-screen drawer, stacked cards","Transition: opacity + transform for panel","Lucide icons for card icons"], wordpress:{ desc:"Mega menu sections are configured per nav item in the Max Mega Menu plugin.", plugins:["Max Mega Menu (free) — wordpress.org/plugins/megamenu"], steps:["Configure menu in Appearance > Menus","For each top-level item: enable Mega Menu via the grid icon","Drag sub-items into columns within the mega panel editor","Set column widths and featured image cards in the theme settings","Mobile drawer is generated automatically by the plugin"], technical:["Max Mega Menu stores column config per menu item","Featured cards: use the Widget Area option to add image widgets in columns","Mobile: plugin auto-converts to hamburger drawer at your set breakpoint","Section icons: add via the menu item's Icon field in Max Mega Menu settings"] } }
+        };
+
         function renderDocs(title) {
-            var data = docs[title];
+            var data = docs[title] || autoDocs[title];
             if (!data) {
-                docsPanel.innerHTML = '<div style="padding:64px 48px;color:#86868b;font-size:15px;">Documentation not yet available for this component.</div>';
+                docsPanel.innerHTML = '<div class="doc-inner" style="color:#86868b;font-size:15px;padding-top:80px;">Documentation not yet available for this component.</div>';
                 return;
             }
-            var html = '<span class="doc-label">' + data.label + '</span>';
+            var html = '<div class="doc-inner"><div class="doc-header">';
+            html += '<span class="doc-label">' + data.label + '</span>';
             html += '<h2 class="doc-title">' + title + '</h2>';
             html += '<p class="doc-desc">' + data.desc + '</p>';
-            html += '<p class="doc-where">Used on: <span>' + data.where + '</span></p>';
+            if (data.where) html += '<p class="doc-where">Used on: <span>' + data.where + '</span></p>';
+            html += '</div>';
+
+            // Anatomy section (full width)
+            if (data.blocks && data.blocks.length) {
+                html += '<div class="doc-grid doc-grid--full" style="margin-bottom:32px;"><div class="doc-section"><h4>Anatomy</h4><div class="doc-anatomy">';
+                data.blocks.forEach(function(b) {
+                    var depth = b.depth || 0;
+                    html += '<div class="doc-anatomy-item doc-anatomy-depth-' + depth + '">'
+                          + '<span class="doc-anatomy-tag">' + b.tag + '</span>'
+                          + '<span class="doc-anatomy-role">' + b.role + '</span>'
+                          + '</div>';
+                });
+                html += '</div></div></div>';
+            }
+
+            // Tokens (full width)
+            if (data.tokens && data.tokens.length) {
+                html += '<div class="doc-grid doc-grid--full" style="margin-bottom:32px;"><div class="doc-section"><h4>Design Tokens</h4><div class="doc-tokens-grid">';
+                data.tokens.forEach(function(t) {
+                    var swatch = '';
+                    if (t.type === 'color') {
+                        swatch = '<span class="doc-token-swatch" style="background:' + t.value + ';"></span>';
+                    } else if (t.type === 'font') {
+                        swatch = '<span class="doc-token-swatch font" style="font-family:' + t.value + ';">' + t.value.charAt(0).toUpperCase() + 'a</span>';
+                    } else {
+                        swatch = '<span class="doc-token-swatch" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6e6e73;">' + t.value + '</span>';
+                    }
+                    html += '<div class="doc-token">' + swatch
+                          + '<div class="doc-token-info"><span class="doc-token-name">' + t.token + '</span><span class="doc-token-value">' + (t.label || t.value) + '</span></div></div>';
+                });
+                html += '</div></div></div>';
+            }
+
+            // Behaviour + Technical in 2-col grid
+            html += '<div class="doc-grid">';
             html += '<div class="doc-section"><h4>Behaviour</h4><ul>';
             data.behaviour.forEach(function(item) { html += '<li>' + item + '</li>'; });
             html += '</ul></div>';
             html += '<div class="doc-section"><h4>Technical Details</h4><ul>';
             data.technical.forEach(function(item) { html += '<li>' + item + '</li>'; });
             html += '</ul></div>';
+            html += '</div>';
+
+            // Markup & Styles code blocks (extracted from iframe)
+            html += '<div id="doc-code-area"></div>';
+
+            html += '</div>';
             docsPanel.innerHTML = html;
+
+            // Extract markup and styles from iframe after a short delay
+            setTimeout(function() { extractCodeFromIframe(title); }, 600);
+        }
+
+        function extractCodeFromIframe(title) {
+            var codeArea = document.getElementById('doc-code-area');
+            if (!codeArea) return;
+            try {
+                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (!iframeDoc || !iframeDoc.body) { codeArea.innerHTML = ''; return; }
+
+                // Build a simple parent → child block tree
+                var bodyClone = iframeDoc.body.cloneNode(true);
+                bodyClone.querySelectorAll('script,style,link,meta').forEach(function(s) { s.remove(); });
+
+                // Skip demo scaffold classes
+                var scaffoldRe = /^(block-section|block-label|block-title|block-desc|demo-|variant-label|showcase)/;
+
+                function getBlockName(el) {
+                    var tag = el.tagName.toLowerCase();
+                    var cls = el.className && typeof el.className === 'string' ? el.className.trim() : '';
+                    var first = cls ? cls.split(/\s+/)[0] : '';
+                    if (first && scaffoldRe.test(first)) return null;
+                    if (first) return '.' + first;
+                    var semantics = ['section','nav','header','footer','main','article','aside','figure','form','video','img','h1','h2','h3','h4','h5','button','a','ul','ol','table','blockquote'];
+                    if (semantics.indexOf(tag) > -1) return '<' + tag + '>';
+                    return null;
+                }
+
+                // Find top-level component container
+                var root = bodyClone.querySelector('[id]:not([id=""])') || bodyClone.querySelector('section, main, .block-section, footer, header') || bodyClone;
+                var rootName = getBlockName(root) || title;
+
+                // Collect direct meaningful children (depth 1 only)
+                var children = [];
+                var seen = {};
+                function walkChildren(parent, depth) {
+                    if (depth > 2) return;
+                    for (var i = 0; i < parent.children.length; i++) {
+                        var child = parent.children[i];
+                        var name = getBlockName(child);
+                        if (name && !seen[name]) {
+                            seen[name] = true;
+                            children.push({ name: name, depth: depth });
+                        } else {
+                            // If this element isn't meaningful, look inside it
+                            walkChildren(child, depth);
+                        }
+                        if (name) walkChildren(child, depth + 1);
+                    }
+                }
+                walkChildren(root, 0);
+
+                // Only show if there are sub-blocks
+                if (children.length < 1) { codeArea.innerHTML = ''; return; }
+
+                var codeHtml = '<div class="doc-grid doc-grid--full" style="margin-top:32px;"><div class="doc-section">';
+                codeHtml += '<h4>Block Composition</h4>';
+                codeHtml += '<div class="doc-table-wrap"><table class="doc-table"><colgroup><col style="width:40%"><col style="width:60%"></colgroup><thead><tr><th>Block</th><th>Role</th></tr></thead><tbody>';
+                codeHtml += '<tr><td class="cell-tag" style="font-weight:700;">' + escapeHTML(rootName) + '</td><td>Parent container</td></tr>';
+                children.forEach(function(c) {
+                    var indent = c.depth > 0 ? '└ ' : '├ ';
+                    codeHtml += '<tr><td class="cell-tag" style="padding-left:' + (14 + c.depth * 20) + 'px;">' + indent + escapeHTML(c.name) + '</td><td></td></tr>';
+                });
+                codeHtml += '</tbody></table></div></div></div>';
+
+                codeArea.innerHTML = codeHtml;
+            } catch(e) {
+                codeArea.innerHTML = '';
+            }
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
 
         function renderWP(title) {
-            var data = docs[title];
+            var data = docs[title] || autoDocs[title];
             if (!data || !data.wordpress) {
-                wpPanel.innerHTML = '<div style="padding:64px 48px;color:#86868b;font-size:15px;">WordPress integration guide not yet available for this component.</div>';
+                wpPanel.innerHTML = '<div class="doc-inner" style="color:#86868b;font-size:15px;padding-top:80px;">WordPress integration guide not yet available for this component.</div>';
                 return;
             }
             var wp = data.wordpress;
             var shots = wpScreenshots[title] || [];
-            var html = '<span class="doc-label" style="color:#21759b;background:rgba(33,117,155,0.1);">WordPress Integration</span>';
+            var html = '<div class="doc-inner"><div class="doc-header">';
+            html += '<span class="doc-label" style="color:#21759b;background:rgba(33,117,155,0.1);">WordPress Integration</span>';
             html += '<h2 class="doc-title">' + title + '</h2>';
             html += '<p class="doc-desc">' + wp.desc + '</p>';
-            if (wp.plugins && wp.plugins.length) {
-                html += '<div class="doc-section"><h4>Plugins Required</h4><ul>';
-                wp.plugins.forEach(function(item) {
-                    html += '<li><span class="wp-plugin-tag">Plugin</span>' + item + '</li>';
-                });
-                html += '</ul></div>';
-            }
+            html += '</div>';
+
+            // Screenshots (full width if present)
             if (shots.length) {
-                html += '<div class="doc-section"><h4>Plugin Screenshots</h4>';
+                html += '<div class="doc-grid doc-grid--full" style="margin-bottom:32px;"><div class="doc-section"><h4>Plugin Screenshots</h4>';
                 html += '<div class="wp-screenshots-grid">';
                 shots.forEach(function(s) {
-                    html += '<figure class="wp-screenshot-item">';
-                    html += '<img src="' + s.url + '" alt="' + s.caption + '" loading="lazy">';
-                    html += '<figcaption>' + s.caption + '</figcaption>';
-                    html += '</figure>';
+                    html += '<figure class="wp-screenshot-item"><img src="' + s.url + '" alt="' + s.caption + '" loading="lazy"><figcaption>' + s.caption + '</figcaption></figure>';
                 });
-                html += '</div></div>';
+                html += '</div></div></div>';
+            }
+
+            // Plugins + Steps + Technical in grid
+            html += '<div class="doc-grid">';
+            if (wp.plugins && wp.plugins.length) {
+                html += '<div class="doc-section"><h4>Plugins Required</h4><ul>';
+                wp.plugins.forEach(function(item) { html += '<li><span class="wp-plugin-tag">Plugin</span>' + item + '</li>'; });
+                html += '</ul></div>';
             }
             html += '<div class="doc-section"><h4>Implementation Steps</h4><ul>';
             wp.steps.forEach(function(item) { html += '<li>' + item + '</li>'; });
             html += '</ul></div>';
-            html += '<div class="doc-section"><h4>Technical Notes</h4><ul>';
+            html += '</div>';
+
+            // Technical notes full width
+            html += '<div class="doc-grid doc-grid--full" style="margin-top:32px;"><div class="doc-section"><h4>Technical Notes</h4><ul>';
             wp.technical.forEach(function(item) { html += '<li>' + item + '</li>'; });
-            html += '</ul></div>';
+            html += '</ul></div></div>';
+
+            html += '</div>';
             wpPanel.innerHTML = html;
         }
 
@@ -1293,8 +2050,9 @@
             textVisible = true;
             textToggle.classList.add('active');
             textToggle.style.display = (title === 'Video Hero Banner') ? 'flex' : 'none';
-            renderDocs(title);
-            renderWP(title);
+            var lookupTitle = docsAlias[title] || title;
+            renderDocs(lookupTitle);
+            renderWP(lookupTitle);
             backdrop.classList.add('open');
             document.body.classList.add('modal-open');
         }
