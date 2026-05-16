@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stat Stack — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--color-black); min-height: 100vh; padding: 80px 48px; }
+        .container { max-width: 1400px; width: 100%; margin: 0 auto; }
+        .section-eyebrow { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--color-teal); margin-bottom: 48px; }
+        h2.section-title { font-family: var(--font-heading); font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 24px; }
+
+        /* Tile base */
+        .stat-tile {
+            background: var(--color-pear);
+            border-radius: clamp(12px, 2vw, 20px);
+            padding: clamp(24px, 4vw, 36px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+        }
+        .stat-tile.visible { opacity: 1; transform: translateY(0); }
+
+        .stat-tile__heading {
+            font-family: var(--font-body);
+            font-weight: 900;
+            font-size: clamp(18px, 2.4vw, 32px);
+            line-height: 1.1;
+            color: var(--color-black);
+            opacity: 0.75;
+            margin-bottom: clamp(8px, 1.5vw, 16px);
+        }
+        .stat-tile__figure {
+            font-family: var(--font-heading);
+            font-weight: 900;
+            font-size: clamp(48px, 7vw, 120px);
+            line-height: 0.9;
+            color: var(--color-black);
+            margin-bottom: clamp(6px, 1vw, 12px);
+        }
+        .stat-tile__subheading {
+            font-family: var(--font-body);
+            font-weight: 900;
+            font-size: clamp(16px, 1.8vw, 24px);
+            line-height: 1.1;
+            color: var(--color-black);
+            opacity: 0.75;
+        }
+        .stat-tile__caption {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: clamp(12px, 1.1vw, 15px);
+            line-height: 1.3;
+            color: var(--color-black);
+            opacity: 0.5;
+            margin-top: auto;
+            padding-top: clamp(16px, 2.5vw, 32px);
+        }
+
+        /* Stat Row — 3 tiles horizontal */
+        .stat-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: clamp(8px, 1.5vw, 16px);
+            margin-bottom: 64px;
+        }
+        .stat-row .stat-tile { min-height: clamp(240px, 30vw, 380px); }
+
+        /* Stat Stack — tiles vertical */
+        .stat-stack {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(8px, 1.5vw, 16px);
+            max-width: 640px;
+            margin-bottom: 64px;
+        }
+        .stat-stack .stat-tile { min-height: clamp(200px, 22vw, 280px); }
+
+        @media (max-width: 900px) {
+            .stat-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 40px 16px; }
+            .stat-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <span class="section-eyebrow">Ethiopia — Land Degradation</span>
+
+        <!-- Stat Row variant (horizontal) -->
+        <h2 class="section-title">Stat Row</h2>
+        <div class="stat-row">
+            <div class="stat-tile">
+                <div class="stat-tile__content">
+                    <p class="stat-tile__heading">Land degradation</p>
+                    <p class="stat-tile__figure"><span class="stat-number" data-target="85">0</span>%</p>
+                    <p class="stat-tile__subheading">of land area degraded</p>
+                </div>
+                <p class="stat-tile__caption">Source: FAO</p>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile__content">
+                    <p class="stat-tile__heading">Deforestation</p>
+                    <p class="stat-tile__figure"><span class="stat-number" data-target="2.19" data-decimal="true">0</span>M</p>
+                    <p class="stat-tile__subheading">hectares lost</p>
+                </div>
+                <p class="stat-tile__caption">Source: FAO 2020</p>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile__content">
+                    <p class="stat-tile__heading">Desertification</p>
+                    <p class="stat-tile__figure"><span class="stat-number" data-target="75">0</span>%</p>
+                    <p class="stat-tile__subheading">land affected</p>
+                </div>
+                <p class="stat-tile__caption">Source: UNCCD</p>
+            </div>
+        </div>
+
+        <!-- Stat Stack variant (vertical) -->
+        <h2 class="section-title">Stat Stack</h2>
+        <div class="stat-stack">
+            <div class="stat-tile">
+                <div class="stat-tile__content">
+                    <p class="stat-tile__heading">Annual forest loss</p>
+                    <p class="stat-tile__figure"><span class="stat-number" data-target="200" data-suffix=",000">0</span></p>
+                    <p class="stat-tile__subheading">hectares per year</p>
+                </div>
+                <p class="stat-tile__caption">Source: Ethiopian Ministry of Agriculture</p>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile__content">
+                    <p class="stat-tile__heading">Rain-fed agriculture</p>
+                    <p class="stat-tile__figure"><span class="stat-number" data-target="80">0</span>%</p>
+                    <p class="stat-tile__subheading">population dependent</p>
+                </div>
+                <p class="stat-tile__caption">Source: World Bank</p>
+            </div>
+            <div class="stat-tile">
+                <div class="stat-tile__content">
+                    <p class="stat-tile__heading">Soil erosion</p>
+                    <p class="stat-tile__figure"><span class="stat-number" data-target="1.5" data-decimal="true">0</span>B</p>
+                    <p class="stat-tile__subheading">tonnes of topsoil lost annually</p>
+                </div>
+                <p class="stat-tile__caption">Source: Ethiopian Highlands Study</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        function animateNumber(el) {
+            var target = parseFloat(el.getAttribute('data-target'));
+            var isDecimal = el.getAttribute('data-decimal') === 'true';
+            var suffix = el.getAttribute('data-suffix') || '';
+            var duration = 1800;
+            var start = performance.now();
+
+            function step(now) {
+                var elapsed = now - start;
+                var progress = Math.min(elapsed / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                var current = target * eased;
+
+                if (isDecimal) {
+                    el.textContent = current.toFixed(2) + suffix;
+                } else {
+                    el.textContent = Math.round(current) + suffix;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    if (isDecimal) el.textContent = target + suffix;
+                    else el.textContent = Math.round(target) + suffix;
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        var tiles = document.querySelectorAll('.stat-tile');
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var tile = entry.target;
+                    var siblings = tile.parentElement.querySelectorAll('.stat-tile');
+                    var index = Array.prototype.indexOf.call(siblings, tile);
+                    setTimeout(function() {
+                        tile.classList.add('visible');
+                        var num = tile.querySelector('.stat-number');
+                        if (num) animateNumber(num);
+                    }, index * 150);
+                    observer.unobserve(tile);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        tiles.forEach(function(tile) { observer.observe(tile); });
+    })();
+    </script>
+</body>
+</html>

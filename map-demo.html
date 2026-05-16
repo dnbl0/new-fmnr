@@ -24,6 +24,9 @@
     @media (max-width: 767px) {
       .leaflet-control-attribution { margin-bottom: 260px !important; background: rgba(255,255,255,0.7) !important; }
     }
+    .custom-popup .leaflet-popup-content-wrapper { border-radius: 16px; padding: 8px; box-shadow: 0 12px 40px rgba(0,0,0,0.15); border: 2px solid #d1fae5; }
+    .custom-popup .leaflet-popup-content { margin: 8px; }
+    .custom-popup .leaflet-popup-tip { border-top-color: #fff; }
   </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 antialiased m-0 p-0 overflow-hidden select-none md:select-auto">
@@ -41,7 +44,6 @@
       
       <!-- Desktop Header -->
       <div class="hidden md:block p-8 pb-4 shrink-0 pointer-events-auto">
-        <span class="text-emerald-600 font-bold tracking-wider text-sm uppercase">World Vision</span>
         <h1 class="text-3xl font-extrabold text-slate-900 mt-1 mb-3">FMNR Scale-Up</h1>
         <p class="text-slate-500 text-sm leading-relaxed">
           Farmer Managed Natural Regeneration is restoring millions of hectares. Select a country to explore impact.
@@ -49,10 +51,6 @@
       </div>
 
       <div class="md:hidden absolute bottom-0 left-0 w-full h-[150%] bg-gradient-to-t from-slate-900/20 to-transparent pointer-events-none -z-10"></div>
-
-      <!-- Cards Container -->
-      <div id="cards-list" class="pointer-events-auto w-full overflow-x-auto md:overflow-y-auto flex md:flex-col gap-4 md:gap-5 px-4 md:px-8 pb-8 pt-4 md:pt-2 snap-x snap-mandatory no-scrollbar desktop-scrollbar md:pb-12 scroll-smooth">
-      </div>
     </div>
 
     <!-- Map Container -->
@@ -82,7 +80,6 @@
     setTimeout(() => { map.invalidateSize(); }, 100);
 
     const markers = {};
-    const cardsList = document.getElementById('cards-list');
 
     const createLeafIcon = (color, scale = 1) => {
       return L.divIcon({
@@ -105,47 +102,33 @@
       mapBounds.push([data.lat, data.lng]);
       
       const popupContent = `
-        <div class="px-1 py-0.5 font-sans">
-          <h4 class="font-bold text-base text-slate-800 mb-0.5">${data.name}</h4>
-          <p class="text-emerald-700 font-semibold text-sm m-0">${data.total} ha</p>
+        <div class="font-sans p-1" style="min-width:260px;">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-lg font-bold text-slate-800">${data.name}</h3>
+            <div class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded-full flex items-center">
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+              ${data.total} ha
+            </div>
+          </div>
+          <p class="text-slate-500 text-xs mb-3 leading-relaxed">${data.desc}</p>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-100">
+              <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Direct</span>
+              <span class="block text-base font-bold text-slate-700">${data.direct}</span>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-100">
+              <span class="block text-[9px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Indirect</span>
+              <span class="block text-base font-bold text-slate-700">${data.indirect}</span>
+            </div>
+          </div>
         </div>
       `;
-      marker.bindPopup(popupContent, { closeButton: false, offset: [0, -5] });
+      marker.bindPopup(popupContent, { closeButton: true, offset: [0, -5], maxWidth: 320, className: 'custom-popup' });
       markers[data.id] = marker;
 
-      const card = document.createElement('div');
-      card.id = `card-${data.id}`;
-      card.className = `group bg-white rounded-2xl p-5 border-2 border-slate-100 shadow-lg md:shadow-sm transition-all duration-300 cursor-pointer hover:border-emerald-200 
-                        min-w-[85vw] max-w-[85vw] md:min-w-0 md:max-w-none snap-center shrink-0`;
-      
-      card.innerHTML = `
-        <div class="flex justify-between items-start mb-2 md:mb-3">
-          <h3 class="text-xl md:text-2xl font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">${data.name}</h3>
-          <div class="bg-emerald-50 md:bg-emerald-100 text-emerald-800 text-[10px] md:text-xs font-bold px-2 md:px-3 py-1 rounded-full flex items-center">
-            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-            ${data.total} ha
-          </div>
-        </div>
-        <p class="text-slate-500 text-xs md:text-sm mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">${data.desc}</p>
-        <div class="grid grid-cols-2 gap-2 md:gap-3">
-          <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-100">
-            <span class="block text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Direct</span>
-            <span class="block text-base md:text-lg font-bold text-slate-700">${data.direct}</span>
-          </div>
-          <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-100">
-            <span class="block text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Indirect</span>
-            <span class="block text-base md:text-lg font-bold text-slate-700">${data.indirect}</span>
-          </div>
-        </div>
-      `;
-
-      card.addEventListener('click', () => activateCountry(data.id));
       marker.on('click', () => {
         activateCountry(data.id);
-        card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       });
-
-      cardsList.appendChild(card);
     });
 
     const isMobileInit = window.innerWidth < 768;
@@ -156,15 +139,8 @@
 
     function activateCountry(id) {
       fmnrData.forEach(d => {
-        const c = document.getElementById(`card-${d.id}`);
-        c.classList.remove('border-emerald-500', 'ring-2', 'ring-emerald-100');
-        c.classList.add('border-slate-100');
         markers[d.id].setIcon(defaultIcon);
       });
-
-      const activeCard = document.getElementById(`card-${id}`);
-      activeCard.classList.remove('border-slate-100');
-      activeCard.classList.add('border-emerald-500', 'ring-2', 'ring-emerald-100');
 
       const activeData = fmnrData.find(d => d.id === id);
       const activeMarker = markers[id];

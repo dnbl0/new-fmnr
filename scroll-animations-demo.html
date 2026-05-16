@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Scroll Animations — FMNR Component Library</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; }
+
+        .page-header { max-width: 900px; margin: 0 auto; padding: 80px 48px 48px; }
+        .page-header h1 { font-family: var(--font-heading); font-size: clamp(36px, 5vw, 56px); text-transform: uppercase; color: #1d1d1f; line-height: 1; margin-bottom: 12px; }
+        .page-header p { font-size: 17px; color: #6e6e73; max-width: 600px; line-height: 1.6; }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--color-green); text-decoration: none; margin-bottom: 24px; }
+        .back-link:hover { text-decoration: underline; }
+
+        /* Demo sections */
+        .demo-section { max-width: 900px; margin: 0 auto; padding: 0 48px 96px; }
+        .demo-label { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-green); background: rgba(7,125,87,0.08); padding: 5px 12px; border-radius: 6px; margin-bottom: 16px; }
+        .demo-title { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: #1d1d1f; margin-bottom: 8px; line-height: 1.1; }
+        .demo-desc { font-size: 15px; color: #6e6e73; line-height: 1.6; margin-bottom: 32px; max-width: 600px; }
+
+        /* Demo areas */
+        .demo-area { background: #f5f5f7; border-radius: 16px; padding: 64px 48px; display: flex; flex-direction: column; align-items: center; gap: 24px; min-height: 300px; justify-content: center; overflow: hidden; }
+        .demo-area--dark { background: #1d1d1f; }
+
+        /* Reveal items */
+        .reveal-item { background: #fff; border-radius: 12px; padding: 24px 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04); width: 100%; max-width: 400px; text-align: center; font-weight: 700; color: #1d1d1f; opacity: 0; transform: translateY(32px); transition: none; }
+        .reveal-item.visible { opacity: 1; transform: translateY(0); transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1); }
+
+        /* Stagger items */
+        .stagger-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; width: 100%; }
+        .stagger-card { background: #fff; border-radius: 12px; padding: 32px 16px; text-align: center; font-weight: 700; font-size: 14px; color: #1d1d1f; box-shadow: 0 2px 8px rgba(0,0,0,0.05); opacity: 0; transform: translateY(24px) scale(0.95); }
+        .stagger-card.visible { opacity: 1; transform: translateY(0) scale(1); transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+
+        /* Parallax */
+        .parallax-container { position: relative; width: 100%; height: 300px; border-radius: 16px; overflow: hidden; }
+        .parallax-bg { position: absolute; inset: -60px 0; background: url('images/brand/tony-1.jpg') center/cover; }
+        .parallax-text { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; height: 100%; }
+        .parallax-text h3 { font-family: var(--font-heading); font-size: 36px; color: #fff; text-transform: uppercase; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+
+        /* Scale-in */
+        .scale-item { width: 200px; height: 200px; border-radius: 16px; background: var(--color-green); display: flex; align-items: center; justify-content: center; color: #fff; font-family: var(--font-heading); font-size: 48px; opacity: 0; transform: scale(0.6); }
+        .scale-item.visible { opacity: 1; transform: scale(1); transition: opacity 0.7s cubic-bezier(0.34,1.56,0.64,1), transform 0.7s cubic-bezier(0.34,1.56,0.64,1); }
+
+        /* Counter */
+        .counter-row { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; }
+        .counter-item { text-align: center; }
+        .counter-value { font-family: var(--font-heading); font-size: clamp(40px, 6vw, 64px); color: var(--color-teal); line-height: 1; }
+        .counter-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-top: 8px; }
+
+        /* Slide-in */
+        .slide-row { display: flex; gap: 24px; width: 100%; }
+        .slide-left { background: #fff; border-radius: 12px; padding: 32px; flex: 1; font-weight: 700; opacity: 0; transform: translateX(-60px); }
+        .slide-left.visible { opacity: 1; transform: translateX(0); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .slide-right { background: #fff; border-radius: 12px; padding: 32px; flex: 1; font-weight: 700; opacity: 0; transform: translateX(60px); }
+        .slide-right.visible { opacity: 1; transform: translateX(0); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1) 0.15s, transform 0.8s cubic-bezier(0.16,1,0.3,1) 0.15s; }
+
+        /* Bar chart animation */
+        .bar-row { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .bar-item { display: flex; align-items: center; gap: 12px; }
+        .bar-label { font-size: 13px; font-weight: 700; color: #fff; width: 100px; text-align: right; flex-shrink: 0; }
+        .bar-track { flex: 1; height: 32px; background: rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--color-teal); border-radius: 8px; width: 0; transition: width 1.2s cubic-bezier(0.16,1,0.3,1); }
+
+        /* Ken Burns */
+        .ken-burns-container { position: relative; width: 100%; height: 300px; border-radius: 16px; overflow: hidden; }
+        .ken-burns-img { width: 100%; height: 100%; object-fit: cover; animation: kenBurns 12s ease-in-out infinite alternate; }
+        @keyframes kenBurns { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.12) translate(-2%,-1%); } }
+
+        .separator { max-width: 900px; margin: 0 auto; padding: 0 48px; }
+        .separator hr { border: none; border-top: 1px solid #e5e5e5; margin-bottom: 64px; }
+
+        @media (max-width: 768px) {
+            .page-header, .demo-section { padding-left: 24px; padding-right: 24px; }
+            .stagger-grid { grid-template-columns: 1fr 1fr; }
+            .slide-row { flex-direction: column; }
+            .counter-row { gap: 32px; }
+            .demo-area { padding: 40px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <a href="components.html" class="back-link">← Back to Deliverables</a>
+        <h1>Scroll &amp; Animation<br>Patterns</h1>
+        <p>Each animation pattern used across the FMNR website, documented in isolation. Scroll down to trigger each demo as it enters the viewport.</p>
+    </header>
+
+    <!-- 1. Fade-up reveal -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 01</span>
+        <h2 class="demo-title">Fade-Up Reveal</h2>
+        <p class="demo-desc">Elements fade in and slide up as they enter the viewport. Used for headings, paragraphs, and section content throughout the site. Triggered once on scroll.</p>
+        <div class="demo-area" id="demo-reveal">
+            <div class="reveal-item">First element fades up</div>
+            <div class="reveal-item">Second element fades up</div>
+            <div class="reveal-item">Third element fades up</div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- 2. Staggered entrance -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 02</span>
+        <h2 class="demo-title">Staggered Grid Entrance</h2>
+        <p class="demo-desc">Multiple elements animate in sequence with a short delay between each. Used for card grids, pillar sections, and award cards. Creates a "cascading" feel.</p>
+        <div class="demo-area" id="demo-stagger">
+            <div class="stagger-grid">
+                <div class="stagger-card">Card 1</div>
+                <div class="stagger-card">Card 2</div>
+                <div class="stagger-card">Card 3</div>
+                <div class="stagger-card">Card 4</div>
+                <div class="stagger-card">Card 5</div>
+                <div class="stagger-card">Card 6</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- 3. Parallax -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 03</span>
+        <h2 class="demo-title">Parallax Scroll</h2>
+        <p class="demo-desc">Background images move at a slower rate than the page scroll, creating depth. Used on hero sections and full-bleed image bands. The image shifts vertically as you scroll past.</p>
+        <div class="demo-area" style="padding:0; overflow:hidden; border-radius:16px;">
+            <div class="parallax-container" id="demo-parallax">
+                <div class="parallax-bg" id="parallax-bg"></div>
+                <div class="parallax-text"><h3>Parallax depth</h3></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- 4. Scale-in -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 04</span>
+        <h2 class="demo-title">Scale-In (Bounce)</h2>
+        <p class="demo-desc">Elements scale from small to full size with a slight overshoot/bounce. Used for stat numbers, icons, and emphasis moments. Draws attention with a springy entrance.</p>
+        <div class="demo-area" id="demo-scale">
+            <div class="scale-item">5M+</div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- 5. Count-up -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 05</span>
+        <h2 class="demo-title">Animated Count-Up</h2>
+        <p class="demo-desc">Numbers count from zero to their target value when scrolled into view. Used in stat strips, impact numbers, and data visualisation sections. Creates a sense of scale and achievement.</p>
+        <div class="demo-area demo-area--dark" id="demo-counter">
+            <div class="counter-row">
+                <div class="counter-item">
+                    <span class="counter-value" data-target="27">0</span>
+                    <span class="counter-label">Countries</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-value" data-target="5">0</span>
+                    <span class="counter-label">Million Hectares</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-value" data-target="900">0</span>
+                    <span class="counter-label">K Beneficiaries</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- 6. Slide from sides -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 06</span>
+        <h2 class="demo-title">Slide-In from Sides</h2>
+        <p class="demo-desc">Elements slide in from the left or right. Used for two-column layouts, split content sections, and bio panels. Creates a sense of two halves coming together.</p>
+        <div class="demo-area" id="demo-slide">
+            <div class="slide-row">
+                <div class="slide-left">← Slides in from left</div>
+                <div class="slide-right">Slides in from right →</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- 7. Bar chart fill -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 07</span>
+        <h2 class="demo-title">Bar Chart Fill</h2>
+        <p class="demo-desc">Horizontal bars animate from zero width to their target percentage. Used on the Impact page for country adoption data. Each bar fills sequentially for a dramatic effect.</p>
+        <div class="demo-area demo-area--dark" id="demo-bars">
+            <div class="bar-row">
+                <div class="bar-item"><span class="bar-label">Niger</span><div class="bar-track"><div class="bar-fill" data-width="92"></div></div></div>
+                <div class="bar-item"><span class="bar-label">Ethiopia</span><div class="bar-track"><div class="bar-fill" data-width="78"></div></div></div>
+                <div class="bar-item"><span class="bar-label">Kenya</span><div class="bar-track"><div class="bar-fill" data-width="65"></div></div></div>
+                <div class="bar-item"><span class="bar-label">Ghana</span><div class="bar-track"><div class="bar-fill" data-width="48"></div></div></div>
+                <div class="bar-item"><span class="bar-label">Indonesia</span><div class="bar-track"><div class="bar-fill" data-width="32"></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- 8. Ken Burns -->
+    <section class="demo-section">
+        <span class="demo-label">Pattern 08</span>
+        <h2 class="demo-title">Ken Burns (Slow Zoom)</h2>
+        <p class="demo-desc">A subtle continuous zoom/pan on hero images that adds life without requiring interaction. Used on page hero sections. The image gently scales and translates over time using CSS keyframes.</p>
+        <div class="demo-area" style="padding:0; overflow:hidden; border-radius:16px;">
+            <div class="ken-burns-container">
+                <img class="ken-burns-img" src="images/brand/tony-3.jpg" alt="Ken Burns demo">
+            </div>
+        </div>
+    </section>
+
+    <div class="separator"><hr></div>
+
+    <!-- Summary -->
+    <section class="demo-section" style="padding-bottom:120px;">
+        <span class="demo-label">Summary</span>
+        <h2 class="demo-title">When to use each pattern</h2>
+        <p class="demo-desc" style="max-width:100%;">
+            <strong>Fade-up</strong> — Default for all content entering the viewport.<br>
+            <strong>Stagger</strong> — Grids of 3+ items (cards, pillars, awards).<br>
+            <strong>Parallax</strong> — Hero images and full-bleed photo bands.<br>
+            <strong>Scale-in</strong> — Key stat numbers or icons that need emphasis.<br>
+            <strong>Count-up</strong> — Numeric data (impact stats, beneficiary counts).<br>
+            <strong>Slide-in</strong> — Two-column split layouts (bio, feature sections).<br>
+            <strong>Bar chart</strong> — Data comparison (adoption rates, percentages).<br>
+            <strong>Ken Burns</strong> — Hero images to add subtle life on load.
+        </p>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script>
+    (function() {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 1. Fade-up reveal
+        var revealItems = document.querySelectorAll('#demo-reveal .reveal-item');
+        revealItems.forEach(function(el, i) {
+            ScrollTrigger.create({
+                trigger: el, start: 'top 88%', once: true,
+                onEnter: function() {
+                    setTimeout(function() { el.classList.add('visible'); }, i * 200);
+                }
+            });
+        });
+
+        // 2. Stagger grid
+        var staggerCards = document.querySelectorAll('#demo-stagger .stagger-card');
+        ScrollTrigger.create({
+            trigger: '#demo-stagger', start: 'top 80%', once: true,
+            onEnter: function() {
+                staggerCards.forEach(function(card, i) {
+                    setTimeout(function() { card.classList.add('visible'); }, i * 100);
+                });
+            }
+        });
+
+        // 3. Parallax
+        var parallaxBg = document.getElementById('parallax-bg');
+        ScrollTrigger.create({
+            trigger: '#demo-parallax', start: 'top bottom', end: 'bottom top',
+            onUpdate: function(self) {
+                gsap.set(parallaxBg, { yPercent: -20 + (self.progress * 40) });
+            }
+        });
+
+        // 4. Scale-in
+        var scaleItem = document.querySelector('#demo-scale .scale-item');
+        ScrollTrigger.create({
+            trigger: '#demo-scale', start: 'top 80%', once: true,
+            onEnter: function() { scaleItem.classList.add('visible'); }
+        });
+
+        // 5. Count-up
+        var counters = document.querySelectorAll('#demo-counter .counter-value');
+        ScrollTrigger.create({
+            trigger: '#demo-counter', start: 'top 80%', once: true,
+            onEnter: function() {
+                counters.forEach(function(el) {
+                    var target = parseInt(el.getAttribute('data-target'), 10);
+                    gsap.to(el, {
+                        innerText: target, duration: 2, ease: 'power2.out',
+                        snap: { innerText: 1 },
+                        onUpdate: function() { el.textContent = Math.round(parseFloat(el.textContent)); }
+                    });
+                });
+            }
+        });
+
+        // 6. Slide-in
+        var slideLeft = document.querySelector('#demo-slide .slide-left');
+        var slideRight = document.querySelector('#demo-slide .slide-right');
+        ScrollTrigger.create({
+            trigger: '#demo-slide', start: 'top 80%', once: true,
+            onEnter: function() {
+                slideLeft.classList.add('visible');
+                setTimeout(function() { slideRight.classList.add('visible'); }, 150);
+            }
+        });
+
+        // 7. Bar chart
+        ScrollTrigger.create({
+            trigger: '#demo-bars', start: 'top 80%', once: true,
+            onEnter: function() {
+                document.querySelectorAll('#demo-bars .bar-fill').forEach(function(bar, i) {
+                    setTimeout(function() {
+                        bar.style.width = bar.getAttribute('data-width') + '%';
+                    }, i * 150);
+                });
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

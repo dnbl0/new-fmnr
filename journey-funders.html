@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Journey — Funders — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; padding: 80px 48px; max-width: 1080px; margin: 0 auto; }
+        h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; margin-bottom: 8px; }
+        .subtitle { font-size: 17px; color: #6e6e73; margin-bottom: 48px; line-height: 1.5; }
+        .persona { background: #f5f5f7; border-radius: 16px; padding: 32px; margin-bottom: 48px; }
+        .persona h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .persona p { font-size: 15px; color: #6e6e73; line-height: 1.6; }
+        .persona .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+        .persona .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: #fff; border: 1px solid #e5e5e5; border-radius: 100px; padding: 6px 14px; color: #6e6e73; }
+        .journey { position: relative; padding-left: 32px; }
+        .journey::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: #e5e5e5; }
+        .step { position: relative; margin-bottom: 40px; }
+        .step::before { content: ''; position: absolute; left: -32px; top: 6px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--color-green); background: #fff; }
+        .step.active::before { background: var(--color-green); }
+        .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .step .action { font-size: 14px; color: #1d1d1f; margin-bottom: 4px; }
+        .step .page { font-size: 13px; color: var(--color-green); font-weight: 600; }
+        .step .need { font-size: 13px; color: #86868b; margin-top: 4px; }
+        @media (max-width: 768px) { body { padding: 40px 24px; } }
+    </style>
+</head>
+<body>
+    <h1>User Journey — Funders</h1>
+    <p class="subtitle">How donors and grant-makers assess FMNR's impact, review evidence and identify funding opportunities.</p>
+
+    <div class="persona">
+        <h2>Persona: Programme Officer at a Foundation</h2>
+        <p>Manages a climate/agriculture portfolio at a bilateral or private foundation. Evaluates dozens of initiatives annually. Needs rigorous data, clear cost-effectiveness metrics and confidence in scale potential before recommending funding.</p>
+        <div class="tags">
+            <span class="tag">Data-driven</span>
+            <span class="tag">Comparative mindset</span>
+            <span class="tag">Seeks ROI</span>
+            <span class="tag">Needs scale evidence</span>
+        </div>
+    </div>
+
+    <div class="journey">
+        <div class="step active">
+            <h3>1. Discovery</h3>
+            <p class="action">Encounters FMNR in a report, at a climate summit or via a referral</p>
+            <p class="page">→ Homepage (credibility signals, scale numbers)</p>
+            <p class="need">Needs: Immediate sense of scale and legitimacy</p>
+        </div>
+        <div class="step active">
+            <h3>2. Due Diligence</h3>
+            <p class="action">Reviews hectares restored, beneficiaries reached, cost per hectare</p>
+            <p class="page">→ Impact & Evidence (stats, charts, interactive map)</p>
+            <p class="need">Needs: Hard numbers, peer-reviewed citations, methodology</p>
+        </div>
+        <div class="step active">
+            <h3>3. Depth Research</h3>
+            <p class="action">Downloads research papers, reads case studies for specific regions</p>
+            <p class="page">→ Resources (filtered by "Research"), Country Profiles</p>
+            <p class="need">Needs: Downloadable PDFs, academic sources, geographic specificity</p>
+        </div>
+        <div class="step">
+            <h3>4. Alignment Check</h3>
+            <p class="action">Assesses how FMNR aligns with their portfolio themes (climate, food security, gender)</p>
+            <p class="page">→ About FMNR, Partner page (impact areas)</p>
+            <p class="need">Needs: Clear articulation of outcomes across multiple SDGs</p>
+        </div>
+        <div class="step">
+            <h3>5. Engagement</h3>
+            <p class="action">Reaches out to discuss funding opportunities or co-investment</p>
+            <p class="page">→ Partner With Us, Contact</p>
+            <p class="need">Needs: Senior contact, clear ask, proposal-ready content</p>
+        </div>
+    </div>
+</body>
+</html>

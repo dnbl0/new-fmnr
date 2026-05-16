@@ -6,8 +6,8 @@
     <title>FMNR &#8212; Farmer Managed Natural Regeneration</title>
     <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
     <link href="design-tokens.css" rel="stylesheet">
-    <script src="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
@@ -298,39 +298,15 @@
         @media(max-width:900px){.growth-section{padding:72px 0}.growth-inner{padding:0 24px}.growth-grid{grid-template-columns:1fr 1fr;border-top:none}.growth-step{border-top:2px solid #1d1d1f;padding-top:32px;padding-right:0;margin-bottom:32px}.growth-step+.growth-step{border-left:none;padding-left:0}}
 
         /* MAP */
-        #map-scene{position:relative;height:400vh}
-        #map-scene .scene__sticky{position:sticky;top:0;height:100vh;overflow:hidden}
-        #map-section{width:100%;height:100%;background:#000;display:flex;align-items:center}
-        .map-inner{max-width:1280px;width:100%;margin:0 auto;padding:0 48px;display:flex;min-height:700px}
-        .map-sidebar{width:500px;flex-shrink:0;padding:80px 48px 80px 0;display:flex;flex-direction:column;gap:24px}
-        .map-sidebar h2{font-family:var(--font-heading);font-size:clamp(32px,3.5vw,52px);line-height:1;color:#fff;text-transform:uppercase;margin:0}
-        .map-sidebar h2 em{color:var(--color-teal);font-style:normal}
-        .map-narrative-area{position:relative;flex:1;overflow:hidden;min-height:200px}
-        .map-narrative{position:absolute;top:0;left:0;width:100%;opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .4s,transform .4s}
-        .map-narrative.active{position:relative;opacity:1;transform:translateY(0);pointer-events:auto}
-        .map-step-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--color-teal);margin-bottom:12px}
-        .map-narrative-heading{font-family:var(--font-heading);font-size:clamp(20px,2.2vw,28px);color:#fff;text-transform:uppercase;margin:0 0 12px;line-height:1}
-        .map-narrative p{font-size:15px;line-height:1.65;color:rgba(255,255,255,.55);margin:0}
-        .map-stat-highlight{font-family:var(--font-heading);font-size:clamp(26px,2.8vw,40px);color:var(--color-teal);display:block;margin-top:16px;letter-spacing:-.02em}
-        .map-progress{display:flex;gap:10px;align-items:center;margin-top:32px;flex-shrink:0}
-        .map-progress-dot{width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,.22);cursor:pointer;padding:0;transition:background .3s,transform .3s}
-        .map-progress-dot.active{background:var(--color-teal);transform:scale(1.4)}
-        .map-container{flex:1;position:relative;overflow:hidden;border-radius:8px}
-        #mapbox-map{width:100%;height:100%;min-height:600px}
-        .maplibregl-popup-content{background:#fff;border-radius:8px;padding:0;box-shadow:0 12px 24px rgba(0,0,0,.2);width:280px;overflow:hidden}
-        .maplibregl-popup-close-button{font-size:20px;padding:4px 10px;color:#999;z-index:1}
-        .maplibregl-popup-anchor-bottom .maplibregl-popup-tip{border-top-color:#fff}
-        .map-popup{display:flex;flex-direction:column}
-        .map-popup-bar{height:4px;width:100%;background:var(--color-teal)}
-        .map-popup-body{padding:16px;display:flex;flex-direction:column;gap:10px}
-        .map-popup-region{display:inline-flex;align-items:center;padding:3px 8px;background:var(--color-teal);border-radius:999px;font-size:11px;color:#000;width:fit-content;text-transform:uppercase}
-        .map-popup h4{font-family:var(--font-heading);font-size:20px;margin:0;text-transform:uppercase;color:#000}
-        .map-popup p{font-size:13px;line-height:1.5;color:#333;margin:0}
-        .map-marker{width:14px;height:14px;background:#0FFBAB;border-radius:50%;cursor:pointer;box-shadow:0 0 12px rgba(15,251,171,.6);border:2px solid rgba(15,251,171,.3);transition:transform .2s}
-        .map-marker:hover{transform:scale(1.5)}
-        .map-marker-pulse{position:absolute;top:-9px;left:-9px;width:32px;height:32px;border-radius:50%;background:rgba(15,251,171,.2);animation:markerPulse 2.5s ease-in-out infinite;pointer-events:none}
-        @keyframes markerPulse{0%,100%{transform:scale(1);opacity:.2}50%{transform:scale(1.8);opacity:0}}
-        @media(max-width:900px){.map-inner{padding:0 24px;flex-direction:column}.map-sidebar{width:100%;padding:40px 0 24px}.map-container{width:100%;min-height:360px}#mapbox-map{min-height:360px}}
+        #map-scene{position:relative;background:#000;padding:0}
+        .map-header{max-width:1280px;margin:0 auto;padding:80px 48px 32px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+        .map-header h2{font-family:var(--font-heading);font-size:clamp(32px,3.5vw,52px);line-height:1;color:#fff;text-transform:uppercase;margin:0}
+        .map-header h2 em{color:var(--color-teal);font-style:normal}
+        .map-header p{font-size:15px;color:rgba(255,255,255,.5);max-width:400px;line-height:1.5;margin:0}
+        #leaflet-map{width:100%;height:700px;background:#1a1a2e}
+        .leaflet-popup .leaflet-popup-content-wrapper{border-radius:16px;padding:8px;box-shadow:0 12px 40px rgba(0,0,0,.15);border:2px solid #d1fae5}
+        .leaflet-popup .leaflet-popup-content{margin:8px}
+        @media(max-width:900px){.map-header{padding:56px 24px 24px;flex-direction:column;align-items:flex-start}#leaflet-map{height:500px}}
 
         /* CONTACT */
         #contact{background:#f5f5f7}
@@ -457,7 +433,7 @@
 
     <!-- HERO -->
     <section id="hero">
-        <video id="hero-video" autoplay muted loop playsinline preload="auto" src="home-video-web.mp4"></video>
+        <video id="hero-video" autoplay muted loop playsinline preload="auto" src="video/forest-fmnr.mp4"></video>
         <div class="hero-scrim"></div>
         <div class="hero-copy">
             <div class="hero-copy-inner">
@@ -807,50 +783,11 @@
 
     <!-- MAP -->
     <div id="map-scene">
-        <div class="scene__sticky">
-            <div id="map-section">
-                <div class="map-inner">
-                    <div class="map-sidebar">
-                        <h2>Where FMNR is <em>changing</em> the world</h2>
-                        <div class="map-narrative-area">
-                            <div class="map-narrative active" data-step="0">
-                                <span class="map-step-label">Step 1 of 4</span>
-                                <p class="map-narrative-heading">A Global Movement</p>
-                                <p>From a single field in Niger, FMNR has grown into a worldwide force for landscape restoration. Communities are reclaiming degraded land with minimal cost and maximum impact.</p>
-                                <span class="map-stat-highlight">27 countries &amp; 24M ha restored</span>
-                            </div>
-                            <div class="map-narrative" data-step="1">
-                                <span class="map-step-label">Step 2 of 4</span>
-                                <p class="map-narrative-heading">Africa: The Heartland</p>
-                                <p>The Sahel is where FMNR was born. In Niger alone, an estimated 200 million trees have been regenerated, reversing decades of desertification.</p>
-                                <span class="map-stat-highlight">5M farmers across the Sahel</span>
-                            </div>
-                            <div class="map-narrative" data-step="2">
-                                <span class="map-step-label">Step 3 of 4</span>
-                                <p class="map-narrative-heading">From Sahel to Horn</p>
-                                <p>Scaling east, FMNR is transforming landscapes in Ethiopia and Kenya. Degraded hillsides return to productive farmland as communities build long-term drought resilience.</p>
-                                <span class="map-stat-highlight">12M trees regenerated in East Africa</span>
-                            </div>
-                            <div class="map-narrative" data-step="3">
-                                <span class="map-step-label">Step 4 of 4</span>
-                                <p class="map-narrative-heading">Growing Worldwide</p>
-                                <p>The movement now reaches Asia-Pacific and beyond. From Timor-Leste to Indonesia, local farmers are adapting FMNR &#8212; proving regenerative power is truly universal.</p>
-                                <span class="map-stat-highlight">Asia-Pacific &amp; Latin America expanding</span>
-                            </div>
-                        </div>
-                        <div class="map-progress">
-                            <button class="map-progress-dot active" data-goto="0" aria-label="Step 1"></button>
-                            <button class="map-progress-dot" data-goto="1" aria-label="Step 2"></button>
-                            <button class="map-progress-dot" data-goto="2" aria-label="Step 3"></button>
-                            <button class="map-progress-dot" data-goto="3" aria-label="Step 4"></button>
-                        </div>
-                    </div>
-                    <div class="map-container" id="map-container">
-                        <div id="mapbox-map"></div>
-                    </div>
-                </div>
-            </div>
+        <div class="map-header">
+            <h2>Where FMNR is <em>changing</em> the world</h2>
+            <p>From a single field in Niger to 27 countries. Select a pin to explore impact by region.</p>
         </div>
+        <div id="leaflet-map"></div>
     </div>
 
     <!-- CONTACT -->
@@ -1160,20 +1097,54 @@
     </script>
 
     <script>
-    // MapLibre
+    // Leaflet Map
     (function(){
-        var regionData=[{id:'niger',lng:8.0,lat:13.5,region:'West Africa',name:'Niger',desc:'Birthplace of modern FMNR. 200 million trees regenerated.'},{id:'burkina',lng:-1.5,lat:12.4,region:'West Africa',name:'Burkina Faso',desc:'Large-scale FMNR adoption reversing Sahel desertification.'},{id:'mali',lng:-2.0,lat:17.6,region:'West Africa',name:'Mali',desc:'Community-led FMNR protecting livelihoods across drylands.'},{id:'senegal',lng:-14.5,lat:14.5,region:'West Africa',name:'Senegal',desc:'Agroforestry revival through FMNR-aligned practices.'},{id:'ethiopia',lng:40.5,lat:9.2,region:'East Africa',name:'Ethiopia',desc:'1 million hectares restored, improving food security.'},{id:'kenya',lng:37.9,lat:0.0,region:'East Africa',name:'Kenya',desc:'FMNR integrated with community watershed restoration.'},{id:'tanzania',lng:34.9,lat:-6.4,region:'East Africa',name:'Tanzania',desc:'Farmer networks scaling FMNR across degraded hillsides.'},{id:'ghana',lng:-1.0,lat:7.9,region:'West Africa',name:'Ghana',desc:'FMNR supporting cocoa agroforestry and food systems.'},{id:'cambodia',lng:104.9,lat:12.6,region:'Asia-Pacific',name:'Cambodia',desc:'FMNR reviving degraded forests near community farmlands.'},{id:'indonesia',lng:113.9,lat:-0.8,region:'Asia-Pacific',name:'Indonesia',desc:'Smallholder adoption of FMNR in degraded dryland zones.'},{id:'timorleste',lng:125.6,lat:-8.8,region:'Asia-Pacific',name:'Timor-Leste',desc:'FMNR piloted in partnership with Caritas and local NGOs.'},{id:'india',lng:78.5,lat:20.6,region:'Asia-Pacific',name:'India',desc:'FMNR techniques trialled in dryland Rajasthan and Gujarat.'},{id:'haiti',lng:-72.3,lat:18.9,region:'Latin America',name:'Haiti',desc:'Post-disaster FMNR adoption restoring hillside tree cover.'},{id:'chad',lng:18.7,lat:15.5,region:'Central Africa',name:'Chad',desc:'FMNR protecting Lake Chad basin communities from drought.'}];
-        var mapEl=document.getElementById('mapbox-map');if(!mapEl)return;
-        var map=new maplibregl.Map({container:'mapbox-map',style:{version:8,sources:{osm:{type:'raster',tiles:['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'],tileSize:256,attribution:'&copy; OpenStreetMap, &copy; CartoDB'}},layers:[{id:'osm',type:'raster',source:'osm'}]},center:[20,10],zoom:2,minZoom:1.5,maxZoom:8,interactive:true});
-        map.on('load',function(){
-            regionData.forEach(function(r){var el=document.createElement('div');el.style.position='relative';var dot=document.createElement('div');dot.className='map-marker';el.appendChild(dot);var pulse=document.createElement('div');pulse.className='map-marker-pulse';el.appendChild(pulse);var popup=new maplibregl.Popup({offset:18,closeButton:true,maxWidth:'280px'}).setHTML('<div class="map-popup"><div class="map-popup-bar"></div><div class="map-popup-body"><span class="map-popup-region">'+r.region+'</span><h4>'+r.name+'</h4><p>'+r.desc+'</p></div></div>');new maplibregl.Marker({element:el}).setLngLat([r.lng,r.lat]).setPopup(popup).addTo(map);});
-            gsap.from(document.querySelectorAll('.map-marker'),{scale:0,opacity:0,duration:0.5,ease:'back.out(1.4)',stagger:0.05,scrollTrigger:{trigger:'#map-scene',start:'top 80%',once:true}});
+        var mapEl=document.getElementById('leaflet-map');if(!mapEl)return;
+        var regionData=[
+            {id:'niger',lat:13.5,lng:8.0,name:'Niger',region:'West Africa',desc:'Birthplace of modern FMNR. 200 million trees regenerated.',total:'5M',direct:'2M',indirect:'3M'},
+            {id:'ethiopia',lat:9.2,lng:40.5,name:'Ethiopia',region:'East Africa',desc:'4.6M hectares targeted for restoration, improving food security.',total:'4.6M',direct:'700K',indirect:'3.9M'},
+            {id:'kenya',lat:0.0,lng:37.9,name:'Kenya',region:'East Africa',desc:'Kenya has committed 5.1M hectares to restoration for climate strategy.',total:'4.5M',direct:'744K',indirect:'3.75M'},
+            {id:'uganda',lat:1.37,lng:32.29,name:'Uganda',region:'East Africa',desc:'Targeting 2.5M hectares to build resilience for farmers.',total:'2.28M',direct:'571K',indirect:'1.71M'},
+            {id:'zambia',lat:-13.13,lng:27.85,name:'Zambia',region:'Southern Africa',desc:'Plans to restore over 3M hectares by empowering communities.',total:'2.0M',direct:'600K',indirect:'1.4M'},
+            {id:'burkina',lat:12.4,lng:-1.5,name:'Burkina Faso',region:'West Africa',desc:'Large-scale FMNR adoption reversing Sahel desertification.',total:'1.8M',direct:'450K',indirect:'1.35M'},
+            {id:'mali',lat:17.6,lng:-2.0,name:'Mali',region:'West Africa',desc:'Community-led FMNR protecting livelihoods across drylands.',total:'1.5M',direct:'380K',indirect:'1.12M'},
+            {id:'senegal',lat:14.5,lng:-14.5,name:'Senegal',region:'West Africa',desc:'Agroforestry revival through FMNR-aligned practices.',total:'1.2M',direct:'300K',indirect:'900K'},
+            {id:'ghana',lat:7.9,lng:-1.0,name:'Ghana',region:'West Africa',desc:'FMNR supporting cocoa agroforestry and food systems.',total:'800K',direct:'200K',indirect:'600K'},
+            {id:'tanzania',lat:-6.4,lng:34.9,name:'Tanzania',region:'East Africa',desc:'Farmer networks scaling FMNR across degraded hillsides.',total:'1.1M',direct:'280K',indirect:'820K'},
+            {id:'indonesia',lat:-0.8,lng:113.9,name:'Indonesia',region:'Asia-Pacific',desc:'Smallholder adoption of FMNR in degraded dryland zones.',total:'600K',direct:'150K',indirect:'450K'},
+            {id:'timorleste',lat:-8.8,lng:125.6,name:'Timor-Leste',region:'Asia-Pacific',desc:'FMNR piloted in partnership with Caritas and local NGOs.',total:'200K',direct:'50K',indirect:'150K'},
+            {id:'india',lat:20.6,lng:78.5,name:'India',region:'Asia-Pacific',desc:'FMNR techniques trialled in dryland Rajasthan and Gujarat.',total:'400K',direct:'100K',indirect:'300K'},
+            {id:'chad',lat:15.5,lng:18.7,name:'Chad',region:'Central Africa',desc:'FMNR protecting Lake Chad basin communities from drought.',total:'900K',direct:'225K',indirect:'675K'}
+        ];
+
+        var map=L.map('leaflet-map',{scrollWheelZoom:false,zoomControl:false}).setView([10,20],3);
+        L.control.zoom({position:'topright'}).addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+            attribution:'&copy; OSM &copy; CARTO',subdomains:'abcd',maxZoom:20
+        }).addTo(map);
+
+        var leafIcon=function(color){
+            return L.divIcon({
+                className:'custom-icon',
+                html:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="'+color+'" style="width:28px;height:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))"><path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>',
+                iconSize:[28,28],iconAnchor:[14,28],popupAnchor:[0,-28]
+            });
+        };
+
+        regionData.forEach(function(r){
+            var popupHtml='<div style="font-family:system-ui;min-width:240px;padding:4px;">'+
+                '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;">'+
+                '<h4 style="font-size:16px;font-weight:800;margin:0;">'+r.name+'</h4>'+
+                '<span style="background:#d1fae5;color:#065f46;font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;">'+r.total+' ha</span>'+
+                '</div>'+
+                '<p style="font-size:12px;color:#64748b;margin:0 0 10px;line-height:1.4;">'+r.desc+'</p>'+
+                '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+
+                '<div style="background:#f1f5f9;border-radius:8px;padding:8px;"><span style="display:block;font-size:9px;font-weight:700;text-transform:uppercase;color:#94a3b8;margin-bottom:2px;">Direct</span><span style="font-size:14px;font-weight:700;color:#334155;">'+r.direct+'</span></div>'+
+                '<div style="background:#f1f5f9;border-radius:8px;padding:8px;"><span style="display:block;font-size:9px;font-weight:700;text-transform:uppercase;color:#94a3b8;margin-bottom:2px;">Indirect</span><span style="font-size:14px;font-weight:700;color:#334155;">'+r.indirect+'</span></div>'+
+                '</div></div>';
+            L.marker([r.lat,r.lng],{icon:leafIcon('#10b981')}).addTo(map)
+                .bindPopup(popupHtml,{closeButton:true,maxWidth:320,className:'custom-popup'});
         });
-        var mapSteps=[{center:[20,10],zoom:2},{center:[5,14],zoom:4},{center:[39,5],zoom:4.5},{center:[95,5],zoom:3}];
-        var currentStep=0;
-        function goToStep(n){if(n<0||n>=mapSteps.length)return;currentStep=n;document.querySelectorAll('.map-narrative').forEach(function(el,i){el.classList.toggle('active',i===n);});document.querySelectorAll('.map-progress-dot').forEach(function(d,i){d.classList.toggle('active',i===n);});var s=mapSteps[n];map.flyTo({center:s.center,zoom:s.zoom,duration:1600,essential:true});}
-        document.querySelectorAll('.map-progress-dot').forEach(function(d){d.addEventListener('click',function(){goToStep(parseInt(d.getAttribute('data-goto'),10));});});
-        ScrollTrigger.create({trigger:'#map-scene',start:'top top',end:'bottom bottom',onUpdate:function(self){var step=Math.min(mapSteps.length-1,Math.floor(self.progress*mapSteps.length));if(step!==currentStep)goToStep(step);}});
     })();
     </script>
 

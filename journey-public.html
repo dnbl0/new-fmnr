@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Journey — General Public — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; padding: 80px 48px; max-width: 1080px; margin: 0 auto; }
+        h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; margin-bottom: 8px; }
+        .subtitle { font-size: 17px; color: #6e6e73; margin-bottom: 48px; line-height: 1.5; }
+        .persona { background: #f5f5f7; border-radius: 16px; padding: 32px; margin-bottom: 48px; }
+        .persona h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .persona p { font-size: 15px; color: #6e6e73; line-height: 1.6; }
+        .persona .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+        .persona .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: #fff; border: 1px solid #e5e5e5; border-radius: 100px; padding: 6px 14px; color: #6e6e73; }
+        .journey { position: relative; padding-left: 32px; }
+        .journey::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: #e5e5e5; }
+        .step { position: relative; margin-bottom: 40px; }
+        .step::before { content: ''; position: absolute; left: -32px; top: 6px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--color-green); background: #fff; }
+        .step.active::before { background: var(--color-green); }
+        .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .step .action { font-size: 14px; color: #1d1d1f; margin-bottom: 4px; }
+        .step .page { font-size: 13px; color: var(--color-green); font-weight: 600; }
+        .step .need { font-size: 13px; color: #86868b; margin-top: 4px; }
+        @media (max-width: 768px) { body { padding: 40px 24px; } }
+    </style>
+</head>
+<body>
+    <h1>User Journey — General Public</h1>
+    <p class="subtitle">How curious visitors learn what FMNR is, explore inspiring stories and share content with their networks.</p>
+
+    <div class="persona">
+        <h2>Persona: Environmentally Curious Individual</h2>
+        <p>Saw a social media post or news article about reforestation. Wants to understand FMNR quickly and feel inspired. May share content or sign up for a newsletter but is unlikely to have a professional stake.</p>
+        <div class="tags">
+            <span class="tag">Casual browser</span>
+            <span class="tag">Story-driven</span>
+            <span class="tag">Social sharer</span>
+            <span class="tag">Short attention span</span>
+        </div>
+    </div>
+
+    <div class="journey">
+        <div class="step active">
+            <h3>1. Arrival</h3>
+            <p class="action">Clicks a link from social media, news article or search result</p>
+            <p class="page">→ Homepage (video hero — emotional, visual hook)</p>
+            <p class="need">Needs: Immediate emotional connection, visual storytelling</p>
+        </div>
+        <div class="step active">
+            <h3>2. Exploration</h3>
+            <p class="action">Scrolls through the homepage, watches the video, scans key stats</p>
+            <p class="page">→ Homepage (impact numbers, scroll animations)</p>
+            <p class="need">Needs: Bite-sized information, compelling visuals</p>
+        </div>
+        <div class="step">
+            <h3>3. Deeper Interest</h3>
+            <p class="action">Clicks into a story about Tony Rinaudo or a specific country</p>
+            <p class="page">→ Tony Rinaudo, Interactive Map</p>
+            <p class="need">Needs: Human stories, narrative arc, shareable moments</p>
+        </div>
+        <div class="step">
+            <h3>4. Sharing</h3>
+            <p class="action">Shares a stat, video clip or article with their network</p>
+            <p class="page">→ Any page (social sharing metadata, OG images)</p>
+            <p class="need">Needs: Quotable stats, shareable visuals, good meta tags</p>
+        </div>
+        <div class="step">
+            <h3>5. Staying Connected</h3>
+            <p class="action">Signs up for the newsletter to follow progress</p>
+            <p class="page">→ Newsletter signup (footer or contact page)</p>
+            <p class="need">Needs: Simple one-field signup, clear value proposition</p>
+        </div>
+    </div>
+</body>
+</html>

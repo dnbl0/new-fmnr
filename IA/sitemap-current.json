@@ -1,0 +1,311 @@
+{
+  "site": {
+    "name": "FMNR Hub",
+    "url": "https://fmnrhub.com.au",
+    "global": {
+      "header": {
+        "primary_nav": [
+          {
+            "label": "About FMNR",
+            "path": "/about-fmnr",
+            "children": [
+              {
+                "label": "About FMNR",
+                "path": "/about-fmnr"
+              },
+              {
+                "label": "FMNR and World Vision",
+                "path": "/fmnr-and-world-vision"
+              },
+              {
+                "label": "Tony Rinaudo – The Forest Maker",
+                "path": "/tony-rinaudo"
+              },
+              {
+                "label": "FMNR Tracking Tool",
+                "path": "/solstice"
+              }
+            ]
+          },
+          {
+            "label": "Resource Hub",
+            "path": "/resource-hub",
+            "children": [
+              {
+                "label": "FMNR Fundamentals",
+                "path": "/fmnr-fundamentals"
+              },
+              {
+                "label": "Case Studies and Stories",
+                "path": "/case-studies"
+              },
+              {
+                "label": "Research",
+                "path": "/research"
+              },
+              {
+                "label": "Country Specific Information",
+                "path": "/countries"
+              },
+              {
+                "label": "FMNR e-Course",
+                "path": "/e-course"
+              },
+              {
+                "label": "Great Green Wall Action Webinar",
+                "path": "/ggw-action-webinar"
+              }
+            ]
+          },
+          {
+            "label": "Blogs & Updates",
+            "path": "/blog"
+          },
+          {
+            "label": "Support Us",
+            "path": "/support",
+            "children": [
+              {
+                "label": "Donate",
+                "path": "/donate"
+              },
+              {
+                "label": "Contact Us",
+                "path": "/contact"
+              }
+            ]
+          }
+        ]
+      },
+      "footer": {
+        "columns": [
+          {
+            "label": "About",
+            "links": [
+              "/about-fmnr",
+              "/resource-hub",
+              "/partner-with-us"
+            ]
+          },
+          {
+            "label": "Privacy",
+            "links": [
+              "/privacy-policy",
+              "/terms",
+              "/contact"
+            ]
+          },
+          {
+            "label": "Social",
+            "links": [
+              "youtube",
+              "twitter"
+            ]
+          }
+        ]
+      }
+    }
+  },
+
+  "pages": [
+    {
+      "type": "homepage",
+      "path": "/",
+      "template": "homepage",
+      "sections": [
+        "hero",
+        "intro",
+        "impact_stats_inline",
+        "how_fmnr_works",
+        "global_impact_map",
+        "case_studies_preview",
+        "cta"
+      ]
+    },
+
+    {
+      "type": "about",
+      "path": "/about-fmnr",
+      "template": "content_with_hero",
+      "sections": [
+        "hero",
+        "intro",
+        "hero_stat",
+        "content_blocks",
+        "cta"
+      ]
+    },
+
+    {
+      "type": "about_subpage",
+      "path": "/fmnr-and-world-vision",
+      "template": "content",
+      "sections": [
+        "hero",
+        "content_blocks"
+      ]
+    },
+
+    {
+      "type": "about_subpage",
+      "path": "/tony-rinaudo",
+      "template": "profile_story",
+      "sections": [
+        "hero",
+        "biography",
+        "media",
+        "cta"
+      ]
+    },
+
+    {
+      "type": "tool",
+      "path": "/solstice",
+      "template": "app_embed"
+    },
+
+    {
+      "type": "resource_hub",
+      "path": "/resource-hub",
+      "template": "hub",
+      "sections": [
+        "search",
+        "filters",
+        "resource_grid"
+      ]
+    },
+
+    {
+      "type": "resource_category",
+      "path": "/fmnr-fundamentals",
+      "template": "listing"
+    },
+    {
+      "type": "resource_category",
+      "path": "/case-studies",
+      "template": "listing"
+    },
+    {
+      "type": "resource_category",
+      "path": "/research",
+      "template": "listing"
+    },
+    {
+      "type": "resource_category",
+      "path": "/countries",
+      "template": "country_index"
+    },
+    {
+      "type": "resource_category",
+      "path": "/e-course",
+      "template": "course"
+    },
+    {
+      "type": "resource_category",
+      "path": "/ggw-action-webinar",
+      "template": "event"
+    },
+
+    {
+      "type": "blog",
+      "path": "/blog",
+      "template": "blog_index"
+    },
+
+    {
+      "type": "support",
+      "path": "/support",
+      "template": "cta_page"
+    },
+    {
+      "type": "support",
+      "path": "/donate",
+      "template": "external_link"
+    },
+    {
+      "type": "support",
+      "path": "/contact",
+      "template": "contact_form"
+    }
+  ],
+
+  "country_pages": {
+    "type": "collection",
+    "template": "country_detail",
+    "paths": [
+      "/ethiopia",
+      "/uganda",
+      "/kenya",
+      "/tanzania",
+      "/malawi",
+      "/niger",
+      "/ghana",
+      "/senegal"
+    ],
+    "sections": [
+      "hero",
+      "why_country_intro",
+      "stat_stack_block",
+      "image_break",
+      "project_overview",
+      "project_metrics",
+      "project_outcomes",
+      "cta"
+    ],
+    "components": {
+      "stat_stack_block": {
+        "variant": "vertical",
+        "items": [
+          {
+            "type": "stat",
+            "content": "short declarative data point"
+          }
+        ],
+        "max_items": 3
+      },
+      "project_metrics": {
+        "variant": "grid",
+        "items": [
+          {
+            "label": "hectares restored",
+            "value": "number"
+          },
+          {
+            "label": "duration",
+            "value": "timeframe"
+          }
+        ]
+      }
+    }
+  },
+
+  "components": {
+    "stat_block": {
+      "variants": [
+        "stack",
+        "grid",
+        "hero",
+        "inline"
+      ],
+      "fields": [
+        "value",
+        "label",
+        "description"
+      ]
+    },
+    "cta": {
+      "variants": [
+        "donate",
+        "contact",
+        "learn_more"
+      ]
+    },
+    "card": {
+      "variants": [
+        "resource",
+        "country",
+        "case_study"
+      ]
+    }
+  }
+}

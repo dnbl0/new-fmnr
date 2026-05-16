@@ -1,0 +1,360 @@
+{
+  "site": {
+    "name": "FMNR Hub",
+    "url": "https://fmnrhub.com.au",
+    "updated": "2025-05",
+    "global": {
+      "homepage": {
+        "id": "home",
+        "title": "Homepage",
+        "description": "Entry point routing users via audience pathways",
+        "status": "new",
+        "components": [
+          {
+            "id": "home-hero",
+            "title": "Hero + audience entry points",
+            "status": "new"
+          },
+          {
+            "id": "home-audience-cards",
+            "title": "Audience selector cards",
+            "status": "new"
+          },
+          {
+            "id": "home-edm",
+            "title": "Persistent EDM signup CTA",
+            "status": "new"
+          }
+        ]
+      },
+      "search": {
+        "id": "search",
+        "title": "Search & Resource Hub",
+        "status": "new",
+        "components": [
+          {
+            "id": "search-map",
+            "title": "Global FMNR activity map",
+            "status": "new"
+          }
+        ]
+      }
+    },
+    "sections": [
+      {
+        "id": "learn",
+        "title": "Learn",
+        "description": "Introductory and educational content about FMNR",
+        "priority": "medium",
+        "children": [
+          {
+            "id": "learn-fundamentals",
+            "title": "FMNR Fundamentals",
+            "children": [
+              {
+                "id": "learn-what-is-fmnr",
+                "title": "What is FMNR",
+                "status": "improve"
+              },
+              {
+                "id": "learn-how-it-works",
+                "title": "How it works (carousel)",
+                "status": "improve"
+              },
+              {
+                "id": "learn-why-it-matters",
+                "title": "Why it matters",
+                "status": "improve"
+              },
+              {
+                "id": "learn-1b-vision",
+                "title": "1 Billion Hectare Vision",
+                "status": "new"
+              },
+              {
+                "id": "learn-vs-restoration",
+                "title": "FMNR vs Conventional Restoration",
+                "status": "improve"
+              }
+            ]
+          },
+          {
+            "id": "learn-science",
+            "title": "Science & Evidence",
+            "children": [
+              {
+                "id": "learn-research",
+                "title": "Research Overview",
+                "status": "improve"
+              },
+              {
+                "id": "learn-climate",
+                "title": "Climate & Ecosystem Benefits",
+                "status": "improve"
+              },
+              {
+                "id": "learn-livelihoods",
+                "title": "Livelihood Outcomes",
+                "status": "improve"
+              },
+              {
+                "id": "learn-fragile-contexts",
+                "title": "Fragile & Conflict Contexts",
+                "status": "new"
+              },
+              {
+                "id": "learn-water",
+                "title": "Water & Landscape Benefits",
+                "status": "new"
+              }
+            ]
+          },
+          {
+            "id": "learn-global",
+            "title": "Global Activity",
+            "children": [
+              {
+                "id": "learn-map",
+                "title": "Interactive Global Map",
+                "status": "improve"
+              },
+              {
+                "id": "learn-where",
+                "title": "Where WV Works",
+                "status": "improve"
+              },
+              {
+                "id": "learn-countries",
+                "title": "Flagship Countries",
+                "status": "improve"
+              },
+              {
+                "id": "learn-tracker",
+                "title": "Movement Tracker",
+                "status": "new"
+              }
+            ]
+          }
+        ],
+        "notes": [
+          "Replace long-form content with modular carousel tiles",
+          "Consolidate duplicated evidence",
+          "Redesign country pages visual-first"
+        ]
+      },
+      {
+        "id": "adopt",
+        "title": "Adopt",
+        "description": "Practical tools and guides for FMNR adoption",
+        "priority": "medium",
+        "children": [
+          {
+            "id": "adopt-getting-started",
+            "title": "Getting Started",
+            "children": [
+              {
+                "id": "adopt-guide",
+                "title": "Step-by-step Guide",
+                "status": "improve"
+              },
+              {
+                "id": "adopt-tools",
+                "title": "Tools & Resources",
+                "status": "improve"
+              },
+              {
+                "id": "adopt-video",
+                "title": "Video Library",
+                "status": "new"
+              },
+              {
+                "id": "adopt-guides",
+                "title": "Downloadable Field Guides",
+                "status": "new"
+              },
+              {
+                "id": "adopt-complementary",
+                "title": "Complementary Techniques",
+                "status": "new"
+              }
+            ]
+          },
+          {
+            "id": "adopt-countries",
+            "title": "Country Examples",
+            "children": [
+              { "id": "adopt-niger", "title": "Niger", "status": "improve" },
+              { "id": "adopt-ethiopia", "title": "Ethiopia", "status": "improve" },
+              { "id": "adopt-zambia", "title": "Zambia", "status": "improve" },
+              { "id": "adopt-mali", "title": "Mali", "status": "improve" },
+              {
+                "id": "adopt-stories",
+                "title": "Community-led Stories",
+                "status": "new"
+              }
+            ]
+          },
+          {
+            "id": "adopt-connect",
+            "title": "Connect to Adopt",
+            "children": [
+              {
+                "id": "adopt-contact",
+                "title": "Find Local Contact",
+                "status": "new"
+              },
+              {
+                "id": "adopt-submit",
+                "title": "Submit Adoption Story"
+              },
+              {
+                "id": "adopt-newsletter",
+                "title": "Adopter Newsletter",
+                "status": "new"
+              },
+              {
+                "id": "adopt-community",
+                "title": "Community Links",
+                "status": "new"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "partner",
+        "title": "Partner",
+        "priority": "highest",
+        "children": [
+          {
+            "id": "partner-faith",
+            "title": "Faith-based Actors",
+            "status": "new",
+            "priority": "urgent",
+            "children": [
+              { "id": "faith-why", "title": "Why Faith & FMNR" },
+              { "id": "faith-entry", "title": "Leader Entry Point" },
+              { "id": "faith-case-studies", "title": "Case Studies" },
+              { "id": "faith-resources", "title": "Sermon Kit" },
+              { "id": "faith-network", "title": "Faith Network Map" },
+              { "id": "faith-cta", "title": "Get Involved CTA" }
+            ]
+          },
+          {
+            "id": "partner-ngo",
+            "title": "NGOs & Implementers",
+            "status": "new",
+            "children": [
+              { "id": "ngo-programme", "title": "Programme Tool" },
+              { "id": "ngo-integration", "title": "Programme Integration" },
+              { "id": "ngo-partnership", "title": "Technical Partnership" },
+              { "id": "ngo-evidence", "title": "Evidence Pack" },
+              { "id": "ngo-contact", "title": "Partner Enquiry" }
+            ]
+          },
+          {
+            "id": "partner-government",
+            "title": "Governments & Policy",
+            "status": "new",
+            "children": [
+              { "id": "gov-policy", "title": "Policy Case" },
+              { "id": "gov-national", "title": "National Examples" },
+              { "id": "gov-alignment", "title": "Policy Alignment" },
+              { "id": "gov-cost", "title": "Cost-effectiveness" },
+              { "id": "gov-contact", "title": "Official Enquiry" }
+            ]
+          },
+          {
+            "id": "partner-funders",
+            "title": "Funders & Supporters",
+            "status": "new",
+            "children": [
+              { "id": "funding-opportunity", "title": "Funding Opportunity" },
+              { "id": "funding-roi", "title": "Impact ROI" },
+              { "id": "funding-priorities", "title": "Funding Priorities" },
+              { "id": "funding-pathway", "title": "Private Funder Pathway" },
+              { "id": "funding-contact", "title": "Funding Contact" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "impact",
+        "title": "Impact",
+        "priority": "high",
+        "children": [
+          {
+            "id": "impact-hub",
+            "title": "Resource Hub",
+            "children": [
+              { "id": "impact-content", "title": "Stories & Research", "status": "improve" },
+              { "id": "impact-filter", "title": "Content Filters", "status": "improve" },
+              { "id": "impact-carousel", "title": "Featured Stories", "status": "improve" },
+              { "id": "impact-submit", "title": "Submit Story" }
+            ]
+          },
+          {
+            "id": "impact-dashboard",
+            "title": "Impact Dashboard",
+            "children": [
+              { "id": "impact-livelihoods", "title": "People Reached", "status": "new" },
+              { "id": "impact-hectares", "title": "Hectares Restored", "status": "improve" },
+              { "id": "impact-fragile", "title": "Fragile Contexts" },
+              { "id": "impact-water", "title": "Water Metrics" },
+              { "id": "impact-vision", "title": "1B Vision" }
+            ]
+          },
+          {
+            "id": "impact-reporting",
+            "title": "Reporting & Updates",
+            "children": [
+              { "id": "impact-annual", "title": "Annual Highlights", "status": "new" },
+              { "id": "impact-newsletter", "title": "Newsletter Archive" },
+              { "id": "impact-edm", "title": "EDM Strategy" },
+              { "id": "impact-linkedin", "title": "LinkedIn Community" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "about",
+        "title": "About",
+        "priority": "high",
+        "children": [
+          {
+            "id": "about-tony",
+            "title": "Tony Rinaudo",
+            "children": [
+              { "id": "tony-story", "title": "Tony's Story", "status": "improve" },
+              { "id": "tony-podcasts", "title": "Podcasts" },
+              { "id": "tony-articles", "title": "Articles" },
+              { "id": "tony-awards", "title": "Awards" },
+              { "id": "tony-speaking", "title": "Speaking Enquiry" }
+            ]
+          },
+          {
+            "id": "about-org",
+            "title": "FMNR Hub & World Vision",
+            "children": [
+              { "id": "about-hub", "title": "About FMNR Hub", "status": "improve" },
+              { "id": "about-wv", "title": "World Vision Relationship", "status": "improve" },
+              { "id": "about-values", "title": "Values & Approach", "status": "improve" },
+              { "id": "about-team", "title": "Team" },
+              { "id": "about-open", "title": "Open Source Commitment", "status": "improve" }
+            ]
+          },
+          {
+            "id": "about-connect",
+            "title": "Connect",
+            "children": [
+              { "id": "contact", "title": "Contact Us", "status": "improve" },
+              { "id": "newsletter", "title": "Newsletter Signup", "status": "improve" },
+              { "id": "community", "title": "Community Links" },
+              { "id": "partnership", "title": "Partnership Enquiry" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

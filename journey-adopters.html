@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User Journey — Adopters — FMNR</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; padding: 80px 48px; max-width: 1080px; margin: 0 auto; }
+        h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; margin-bottom: 8px; }
+        .subtitle { font-size: 17px; color: #6e6e73; margin-bottom: 48px; line-height: 1.5; }
+        .persona { background: #f5f5f7; border-radius: 16px; padding: 32px; margin-bottom: 48px; }
+        .persona h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .persona p { font-size: 15px; color: #6e6e73; line-height: 1.6; }
+        .persona .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+        .persona .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: #fff; border: 1px solid #e5e5e5; border-radius: 100px; padding: 6px 14px; color: #6e6e73; }
+        .journey { position: relative; padding-left: 32px; }
+        .journey::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: #e5e5e5; }
+        .step { position: relative; margin-bottom: 40px; }
+        .step::before { content: ''; position: absolute; left: -32px; top: 6px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--color-green); background: #fff; }
+        .step.active::before { background: var(--color-green); }
+        .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .step .action { font-size: 14px; color: #1d1d1f; margin-bottom: 4px; }
+        .step .page { font-size: 13px; color: var(--color-green); font-weight: 600; }
+        .step .need { font-size: 13px; color: #86868b; margin-top: 4px; }
+        @media (max-width: 768px) { body { padding: 40px 24px; } }
+    </style>
+</head>
+<body>
+    <h1>User Journey — Adopters</h1>
+    <p class="subtitle">How farmers and communities learn about, adopt and practise FMNR techniques to restore their land.</p>
+
+    <div class="persona">
+        <h2>Persona: Smallholder Farmer</h2>
+        <p>Manages a small farm in a degraded landscape. Has heard about FMNR from a neighbour or community meeting. Needs simple, visual instructions and proof that FMNR will improve yields. May access the site via a shared phone with limited data.</p>
+        <div class="tags">
+            <span class="tag">Visual learner</span>
+            <span class="tag">Mobile-first</span>
+            <span class="tag">Low bandwidth</span>
+            <span class="tag">Wants practical steps</span>
+        </div>
+    </div>
+
+    <div class="journey">
+        <div class="step active">
+            <h3>1. Curiosity</h3>
+            <p class="action">Hears about FMNR from a neighbour, community leader or field worker</p>
+            <p class="page">→ Homepage (video hero — visual, immediate)</p>
+            <p class="need">Needs: Instant visual understanding, no jargon</p>
+        </div>
+        <div class="step active">
+            <h3>2. Inspiration</h3>
+            <p class="action">Sees success stories from farmers in similar regions</p>
+            <p class="page">→ Impact page, Country Profiles (interactive map)</p>
+            <p class="need">Needs: Relatable stories, before/after imagery</p>
+        </div>
+        <div class="step active">
+            <h3>3. Learning</h3>
+            <p class="action">Watches how-to videos and reads step-by-step guides</p>
+            <p class="page">→ Resources (filtered by "Training"), About FMNR</p>
+            <p class="need">Needs: Simple visual guides, video content, downloadable for offline</p>
+        </div>
+        <div class="step">
+            <h3>4. Practice</h3>
+            <p class="action">Starts applying techniques on a small section of their farm</p>
+            <p class="page">→ Training Guides (PDF downloads)</p>
+            <p class="need">Needs: Printable reference cards, troubleshooting tips</p>
+        </div>
+        <div class="step">
+            <h3>5. Community</h3>
+            <p class="action">Connects with local FMNR groups or shares results with neighbours</p>
+            <p class="page">→ Contact, Newsletter</p>
+            <p class="need">Needs: Local contact information, community links</p>
+        </div>
+    </div>
+</body>
+</html>
