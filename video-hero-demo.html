@@ -8,67 +8,48 @@
     <link href="design-tokens.css" rel="stylesheet">
     <style>
         *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--font-body);background:#f0f0f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
-        .demo-frame{width:100%;max-width:1280px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.15);position:relative}
+        body{font-family:var(--font-body);background:#000;min-height:100vh}
 
-        /* PROGRESS */
-        .progress-bar{position:absolute;top:0;left:0;right:0;height:2px;background:var(--color-teal);transform-origin:left;transform:scaleX(0.35);z-index:2000}
-
-        /* HERO */
-        #hero{position:relative;height:80vh;min-height:540px;overflow:hidden;background:#000}
-        #hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-        .hero-scrim{position:absolute;inset:0;background:linear-gradient(160deg,rgba(0,0,0,.04) 0%,rgba(0,0,0,.62) 100%)}
-        .hero-copy{position:absolute;bottom:88px;left:0;right:0}
-        .hero-copy-inner{max-width:1280px;margin:0 auto;padding:0 48px}
-        .hero-eyebrow{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.62);margin-bottom:20px}
-        .hero-heading{font-family:var(--font-heading);font-size:clamp(60px,8.5vw,118px);text-transform:uppercase;color:#fff;line-height:.88;margin-bottom:36px;letter-spacing:-.02em;max-width:700px}
-        .hero-heading em{color:var(--color-teal);font-style:normal}
-        .hero-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-        .btn-hero-white{background:#fff;color:#1d1d1f;font-family:var(--font-body);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;padding:13px 28px;border-radius:980px;text-decoration:none;transition:background .2s,color .2s}
-        .btn-hero-white:hover{background:var(--color-teal);color:#000}
-        .link-hero-plain{font-family:var(--font-body);font-size:15px;font-weight:600;color:rgba(255,255,255,.85);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.32);padding-bottom:2px;transition:color .2s,border-color .2s}
-        .link-hero-plain:hover{color:#fff;border-color:rgba(255,255,255,.7)}
-        .hero-vid-ctrls{position:absolute;bottom:92px;right:48px;display:flex;gap:8px}
-        .hvc-btn{background:rgba(0,0,0,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;transition:background .2s}
-        .hvc-btn:hover{background:rgba(0,0,0,.55)}
-        .hvc-btn svg{width:15px;height:15px}
-        .hero-scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.4);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
-        .hero-scroll-hint svg{width:14px;height:20px;animation:scrollBounce 1.8s ease-in-out infinite}
-        @keyframes scrollBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+        /* VIDEO SECTION */
+        .video-section{position:relative;width:100%;height:100vh;overflow:hidden;background:#000}
+        .video-section video{width:100%;height:100%;object-fit:cover;display:block}
+        .video-controls{position:absolute;bottom:32px;right:32px;display:flex;gap:8px;z-index:10}
+        .vc-btn{background:rgba(0,0,0,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;transition:background .2s}
+        .vc-btn:hover{background:rgba(0,0,0,.55)}
+        .vc-btn svg{width:15px;height:15px}
     </style>
 </head>
 <body>
-    <div class="demo-frame">
-        <div class="progress-bar"></div>
-        <section id="hero">
-            <video id="hero-video" autoplay muted loop playsinline preload="auto" src="video/forest-fmnr.mp4"></video>
-            <div class="hero-scrim"></div>
-            <div class="hero-copy">
-                <div class="hero-copy-inner">
-                    <span class="hero-eyebrow">Farmer Managed Natural Regeneration</span>
-                    <h1 class="hero-heading">Restore<br>the land.<br><em>Renew</em><br>the world.</h1>
-                    <div class="hero-actions">
-                        <a href="#" class="btn-hero-white">Partner with FMNR</a>
-                        <a href="#" class="link-hero-plain">See the impact &#8250;</a>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-vid-ctrls">
-                <button class="hvc-btn" id="btn-playpause" aria-label="Play/Pause">
-                    <svg id="icon-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-                    <svg id="icon-play" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </button>
-                <button class="hvc-btn" id="btn-mute" aria-label="Toggle sound">
-                    <svg id="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-                    <svg id="icon-unmuted" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                </button>
-            </div>
-            <div class="hero-scroll-hint">
-                <span>Scroll</span>
-                <svg viewBox="0 0 14 22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 1v20M1 15l6 6 6-6"/></svg>
-            </div>
-        </section>
-    </div>
+<style id="demo-toolbar-style">
+body{padding-top:44px !important;} .site-header{top:44px !important;}
+#demo-toolbar{position:fixed;top:0;left:0;right:0;z-index:9999;height:44px;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;padding:0 20px;gap:0;font-family:'Lato',sans-serif;font-size:12px;box-sizing:border-box;}
+#demo-toolbar a{text-decoration:none;}
+.dtb-back{color:#0FFBAB;font-weight:700;white-space:nowrap;letter-spacing:.04em;flex-shrink:0;}
+.dtb-back:hover{opacity:.7;}
+.dtb-title{color:rgba(255,255,255,.45);flex:1;text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 16px;}
+.dtb-nav{display:flex;gap:16px;flex-shrink:0;}
+.dtb-prev,.dtb-next{color:rgba(255,255,255,.35);font-size:12px;white-space:nowrap;}
+.dtb-prev:hover,.dtb-next:hover{color:#fff;}
+.dtb-disabled{color:rgba(255,255,255,.12);pointer-events:none;font-size:12px;}
+</style>
+<div id="demo-toolbar">
+  <a class="dtb-back" href="components.html">← Components</a>
+  <span class="dtb-title">Video Hero</span>
+  <nav class="dtb-nav"><a class="dtb-prev" href="video-demo.html">← Video</a><span class="dtb-disabled">Next →</span></nav>
+</div>
+    <section class="video-section">
+        <video id="hero-video" autoplay muted loop playsinline preload="auto" src="video/forest-fmnr.mp4"></video>
+        <div class="video-controls">
+            <button class="vc-btn" id="btn-playpause" aria-label="Play/Pause">
+                <svg id="icon-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                <svg id="icon-play" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <button class="vc-btn" id="btn-mute" aria-label="Toggle sound">
+                <svg id="icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                <svg id="icon-unmuted" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
+        </div>
+    </section>
     <script>
     (function(){
         var v=document.getElementById('hero-video');if(!v)return;
@@ -76,5 +57,6 @@
         document.getElementById('btn-mute').addEventListener('click',function(){v.muted=!v.muted;document.getElementById('icon-muted').style.display=v.muted?'':'none';document.getElementById('icon-unmuted').style.display=v.muted?'none':'';});
     })();
     </script>
+<script src="shared-header.js"></script>
 </body>
 </html>

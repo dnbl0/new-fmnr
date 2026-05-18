@@ -12,6 +12,7 @@
 
         /* ── Header ── */
         .site-header { background: #fff; position: relative; z-index: 1000; }
+        .header-bar { height: 4px; background: var(--color-green); }
         .header-inner { max-width: 1280px; margin: 0 auto; padding: 14px 48px; display: flex; align-items: center; justify-content: space-between; }
         .logo img { height: 33px; display: block; }
         .nav-links { display: flex; gap: 4px; }
@@ -19,70 +20,91 @@
         .nav-links a:hover { background: #f5f5f7; }
         .nav-links a.active { color: var(--color-green); background: rgba(7,125,87,0.06); }
         .header-actions { display: flex; align-items: center; gap: 16px; }
-        .btn-cta { background: var(--color-green); color: #fff; font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; padding: 10px 20px; border-radius: 980px; text-decoration: none; transition: background 0.2s; }
-        .btn-cta:hover { background: #065e42; }
+        .btn-cta { background: transparent; color: var(--color-green); font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; padding: 9px 20px; border-radius: 980px; border: 2px solid var(--color-green); text-decoration: none; transition: background 0.2s, color 0.2s; }
+        .btn-cta:hover { background: var(--color-green); color: #fff; }
 
         /* ── Mega menu panel ── */
         .mega-menu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-top: 1px solid #ebebeb; box-shadow: 0 32px 80px rgba(0,0,0,0.1); z-index: 999; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.22s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0.22s; }
         .mega-menu.open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.22s cubic-bezier(0.4,0,0.2,1), visibility 0s linear 0s; }
-        .mega-inner { max-width: 1280px; margin: 0 auto; padding: 28px 48px 36px; }
+        .mega-inner { max-width: 1280px; margin: 0 auto; padding: 32px 48px 40px; }
 
         /* Backdrop */
         .mega-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0); pointer-events: none; z-index: 998; transition: background 0.3s, backdrop-filter 0.3s; }
-        .mega-backdrop.open { background: rgba(0,0,0,0.18); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); pointer-events: auto; }
+        .mega-backdrop.open { background: rgba(0,0,0,0.18); pointer-events: auto; }
 
-        /* ── Layout B — Editorial Feature ── */
-        .lb { display: flex; align-items: stretch; }
+        /* ── Mega menu header row ── */
+        .mega-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .mega-heading { font-family: var(--font-heading); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; color: var(--wp--preset--color--contrast); line-height: 1; }
+        .mega-cta { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--color-green); text-decoration: none; border: 2px solid var(--color-green); padding: 8px 18px; border-radius: 980px; transition: background 0.2s, color 0.2s; }
+        .mega-cta:hover { background: var(--color-green); color: #fff; }
 
-        .lb-col1 { width: 280px; flex-shrink: 0; padding: 0; }
-        .lb-feature { width: 100%; height: 100%; min-height: 300px; border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; background: linear-gradient(160deg, #1a4a2e 0%, #063020 100%); }
-        .lb-feature img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-        .lb-feature-content { position: relative; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, transparent 70%); }
-        .lb-feature-kicker { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 4px; margin-bottom: 10px; }
-        .lb-feature-title { font-family: var(--font-heading); font-size: 20px; text-transform: uppercase; color: #fff; line-height: 1; margin-bottom: 8px; }
-        .lb-feature-desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.4; }
-        .lb-feature-cta { display: inline-block; margin-top: 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-green); padding: 8px 16px; border-radius: 6px; text-decoration: none; }
+        /* ── 3-column grid matching screenshot ── */
+        .mega-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-        .lb-col2 { flex: 1; padding: 0 0 0 32px; border-left: 1px solid rgba(0,0,0,0.08); margin-left: 32px; }
-        .lb-section-label { font-family: var(--font-heading); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #86868b; margin-bottom: 16px; }
-        .lb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .lb-card { display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 1px solid #e8e8e8; border-radius: 10px; text-decoration: none; background: #fff; transition: border-color 0.15s, box-shadow 0.15s; }
-        .lb-card:hover { border-color: var(--color-green); box-shadow: 0 4px 12px rgba(7,125,87,0.1); }
-        .lb-card-num { font-family: var(--font-heading); font-size: 28px; text-transform: uppercase; color: rgba(7,125,87,0.15); line-height: 1; }
-        .lb-card-label { font-size: 14px; font-weight: 700; color: #1d1d1f; line-height: 1.2; }
-        .lb-card-desc { font-size: 13px; color: #86868b; line-height: 1.4; }
-        .lb-card-arrow { font-size: 13px; color: var(--color-green); margin-top: auto; font-weight: 700; }
+        /* Feature card (left column, spans 2 rows) */
+        .mega-feature { grid-row: span 2; border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; min-height: 280px; background: #e8e8e8; }
+        .mega-feature img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .mega-feature-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.3) 35%, transparent 65%); }
+        .mega-feature-content { position: relative; z-index: 1; padding: 24px; }
+        .mega-feature-kicker { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.3); padding: 4px 10px; border-radius: 4px; margin-bottom: 12px; }
+        .mega-feature-title { font-family: var(--font-heading); font-size: 20px; text-transform: uppercase; color: #fff; line-height: 1.1; margin-bottom: 8px; }
+        .mega-feature-desc { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.4; margin-bottom: 14px; }
+        .mega-feature-btn { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--color-green); padding: 10px 20px; border-radius: 8px; }
+
+        /* Nav cards */
+        .mega-card { display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 10px; text-decoration: none; background: #f8f8f8; border: 1px solid #eee; transition: border-color 0.15s, box-shadow 0.15s; }
+        .mega-card:hover { border-color: var(--color-green); box-shadow: 0 4px 12px rgba(7,125,87,0.08); }
+        .mega-card-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: rgba(7,125,87,0.08); color: var(--color-green); flex-shrink: 0; }
+        .mega-card-icon svg { width: 20px; height: 20px; }
+        .mega-card-label { font-size: 14px; font-weight: 700; color: var(--color-green); line-height: 1.2; }
+        .mega-card-desc { font-size: 13px; color: #86868b; line-height: 1.4; }
 
         @media (max-width: 900px) {
             .header-inner { padding: 12px 24px; }
-            .lb { flex-direction: column; }
-            .lb-col1 { width: 100%; }
-            .lb-feature { min-height: 200px; }
-            .lb-col2 { border-left: none; margin-left: 0; padding: 24px 0 0; border-top: 1px solid rgba(0,0,0,0.08); margin-top: 24px; }
+            .mega-grid { grid-template-columns: 1fr; }
+            .mega-feature { grid-row: span 1; min-height: 200px; }
+            .mega-inner { padding: 24px; }
         }
     </style>
 </head>
 <body>
+<style id="demo-toolbar-style">
+body{padding-top:44px !important;} .site-header{top:44px !important;}
+#demo-toolbar{position:fixed;top:0;left:0;right:0;z-index:9999;height:44px;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;padding:0 20px;gap:0;font-family:'Lato',sans-serif;font-size:12px;box-sizing:border-box;}
+#demo-toolbar a{text-decoration:none;}
+.dtb-back{color:#0FFBAB;font-weight:700;white-space:nowrap;letter-spacing:.04em;flex-shrink:0;}
+.dtb-back:hover{opacity:.7;}
+.dtb-title{color:rgba(255,255,255,.45);flex:1;text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 16px;}
+.dtb-nav{display:flex;gap:16px;flex-shrink:0;}
+.dtb-prev,.dtb-next{color:rgba(255,255,255,.35);font-size:12px;white-space:nowrap;}
+.dtb-prev:hover,.dtb-next:hover{color:#fff;}
+.dtb-disabled{color:rgba(255,255,255,.12);pointer-events:none;font-size:12px;}
+</style>
+<div id="demo-toolbar">
+  <a class="dtb-back" href="components.html">← Components</a>
+  <span class="dtb-title">Mega Menu</span>
+  <nav class="dtb-nav"><a class="dtb-prev" href="media-cards-demo.html">← Media Cards</a><a class="dtb-next" href="mega-menu-v2-demo.html">Mega Menu V2 →</a></nav>
+</div>
 
     <header class="site-header" id="site-header">
+        <div class="header-bar"></div>
         <div class="header-inner">
             <a href="index.html" class="logo"><img src="fmnr-logo-figma.png" alt="FMNR"></a>
             <nav class="nav-links" id="nav-links">
                 <a href="#" data-mega="partner">Partner</a>
-                <a href="#" data-mega="learn">Learn</a>
                 <a href="#" data-mega="adopt">Adopt</a>
                 <a href="#" data-mega="impact">Impact</a>
+                <a href="#" data-mega="resources">Resource Hub</a>
+                <a href="#" data-mega="stories">Stories</a>
                 <a href="#" data-mega="about">About</a>
             </nav>
             <div class="header-actions">
-                <a href="#" class="btn-cta">Get in touch</a>
+                <a href="#" class="btn-cta">Contact us</a>
             </div>
         </div>
         <div class="mega-backdrop" id="mega-backdrop"></div>
         <div class="mega-menu" id="mega-menu">
-            <div class="mega-inner">
-                <div class="lb" id="lb-content"></div>
-            </div>
+            <div class="mega-inner" id="mega-content"></div>
         </div>
     </header>
 
@@ -91,95 +113,130 @@
     (function() {
         var data = {
             partner: {
-                title: 'Partner',
-                desc: 'Join the global movement to restore land and transform communities through FMNR.',
-                href: 'partner.html',
-                feature: { eyebrow: 'Featured', title: 'Scaling FMNR across Sub-Saharan Africa', desc: 'See how faith networks and NGOs are driving landscape restoration.', img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_01_Image_0001.jpg' },
+                heading: 'Partner with Us',
+                feature: {
+                    title: 'Scaling FMNR Across Sub-Saharan Africa',
+                    desc: 'See how faith networks and NGOs are driving landscape restoration.',
+                    img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_01_Image_0001.jpg',
+                    href: 'partner.html'
+                },
                 items: [
-                    { icon: 'heart-handshake', label: 'Faith-based Actors',   desc: 'Churches, pastors and faith network leaders' },
-                    { icon: 'network',         label: 'NGOs & Implementers',  desc: 'Development organisations and programme teams' },
-                    { icon: 'landmark',        label: 'Governments & Policy', desc: 'Policy makers and national programme leaders' },
-                    { icon: 'trending-up',     label: 'Funders & Supporters', desc: 'Philanthropists, impact investors and grant-makers' }
-                ]
-            },
-            learn: {
-                title: 'Learn',
-                desc: 'Discover how FMNR restores degraded land, boosts food security, and builds climate resilience.',
-                href: '#',
-                feature: { eyebrow: 'Story', title: "From desert to forest: Niger\u2019s transformation", desc: 'How millions of farmers changed the Sahel.', img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_06_Image_0001.jpg' },
-                items: [
-                    { icon: 'sprout',     label: 'FMNR Fundamentals',  desc: 'What it is, how it works and why it matters' },
-                    { icon: 'microscope', label: 'Science & Evidence', desc: 'Research, climate benefits and livelihood outcomes' },
-                    { icon: 'globe',      label: 'Global Activity',    desc: 'Maps, flagship countries and movement tracker' }
+                    { icon: 'heart-handshake', label: 'Faith-Based Partners', desc: 'Churches, pastors and faith network leaders' },
+                    { icon: 'users',           label: 'NGOs & Development Orgs', desc: 'Programme teams and implementation partners' },
+                    { icon: 'landmark',        label: 'Governments & Policy', desc: 'National programme leaders and policy makers' },
+                    { icon: 'trending-up',     label: 'Funders & Investors', desc: 'Philanthropists, impact investors and grant-makers' }
                 ]
             },
             adopt: {
-                title: 'Adopt',
-                desc: 'Practical tools, guides and community connections to bring FMNR to your landscape.',
-                href: '#',
-                feature: { eyebrow: 'Guide', title: 'Field guide to FMNR adoption', desc: 'Step-by-step practitioner guide.', img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_07_Image_0001.jpg' },
+                heading: 'Adopt FMNR',
+                feature: {
+                    title: 'Field Guide to FMNR Adoption',
+                    desc: 'Step-by-step practitioner guide for your landscape.',
+                    img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_07_Image_0001.jpg',
+                    href: '#'
+                },
                 items: [
-                    { icon: 'book-open', label: 'Getting Started',  desc: 'Step-by-step guides, tools and video library' },
-                    { icon: 'map-pin',   label: 'Country Examples', desc: 'Niger, Ethiopia, Zambia, Mali and more' },
-                    { icon: 'users',     label: 'Connect to Adopt', desc: 'Find local support and share your story' }
+                    { icon: 'sprout',      label: 'How FMNR Works', desc: 'The technique and its core principles explained' },
+                    { icon: 'footprints',  label: 'Growth Steps', desc: 'Step-by-step guide to implementing FMNR' },
+                    { icon: 'map',         label: 'Community Engagement', desc: 'Mobilise your community for adoption' },
+                    { icon: 'book-open',   label: 'FMNR Manual', desc: 'Comprehensive practitioner reference guide' }
                 ]
             },
             impact: {
-                title: 'Impact',
-                desc: 'Stories, data and reporting on the global reach and outcomes of FMNR.',
-                href: 'impact.html',
-                feature: { eyebrow: 'Data', title: '1 Billion Hectare Vision', desc: 'Track progress toward our global target.', img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_20_Image_0001.jpg' },
+                heading: 'Our Impact',
+                feature: {
+                    title: '1 Billion Hectare Vision',
+                    desc: 'Track progress toward our global restoration target.',
+                    img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_20_Image_0001.jpg',
+                    href: 'impact.html'
+                },
                 items: [
-                    { icon: 'library',     label: 'Resource Hub',        desc: 'Stories, research and featured content' },
-                    { icon: 'bar-chart-2', label: 'Impact Dashboard',    desc: 'People reached, hectares and the 1B vision' },
-                    { icon: 'mail',        label: 'Reporting & Updates', desc: 'Annual highlights, newsletter and community' }
+                    { icon: 'bar-chart-2', label: 'Impact Overview', desc: 'Comprehensive data on FMNR outcomes' },
+                    { icon: 'microscope',  label: 'Evidence of Impact', desc: 'Research and peer-reviewed studies' },
+                    { icon: 'globe',       label: '27 Countries', desc: 'See where FMNR is being practiced' },
+                    { icon: 'book-heart',  label: 'Impact Stories', desc: 'Stories from FMNR communities' }
+                ]
+            },
+            resources: {
+                heading: 'Resource Hub',
+                feature: {
+                    title: 'FMNR e-Courses Now Available',
+                    desc: 'Online learning modules for practitioners at every level.',
+                    img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_06_Image_0001.jpg',
+                    href: 'resources.html'
+                },
+                items: [
+                    { icon: 'library',         label: 'Resource Library', desc: 'Browse all resources, tools and materials' },
+                    { icon: 'graduation-cap',  label: 'FMNR e-Courses', desc: 'Online learning modules and training' },
+                    { icon: 'globe',           label: 'Country Resources', desc: 'Region and country-specific guides' },
+                    { icon: 'film',            label: 'FMNR Media', desc: 'Videos, podcasts and multimedia content' }
+                ]
+            },
+            stories: {
+                heading: 'Stories',
+                feature: {
+                    title: 'From Desert to Forest: Niger\u2019s Transformation',
+                    desc: 'How millions of farmers changed the Sahel landscape.',
+                    img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_09_Image_0001.jpg',
+                    href: 'blog.html'
+                },
+                items: [
+                    { icon: 'book-open',  label: 'All Stories', desc: 'Browse all FMNR community stories' },
+                    { icon: 'map-pin',    label: 'Stories by Region', desc: 'Filter stories by country and region' },
+                    { icon: 'heart',      label: 'Community Voices', desc: 'First-hand accounts from practitioners' },
+                    { icon: 'award',      label: 'Success Stories', desc: 'Celebrated FMNR achievements worldwide' }
                 ]
             },
             about: {
-                title: 'About',
-                desc: 'The people, mission and values behind the FMNR Hub and World Vision.',
-                href: '#',
-                feature: { eyebrow: 'Meet', title: "Tony Rinaudo \u2014 The Forest Maker", desc: 'The story of the man behind the movement.', img: 'images/brand/WVA5019_WVA-FMNR-Playbook_Master_R4a_Page_19_Image_0001.jpg' },
+                heading: 'About FMNR',
+                feature: {
+                    title: 'Tony Rinaudo \u2014 The Forest Maker',
+                    desc: 'The story of the man behind the global FMNR movement.',
+                    img: 'images/brand/tony-1.jpg',
+                    href: '#'
+                },
                 items: [
-                    { icon: 'star',           label: 'Tony Rinaudo',            desc: 'The man who transformed the Sahel' },
-                    { icon: 'building-2',     label: 'FMNR Hub & World Vision', desc: 'Our mission, values and open-source commitment' },
-                    { icon: 'message-circle', label: 'Connect',                 desc: 'Contact, newsletter and community links' }
+                    { icon: 'info',            label: 'About FMNR', desc: 'The technique and movement explained' },
+                    { icon: 'user',            label: 'Tony Rinaudo', desc: 'Meet the Forest Maker' },
+                    { icon: 'building-2',      label: 'FMNR & World Vision', desc: 'Our partnership and shared mission' },
+                    { icon: 'help-circle',     label: 'FAQs', desc: 'Frequently asked questions about FMNR' }
                 ]
             }
         };
 
         var menu = document.getElementById('mega-menu');
         var backdrop = document.getElementById('mega-backdrop');
-        var contentEl = document.getElementById('lb-content');
+        var contentEl = document.getElementById('mega-content');
         var activeKey = null;
         var closeTimer = null;
 
         function render(key) {
             var d = data[key];
-            var cards = d.items.map(function(item, i) {
-                return '<a class="lb-card" href="#">'
-                     + '<span class="lb-card-num">0' + (i + 1) + '</span>'
-                     + '<span class="lb-card-label">' + item.label + '</span>'
-                     + '<span class="lb-card-desc">' + item.desc + '</span>'
-                     + '<span class="lb-card-arrow">\u2192</span>'
+            var cards = d.items.map(function(item) {
+                return '<a class="mega-card" href="#">'
+                     + '<div class="mega-card-icon"><i data-lucide="' + item.icon + '"></i></div>'
+                     + '<span class="mega-card-label">' + item.label + '</span>'
+                     + '<span class="mega-card-desc">' + item.desc + '</span>'
                      + '</a>';
             }).join('');
 
             contentEl.innerHTML =
-                '<div class="lb-col1">'
-              +   '<a class="lb-feature" href="' + d.href + '">'
+                '<div class="mega-header">'
+              +   '<h2 class="mega-heading">' + d.heading + '</h2>'
+              +   '<a class="mega-cta" href="#">Contact us</a>'
+              + '</div>'
+              + '<div class="mega-grid">'
+              +   '<a class="mega-feature" href="' + d.feature.href + '">'
               +     '<img src="' + d.feature.img + '" alt="">'
-              +     '<div class="lb-feature-content">'
-              +       '<span class="lb-feature-kicker">' + d.feature.eyebrow + '</span>'
-              +       '<div class="lb-feature-title">' + d.feature.title + '</div>'
-              +       '<div class="lb-feature-desc">' + d.feature.desc + '</div>'
-              +       '<span class="lb-feature-cta">Explore \u2192</span>'
+              +     '<div class="mega-feature-overlay"></div>'
+              +     '<div class="mega-feature-content">'
+              +       '<span class="mega-feature-kicker">Featured</span>'
+              +       '<div class="mega-feature-title">' + d.feature.title + '</div>'
+              +       '<div class="mega-feature-desc">' + d.feature.desc + '</div>'
+              +       '<span class="mega-feature-btn">Explore →</span>'
               +     '</div>'
               +   '</a>'
-              + '</div>'
-              + '<div class="lb-col2">'
-              +   '<div class="lb-section-label">' + d.title + ' \u2014 All sections</div>'
-              +   '<div class="lb-grid">' + cards + '</div>'
+              +   cards
               + '</div>';
 
             if (window.lucide) lucide.createIcons();
@@ -217,6 +274,7 @@
         backdrop.addEventListener('click', closeMenu);
         document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
 
+        // Open partner by default for demo
         openMenu('partner');
     })();
     </script>

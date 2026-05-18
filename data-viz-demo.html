@@ -8,14 +8,15 @@
     <link href="design-tokens.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); background: var(--wp--preset--color--contrast); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .impact-inner { max-width: 1280px; margin: 0 auto; padding: 120px 48px; }
+        ::selection { background: rgba(15,251,171,.3); color: #fff; }
+        body { font-family: var(--font-body); background: var(--wp--preset--color--contrast); min-height: 100vh; }
+        .impact-inner { max-width: 1280px; margin: 0 auto; padding: 120px 48px; display: flex; flex-direction: column; justify-content: center; min-height: calc(100vh - 44px); }
         .impact-intro { max-width: 640px; margin-bottom: 72px; }
         .impact-intro .eyebrow { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--color-teal); margin-bottom: 16px; }
         .impact-intro h2 { font-family: var(--font-heading); font-size: clamp(36px, 4.5vw, 64px); text-transform: uppercase; color: var(--wp--preset--color--white); line-height: 1; }
         .impact-intro h2 em { color: var(--color-teal); font-style: normal; }
-        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.08); }
-        .stat-item { padding: 52px 36px 52px 0; border-right: 1px solid rgba(255,255,255,.08); }
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.2); }
+        .stat-item { padding: 52px 36px; border-right: 1px solid rgba(255,255,255,.2); text-align: center; display: flex; flex-direction: column; align-items: center; }
         .stat-item:last-child { border-right: none; }
         .stat-val { display: block; font-family: var(--font-heading); font-size: clamp(52px, 5.5vw, 80px); color: var(--color-teal); line-height: 1; letter-spacing: -.02em; }
         .stat-desc { display: block; font-size: 12px; color: rgba(255,255,255,.38); margin-top: 12px; text-transform: uppercase; letter-spacing: .07em; line-height: 1.4; }
@@ -30,31 +31,41 @@
     </style>
 </head>
 <body>
+<style id="demo-toolbar-style">
+body{padding-top:44px !important;} .site-header{top:44px !important;}
+#demo-toolbar{position:fixed;top:0;left:0;right:0;z-index:9999;height:44px;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;padding:0 20px;gap:0;font-family:'Lato',sans-serif;font-size:12px;box-sizing:border-box;}
+#demo-toolbar a{text-decoration:none;}
+.dtb-back{color:#0FFBAB;font-weight:700;white-space:nowrap;letter-spacing:.04em;flex-shrink:0;}
+.dtb-back:hover{opacity:.7;}
+.dtb-title{color:rgba(255,255,255,.45);flex:1;text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 16px;}
+.dtb-nav{display:flex;gap:16px;flex-shrink:0;}
+.dtb-prev,.dtb-next{color:rgba(255,255,255,.35);font-size:12px;white-space:nowrap;}
+.dtb-prev:hover,.dtb-next:hover{color:#fff;}
+.dtb-disabled{color:rgba(255,255,255,.12);pointer-events:none;font-size:12px;}
+</style>
+<div id="demo-toolbar">
+  <a class="dtb-back" href="components.html">← Components</a>
+  <span class="dtb-title">Data Viz</span>
+  <nav class="dtb-nav"><a class="dtb-prev" href="cta-band-demo.html">← CTA Band</a><a class="dtb-next" href="divider-demo.html">Divider →</a></nav>
+</div>
     <div class="impact-inner">
-        <div class="impact-intro">
-            <span class="eyebrow">FMNR Impact</span>
-            <h2>Numbers that <em>speak</em><br>for themselves</h2>
-        </div>
         <div class="stats-row">
             <div class="stat-item">
-                <span class="stat-val" data-target="78" data-suffix="%">0%</span>
+                <span class="stat-val" data-target="78" data-suffix="%">78%</span>
                 <span class="stat-desc">Average tree survival rate</span>
             </div>
             <div class="stat-item">
-                <span class="stat-val" data-target="24" data-suffix="M+">0</span>
+                <span class="stat-val" data-target="24" data-suffix="M+">24M+</span>
                 <span class="stat-desc">Hectares restored globally</span>
             </div>
             <div class="stat-item">
-                <span class="stat-val" data-target="92" data-suffix="%">0%</span>
+                <span class="stat-val" data-target="92" data-suffix="%">92%</span>
                 <span class="stat-desc">Lower cost vs conventional reforestation</span>
             </div>
             <div class="stat-item">
-                <span class="stat-val" data-target="27" data-suffix="">0</span>
+                <span class="stat-val" data-target="27" data-suffix="">27</span>
                 <span class="stat-desc">Countries practicing FMNR</span>
             </div>
-        </div>
-        <div class="impact-foot">
-            <a href="impact.html">See the full evidence base ›</a>
         </div>
     </div>
 
@@ -79,5 +90,51 @@
     // Run on load
     animateCounters();
     </script>
+
+    <!-- WordPress Implementation Notes -->
+    <section style="max-width:1280px;margin:0 auto;padding:0 48px 120px;">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:40px 48px;">
+            <h3 style="font-family:var(--font-heading);font-size:20px;text-transform:uppercase;color:var(--wp--preset--color--white);margin-bottom:8px;">WordPress Implementation</h3>
+            <p style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;line-height:1.6;">How to replicate this component using WordPress Gutenberg plugins.</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:24px;">
+                    <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-teal);margin-bottom:12px;">Recommended Plugin</h4>
+                    <p style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:8px;"><strong style="color:#fff;">CoBlocks</strong> (by GoDaddy) — native Gutenberg block plugin with a <em>Counter</em> block that supports animated count-up, prefixes/suffixes (%, M+), and customisable typography.</p>
+                    <p style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.5;"><strong>Alternative:</strong> Flavor Counter Block — lightweight, single-purpose animated counter for Gutenberg.</p>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:24px;">
+                    <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-teal);margin-bottom:12px;">Block Structure</h4>
+                    <p style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;">
+                        <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:12px;">core/columns</code> (4 columns)<br>
+                        → <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:12px;">coblocks/counter</code> per column<br>
+                        → <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:12px;">core/paragraph</code> for label
+                    </p>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:24px;">
+                    <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-teal);margin-bottom:12px;">Styling (Additional CSS)</h4>
+                    <pre style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;white-space:pre-wrap;margin:0;">.stat-strip { background: var(--wp--preset--color--contrast); }
+.stat-strip .coblocks-counter__number {
+  font-family: var(--font-heading);
+  color: var(--color-teal);
+  font-size: clamp(52px, 5.5vw, 80px);
+}
+.stat-strip .wp-block-column {
+  border-right: 1px solid rgba(255,255,255,0.2);
+  text-align: center;
+  padding: 52px 36px;
+}</pre>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:24px;">
+                    <h4 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-teal);margin-bottom:12px;">Scroll Trigger</h4>
+                    <p style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;">Wrap the Columns block in <strong style="color:#fff;">Animatikon Motion FX</strong> with <em>Opacity</em> (start 0 → end 1) to trigger the entrance on scroll. The CoBlocks counter auto-animates its numbers when visible in viewport.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+<script src="shared-header.js"></script>
 </body>
 </html>

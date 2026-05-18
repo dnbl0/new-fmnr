@@ -6,12 +6,62 @@
     <title>Search — FMNR</title>
     <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
     <link href="design-tokens.css" rel="stylesheet">
+    <!--
+    ╔══════════════════════════════════════════════════════════════════════╗
+    ║  WORDPRESS IMPLEMENTATION NOTES — Ivory Search Plugin              ║
+    ╠══════════════════════════════════════════════════════════════════════╣
+    ║                                                                    ║
+    ║  Plugin: Ivory Search (free) — https://developer.ivorysearch.com/  ║
+    ║  Requires: WordPress 6.x + Gutenberg + Templately                  ║
+    ║                                                                    ║
+    ║  SETUP STEPS:                                                      ║
+    ║  1. Install & activate "Ivory Search" plugin                       ║
+    ║  2. Create a search form (Ivory Search → Add New):                 ║
+    ║     • Name: "FMNR Header Search"                                   ║
+    ║     • Search in: Pages, Posts, Attachments (PDF/media)             ║
+    ║     • Exclude: nav_menu_item, wp_block, wp_template,               ║
+    ║       wp_template_part, wp_global_styles, wp_font_face             ║
+    ║     • Enable AJAX Search (under AJAX tab)                          ║
+    ║     • Set "Show results as you type" = On                          ║
+    ║     • Set "Number of AJAX results" = 8                             ║
+    ║     • Show post thumbnail in AJAX = On                             ║
+    ║     • Show post excerpt in AJAX = On                               ║
+    ║  3. Note the form ID (e.g. 1234)                                   ║
+    ║  4. In your header template (Templately or theme header.php):      ║
+    ║     Use shortcode: [ivory-search id="1234" title="Search"]         ║
+    ║     OR use the Ivory Search widget/block in Gutenberg              ║
+    ║  5. Style overrides go in theme's style.css or Customizer CSS      ║
+    ║                                                                    ║
+    ║  FORM OUTPUT: Ivory Search generates:                              ║
+    ║  <form class="is-search-form" action="/" method="get" role="search">
+    ║    <input type="search" name="s" class="is-search-input" ...>      ║
+    ║    <input type="hidden" name="id" value="1234">                    ║
+    ║    <button type="submit" class="is-search-submit">...</button>     ║
+    ║  </form>                                                           ║
+    ║                                                                    ║
+    ║  AJAX RESULTS: Rendered by Ivory Search into a dropdown div:       ║
+    ║  <div class="is-ajax-search-result">                               ║
+    ║    <div class="is-ajax-search-post">                               ║
+    ║      <img class="is-ajax-search-image" ...>                        ║
+    ║      <span class="is-ajax-search-title">...</span>                 ║
+    ║      <span class="is-ajax-search-excerpt">...</span>               ║
+    ║    </div>                                                          ║
+    ║  </div>                                                            ║
+    ║                                                                    ║
+    ║  The CSS below styles BOTH the prototype demo AND maps to           ║
+    ║  Ivory Search class names so the theme CSS works with the plugin.  ║
+    ║                                                                    ║
+    ║  CONTENT INDEXED (from WP export — 58 pages, 5 posts):            ║
+    ║  Pages, Blog posts, PDF attachments (resources)                    ║
+    ║                                                                    ║
+    ╚══════════════════════════════════════════════════════════════════════╝
+    -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: var(--font-body); color: var(--wp--preset--color--contrast); background: var(--wp--preset--color--white); overflow-x: hidden; }
 
         /* ── Header ── */
-        .site-header { background: var(--wp--preset--color--white); display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .site-header { background: var(--wp--preset--color--white); display: flex; align-items: center; justify-content: space-between; padding: 16px 48px; position: sticky; top: 44px; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.08); }
         .logo img { height: 33px; display: block; }
         .nav-links { display: flex; align-items: center; gap: 4px; }
         .nav-links a { font-family: var(--font-body); font-weight: 700; font-size: 14px; color: var(--color-charcoal); text-decoration: none; padding: 8px 12px; transition: color 0.2s; }
@@ -29,16 +79,36 @@
         .search-panel.open { max-height: 600px; opacity: 1; overflow: visible; }
         .search-panel-inner { max-width: 720px; margin: 0 auto; padding: 24px 48px 32px; }
 
-        /* Search input */
-        .search-box { display: flex; align-items: center; gap: 12px; border: 2px solid #0071e3; border-radius: 980px; padding: 14px 20px; background: var(--wp--preset--color--white); }
-        .search-box svg { width: 20px; height: 20px; color: var(--wp--preset--color--contrast-3); flex-shrink: 0; }
-        .search-box input { flex: 1; border: none; outline: none; font-family: var(--font-body); font-size: 16px; color: var(--wp--preset--color--contrast); background: transparent; }
-        .search-box input::placeholder { color: var(--wp--preset--color--contrast-3); }
+        /* ── Ivory Search form styling ──
+           These target Ivory Search's generated class names.
+           In WP, the form is output by [ivory-search id="XXX"] shortcode.
+           The .is-search-form wraps everything; .is-search-input is the text field.
+        */
+        .search-box,
+        .is-search-form { display: flex; align-items: center; gap: 12px; border: 2px solid var(--color-green); border-radius: 980px; padding: 14px 20px; background: var(--wp--preset--color--white); }
+        .search-box svg,
+        .is-search-submit svg { width: 20px; height: 20px; color: var(--wp--preset--color--contrast-3); flex-shrink: 0; }
+        .search-box input,
+        .is-search-input { flex: 1; border: none; outline: none; font-family: var(--font-body); font-size: 16px; color: var(--wp--preset--color--contrast); background: transparent; }
+        .search-box input::placeholder,
+        .is-search-input::placeholder { color: var(--wp--preset--color--contrast-3); }
         .search-box .clear-btn { width: 22px; height: 22px; border-radius: 50%; background: #86868b; border: none; display: none; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
         .search-box .clear-btn.visible { display: flex; }
         .search-box .clear-btn svg { width: 10px; height: 10px; color: var(--wp--preset--color--white); }
 
-        /* Dropdown suggestions */
+        /* Ivory Search AJAX results dropdown styling */
+        .is-ajax-search-result { margin-top: 20px; background: var(--wp--preset--color--white); border-radius: 12px; }
+        .is-ajax-search-post { display: flex; align-items: center; gap: 14px; padding: 14px 4px; border-bottom: 1px solid #f5f5f7; cursor: pointer; border-radius: 6px; transition: background 0.1s; text-decoration: none; color: var(--wp--preset--color--contrast); }
+        .is-ajax-search-post:hover { background: var(--wp--preset--color--base); }
+        .is-ajax-search-post:last-child { border-bottom: none; }
+        .is-ajax-search-image { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+        .is-ajax-search-title { font-size: 15px; font-weight: 700; color: var(--wp--preset--color--contrast); }
+        .is-ajax-search-excerpt { font-size: 13px; color: var(--wp--preset--color--contrast-3); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* Hide Ivory Search default submit button (we use icon toggle instead) */
+        .is-search-submit { background: none; border: none; padding: 0; cursor: pointer; }
+
+        /* Dropdown suggestions (prototype fallback) */
         .search-dropdown { margin-top: 20px; }
         .search-dropdown-label { font-size: 13px; font-weight: 400; color: var(--wp--preset--color--contrast-3); margin-bottom: 4px; padding: 0 4px; display: flex; align-items: center; justify-content: space-between; }
         .search-dropdown-label a { font-size: 13px; color: var(--wp--preset--color--contrast-3); text-decoration: underline; cursor: pointer; }
@@ -62,7 +132,11 @@
         .search-backdrop { position: fixed; inset: 0; top: 65px; background: rgba(0,0,0,0); pointer-events: none; z-index: 998; transition: background 0.3s; }
         .search-backdrop.open { background: rgba(0,0,0,0.25); pointer-events: auto; }
 
-        /* ── Results page (shown after enter) ── */
+        /* ── Results page (WordPress native search results template) ──
+           In WP, form submission goes to /?s=query which loads search.php / 
+           the Templately search results template. The tabs below can be 
+           implemented via query params: ?s=query&post_type=page etc.
+        */
         .results-page { display: none; }
         .results-page.active { display: block; }
         .results-area { max-width: 840px; margin: 0 auto; padding: 32px 48px; }
@@ -109,17 +183,34 @@
     </style>
 </head>
 <body>
+<style id="demo-toolbar-style">
+body{padding-top:44px !important;} .site-header{top:44px !important;}
+#demo-toolbar{position:fixed;top:0;left:0;right:0;z-index:9999;height:44px;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;padding:0 20px;gap:0;font-family:'Lato',sans-serif;font-size:12px;box-sizing:border-box;}
+#demo-toolbar a{text-decoration:none;}
+.dtb-back{color:#0FFBAB;font-weight:700;white-space:nowrap;letter-spacing:.04em;flex-shrink:0;}
+.dtb-back:hover{opacity:.7;}
+.dtb-title{color:rgba(255,255,255,.45);flex:1;text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 16px;}
+.dtb-nav{display:flex;gap:16px;flex-shrink:0;}
+.dtb-prev,.dtb-next{color:rgba(255,255,255,.35);font-size:12px;white-space:nowrap;}
+.dtb-prev:hover,.dtb-next:hover{color:#fff;}
+.dtb-disabled{color:rgba(255,255,255,.12);pointer-events:none;font-size:12px;}
+</style>
+<div id="demo-toolbar">
+  <a class="dtb-back" href="components.html">← Components</a>
+  <span class="dtb-title">Search</span>
+  <nav class="dtb-nav"><a class="dtb-prev" href="scroll-animations-demo.html">← Scroll Animations</a><a class="dtb-next" href="spacer-demo.html">Spacer →</a></nav>
+</div>
 
     <!-- Header -->
     <header class="site-header" id="site-header">
         <a href="index.html" class="logo"><img src="fmnr-logo-figma.png" alt="FMNR"></a>
         <nav class="nav-links">
             <a href="partner.html">Partner</a>
-            <a href="#">Adopt</a>
+            <a href="#" style="opacity:0.45;cursor:default;pointer-events:none;">Adopt</a>
             <a href="impact.html">Impact</a>
-            <a href="#">Fund</a>
-            <a href="tony-rinaudo.html">About</a>
             <a href="resources.html">Resources</a>
+            <a href="blog.html">Stories</a>
+            <a href="tony-rinaudo.html">About</a>
         </nav>
         <div class="header-actions">
             <button class="header-search-btn" id="search-toggle" aria-label="Search">
@@ -129,16 +220,27 @@
         </div>
 
         <!-- Search dropdown panel -->
+        <!-- 
+          WORDPRESS: This panel wraps the Ivory Search form shortcode output.
+          In Templately header template, place [ivory-search id="XXXX" title="Search"] 
+          inside a container div with class "search-panel-inner".
+          Ivory Search generates the <form class="is-search-form"> automatically.
+          The AJAX results div (.is-ajax-search-result) is appended by the plugin JS.
+        -->
         <div class="search-panel" id="search-panel">
             <div class="search-panel-inner">
-                <form class="search-box" id="search-form" autocomplete="off">
+                <!-- Ivory Search form output (shortcode generates this structure) -->
+                <form class="search-box is-search-form" id="search-form" action="/" method="get" role="search" autocomplete="off">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                    <input type="text" id="search-input" placeholder="What are you looking for?" autofocus>
+                    <input type="search" name="s" id="search-input" class="is-search-input" placeholder="Search pages, resources, regions…" autofocus>
+                    <!-- Hidden field: Ivory Search form ID (replace XXXX with actual ID after plugin setup) -->
+                    <input type="hidden" name="id" value="XXXX">
                     <button type="button" class="clear-btn" id="clear-btn" aria-label="Clear">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
                     </button>
                 </form>
-                <div class="search-dropdown" id="search-dropdown"></div>
+                <!-- Ivory Search AJAX results will be injected here by the plugin -->
+                <div class="search-dropdown is-ajax-search-result" id="search-dropdown"></div>
             </div>
         </div>
     </header>
@@ -157,11 +259,10 @@
     <div class="results-page" id="results-page">
         <div class="results-area">
             <div class="results-tabs" id="results-tabs">
-                <button class="active" data-tab="all">Explore</button>
+                <!-- In WP, tabs filter via ?s=query&post_type=X or custom Query Loop -->
+                <button class="active" data-tab="all">All</button>
                 <button data-tab="resources">Resources</button>
-                <button data-tab="impact">Impact</button>
                 <button data-tab="regions">Regions</button>
-                <button data-tab="partners">Partners</button>
             </div>
             <p class="results-count" id="results-count"></p>
             <div id="results-list"></div>
@@ -169,33 +270,51 @@
     </div>
 
     <script>
+    /*
+     * WORDPRESS IMPLEMENTATION:
+     * This JS simulates Ivory Search's AJAX live-search behaviour for the prototype.
+     * In production, Ivory Search handles this via its own JS (is-search.min.js)
+     * which fires AJAX requests to: /wp-admin/admin-ajax.php?action=is_ajax_load_posts
+     *
+     * The searchIndex below mirrors actual pages/posts from the WP export.
+     * In WordPress, this data comes from WP_Query via the Ivory Search AJAX handler.
+     *
+     * SEARCH RESULTS PAGE:
+     * Form submission (Enter key) navigates to /?s=query which loads the 
+     * Templately search results template (search.php or block-based template).
+     * The tabbed filtering can be achieved with:
+     *   - URL params: ?s=query&post_type=page
+     *   - Or a custom Gutenberg Query Loop block with search filter
+     */
     (function() {
+        // Search index mirrors actual WP content (from XML export)
         var searchIndex = [
-            { title:'What is FMNR?', cat:'About', tab:'all', url:'index.html', desc:'Farmer Managed Natural Regeneration is a low-cost, sustainable land restoration technique that regenerates trees from existing root systems.', links:[{l:'Explore',h:'index.html'},{l:'Learn more',h:'resources.html'}], img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200&q=70&fit=crop' },
-            { title:'Partner With Us', cat:'Partners', tab:'partners', url:'partner.html', desc:'For organisations ready to make large-scale impact through FMNR partnerships across faith, NGO, corporate, and government sectors.', links:[{l:'Explore',h:'partner.html'},{l:'Contact',h:'partner.html#contact'}], img:'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=200&q=70&fit=crop' },
-            { title:'Impact & Evidence', cat:'Impact', tab:'impact', url:'impact.html', desc:'78% tree survival rates, 24 million hectares restored, and 92% cost reduction compared to traditional reforestation methods.', links:[{l:'View data',h:'impact.html'},{l:'Research',h:'resources.html'}], img:'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&q=70&fit=crop' },
-            { title:'24 Million Hectares Restored', cat:'Impact', tab:'impact', url:'impact.html', desc:'Over 24 million hectares of degraded land restored through FMNR practices worldwide, spanning 27 countries.', links:[{l:'Learn more',h:'impact.html'}], img:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=200&q=70&fit=crop' },
-            { title:'Tony Rinaudo', cat:'About', tab:'all', url:'tony-rinaudo.html', desc:'Australian agronomist who developed FMNR in Niger in the 1980s. Right Livelihood Award recipient 2018.', links:[{l:'Full story',h:'tony-rinaudo.html'},{l:'Timeline',h:'tony-rinaudo.html'}], img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200&q=70&fit=crop' },
-            { title:'Interactive Map', cat:'Regions', tab:'regions', url:'index.html#map', desc:'Explore FMNR implementation sites across Africa, Asia, and the Pacific with our interactive MapLibre-powered map.', links:[{l:'Explore map',h:'index.html#map'}], img:'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=200&q=70&fit=crop' },
-            { title:'Niger — 5 Million Hectares', cat:'Regions', tab:'regions', url:'index.html#map', desc:'Niger has restored over 5 million hectares through farmer-led FMNR, transforming the Sahel landscape.', links:[{l:'View on map',h:'index.html#map'}], img:'' },
-            { title:'Ethiopia — Humbo Region', cat:'Regions', tab:'regions', url:'index.html#map', desc:"Ethiopia's Humbo region — world's first CDM forestry project through FMNR.", links:[{l:'Case study',h:'#'}], img:'' },
-            { title:'Training & Resources', cat:'Resources', tab:'resources', url:'resources.html', desc:'Field guides, research papers, and educational resources for FMNR practitioners and community leaders.', links:[{l:'Browse',h:'resources.html'}], img:'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=200&q=70&fit=crop' },
-            { title:'Research Papers', cat:'Resources', tab:'resources', url:'resources.html', desc:'Peer-reviewed studies documenting the environmental, social, and economic impacts of FMNR.', links:[{l:'View papers',h:'resources.html'}], img:'' },
-            { title:'78% Tree Survival Rate', cat:'Impact', tab:'impact', url:'impact.html', desc:'FMNR achieves 78% survival vs 20-30% for conventional tree planting.', links:[{l:'Compare',h:'impact.html'}], img:'' },
-            { title:'92% Cost Reduction', cat:'Impact', tab:'impact', url:'impact.html', desc:'Just $12 per hectare — 92% cheaper than conventional reforestation.', links:[{l:'Evidence',h:'impact.html'}], img:'' },
-            { title:'Faith Based Partners', cat:'Partners', tab:'partners', url:'partner.html', desc:'Churches and faith communities leading restoration through FMNR adoption.', links:[{l:'Learn more',h:'partner.html'}], img:'' },
-            { title:'Corporate Partners', cat:'Partners', tab:'partners', url:'partner.html', desc:'ESG, carbon offset, and sustainability programs leveraging FMNR.', links:[{l:'Partner',h:'partner.html#contact'}], img:'' },
-            { title:'Donate', cat:'Support', tab:'all', url:'index.html#donate', desc:'Your contribution restores degraded lands and empowers farming communities.', links:[{l:'Donate',h:'index.html#donate'}], img:'' },
-            { title:'Data Visualisation', cat:'Impact', tab:'impact', url:'index.html#data-viz', desc:'Animated donut charts and counting stats presenting FMNR impact metrics.', links:[{l:'View',h:'index.html#data-viz'}], img:'' },
-            { title:'Decision Making Guide', cat:'Resources', tab:'resources', url:'index.html', desc:'Visual guide to FMNR decision-making: pruning, selection, and management.', links:[{l:'View guide',h:'index.html'}], img:'' }
+            { title:'What is FMNR?', cat:'Page', tab:'all', url:'/', desc:'Farmer Managed Natural Regeneration is a low-cost, sustainable land restoration technique that regenerates trees from existing root systems.', links:[{l:'Homepage',h:'/'}], img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200&q=70&fit=crop' },
+            { title:'Partner With Us', cat:'Page', tab:'all', url:'/partner-with-us/', desc:'For organisations ready to make large-scale impact through FMNR partnerships across faith, NGO, corporate, and government sectors.', links:[{l:'View page',h:'/partner-with-us/'}], img:'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=200&q=70&fit=crop' },
+            { title:'Impact & Evidence', cat:'Page', tab:'all', url:'/impact/', desc:'78% tree survival rates, 24 million hectares restored, and 92% cost reduction compared to traditional reforestation methods.', links:[{l:'View data',h:'/impact/'}], img:'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200&q=70&fit=crop' },
+            { title:'Tony Rinaudo', cat:'Page', tab:'all', url:'/tony-rinaudo/', desc:'Australian agronomist who developed FMNR in Niger in the 1980s. Right Livelihood Award recipient 2018.', links:[{l:'Full story',h:'/tony-rinaudo/'}], img:'' },
+            { title:'Resource Hub', cat:'Page', tab:'resources', url:'/resources/', desc:'Field guides, research papers, training manuals, and educational resources for FMNR practitioners.', links:[{l:'Browse',h:'/resources/'}], img:'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=200&q=70&fit=crop' },
+            { title:'FMNR Field Manual', cat:'Resource', tab:'resources', url:'/fmnr-field-manual/', desc:'Comprehensive field guide for implementing Farmer Managed Natural Regeneration in the field.', links:[{l:'Download PDF',h:'/fmnr-field-manual/'}], img:'' },
+            { title:'Evidence Gap Map, Research Brief, World Vision, 2024', cat:'Resource', tab:'resources', url:'/evidence-gap-map-research-brief-world-vision-2024/', desc:'Research brief documenting evidence gaps in FMNR implementation and outcomes.', links:[{l:'View',h:'/evidence-gap-map-research-brief-world-vision-2024/'}], img:'' },
+            { title:'FMNR Evidence of Impact, Research Brief, WVA, 2019', cat:'Resource', tab:'resources', url:'/fmnr-evidence-of-impact-research-brief-wva-2019/', desc:'World Vision Australia research brief on FMNR evidence of impact.', links:[{l:'View',h:'/fmnr-evidence-of-impact-research-brief-wva-2019/'}], img:'' },
+            { title:'Sustainable Land Regeneration (SLaR) Project', cat:'Page', tab:'all', url:'/sustainable-land-regeneration-slar-project/', desc:'The SLaR project implementing FMNR at scale across multiple regions.', links:[{l:'Learn more',h:'/sustainable-land-regeneration-slar-project/'}], img:'' },
+            { title:'Musa: From Job Hunter to Sustainable Farming Champion', cat:'Post', tab:'all', url:'/musa-from-job-hunter-to-sustainable-farming-champion/', desc:'How FMNR training transformed Musa from a job hunter into a sustainable farming champion.', links:[{l:'Read story',h:'/musa-from-job-hunter-to-sustainable-farming-champion/'}], img:'' },
+            { title:'How World Vision's FMNR Approach Instilled in a Local Community', cat:'Post', tab:'all', url:'/how-world-visions-fmnr-approach/', desc:'World Vision's FMNR programme building community-led natural regeneration.', links:[{l:'Read story',h:'/how-world-visions-fmnr-approach/'}], img:'' },
+            { title:'Interactive Map', cat:'Page', tab:'regions', url:'/#map', desc:'Explore FMNR implementation sites across Africa, Asia, and the Pacific.', links:[{l:'Explore map',h:'/#map'}], img:'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=200&q=70&fit=crop' },
+            { title:'Niger — 5 Million Hectares', cat:'Region', tab:'regions', url:'/#map', desc:'Niger has restored over 5 million hectares through farmer-led FMNR, transforming the Sahel landscape.', links:[{l:'View on map',h:'/#map'}], img:'' },
+            { title:'Ethiopia — Humbo Region', cat:'Region', tab:'regions', url:'/#map', desc:"Ethiopia's Humbo region — world's first CDM forestry project through FMNR.", links:[{l:'Case study',h:'/#map'}], img:'' },
+            { title:'Adopt FMNR', cat:'Page', tab:'all', url:'/adopt/', desc:'Steps and guidance for communities and organisations to adopt FMNR practices.', links:[{l:'Learn more',h:'/adopt/'}], img:'' },
+            { title:'Blog', cat:'Page', tab:'all', url:'/blog/', desc:'Latest stories, news, and updates from FMNR projects around the world.', links:[{l:'View all',h:'/blog/'}], img:'' },
+            { title:'Contact', cat:'Page', tab:'all', url:'/contact/', desc:'Get in touch with the FMNR team for partnerships, enquiries, and support.', links:[{l:'Contact us',h:'/contact/'}], img:'' }
         ];
 
-        var popularSearches = ['FMNR','impact','Tony Rinaudo','Niger'];
+        var popularSearches = ['FMNR','impact','Tony Rinaudo','Niger','field manual'];
         var popularPages = [
-            { label:'Impact & Evidence', href:'impact.html' },
-            { label:'Partner With Us', href:'partner.html' },
-            { label:'Resources Hub', href:'resources.html' },
-            { label:'Tony Rinaudo', href:'tony-rinaudo.html' }
+            { label:'Impact & Evidence', href:'/impact/' },
+            { label:'Partner With Us', href:'/partner-with-us/' },
+            { label:'Resource Hub', href:'/resources/' },
+            { label:'Tony Rinaudo', href:'/tony-rinaudo/' },
+            { label:'Blog', href:'/blog/' }
         ];
 
         var toggle = document.getElementById('search-toggle');
@@ -358,8 +477,12 @@
             input.value = initQ;
             clearBtn.classList.add('visible');
             showResults(initQ);
+        } else {
+            // Auto-open search on load for demo
+            openSearch();
         }
     })();
     </script>
+<script src="shared-header.js"></script>
 </body>
 </html>

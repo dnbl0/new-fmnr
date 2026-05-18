@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IA Audit — Current vs New Sitemap — FMNR Hub</title>
+    <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
+    <link href="design-tokens.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); color: var(--color-charcoal); background: #f9fafb; min-height: 100vh; }
+
+        .page-header { padding: 80px 48px 40px; max-width: 1400px; margin: 0 auto; }
+        .page-header h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; color: #1d1d1f; line-height: 1; margin-bottom: 8px; }
+        .page-header p { font-size: 15px; color: #6e6e73; max-width: 640px; line-height: 1.6; }
+
+        .content { max-width: 1400px; margin: 0 auto; padding: 0 48px 80px; }
+
+        /* Legend */
+        .legend { display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 32px; padding: 16px 20px; background: #fff; border-radius: 10px; border: 1px solid #e8e8e8; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #6e6e73; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .legend-dot.keep { background: var(--color-green); }
+        .legend-dot.merge { background: var(--color-orange); }
+        .legend-dot.remove { background: #e53e3e; }
+        .legend-dot.new { background: #3b82f6; }
+        .legend-dot.restructure { background: #8b5cf6; }
+
+        /* Two-column layout */
+        .audit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        @media (max-width: 1000px) { .audit-grid { grid-template-columns: 1fr; } }
+
+        .audit-panel { background: #fff; border-radius: 12px; border: 1px solid #e8e8e8; overflow: hidden; }
+        .audit-panel-header { padding: 20px 24px; border-bottom: 1px solid #f0f0f0; }
+        .audit-panel-header h2 { font-family: var(--font-heading); font-size: 18px; text-transform: uppercase; color: #1d1d1f; line-height: 1; }
+        .audit-panel-header p { font-size: 12px; color: #86868b; margin-top: 4px; }
+        .audit-panel-body { padding: 20px 24px; }
+
+        /* Tree */
+        .tree { list-style: none; font-size: 13px; }
+        .tree li { padding: 6px 0; border-bottom: 1px solid #f5f5f7; display: flex; align-items: center; gap: 8px; }
+        .tree li:last-child { border-bottom: none; }
+        .tree .indent-1 { padding-left: 20px; }
+        .tree .indent-2 { padding-left: 40px; }
+        .tree .indent-3 { padding-left: 60px; }
+        .tree .page-name { font-weight: 600; color: #1d1d1f; flex: 1; }
+        .tree .status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+        .status.keep { background: rgba(7,125,87,0.08); color: var(--color-green); }
+        .status.merge { background: rgba(245,130,32,0.1); color: var(--color-orange); }
+        .status.remove { background: rgba(229,62,62,0.08); color: #e53e3e; }
+        .status.restructure { background: rgba(139,92,246,0.08); color: #8b5cf6; }
+        .status.new { background: rgba(59,130,246,0.08); color: #3b82f6; }
+
+        /* Summary cards */
+        .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .summary-card { background: #fff; border-radius: 10px; border: 1px solid #e8e8e8; padding: 20px; text-align: center; }
+        .summary-card-num { font-family: var(--font-heading); font-size: 36px; text-transform: uppercase; color: var(--color-green); line-height: 1; }
+        .summary-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #86868b; margin-top: 6px; }
+
+        /* Notes section */
+        .notes { margin-top: 32px; background: #fff; border-radius: 12px; border: 1px solid #e8e8e8; padding: 24px; }
+        .notes h3 { font-family: var(--font-heading); font-size: 16px; text-transform: uppercase; color: #1d1d1f; margin-bottom: 16px; }
+        .notes ul { list-style: none; }
+        .notes li { font-size: 13px; line-height: 1.6; padding: 8px 0; border-bottom: 1px solid #f5f5f7; display: flex; gap: 10px; }
+        .notes li:last-child { border-bottom: none; }
+        .notes li::before { content: '→'; color: var(--color-green); font-weight: 700; flex-shrink: 0; }
+
+        .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--color-green); text-decoration: none; margin-bottom: 32px; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <h1>IA Audit — Sitemap Migration</h1>
+        <p>A comparison of the existing fmnrhub.com WordPress site structure against the proposed new information architecture, with recommendations for each page.</p>
+    </header>
+
+    <div class="content">
+        <a href="components.html#section-ia" class="back-link">← Back to Components</a>
+
+        <!-- Summary -->
+        <div class="summary-row">
+            <div class="summary-card">
+                <div class="summary-card-num">41</div>
+                <div class="summary-card-label">Current Pages</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-card-num">22</div>
+                <div class="summary-card-label">Keep / Migrate</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-card-num">9</div>
+                <div class="summary-card-label">Merge / Consolidate</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-card-num">8</div>
+                <div class="summary-card-label">New Pages Needed</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-card-num">6</div>
+                <div class="summary-card-label">Remove / Sunset</div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item"><span class="legend-dot keep"></span> Keep — migrate content as-is</div>
+            <div class="legend-item"><span class="legend-dot merge"></span> Merge — consolidate into another page</div>
+            <div class="legend-item"><span class="legend-dot remove"></span> Remove — outdated or redundant</div>
+            <div class="legend-item"><span class="legend-dot new"></span> New — page doesn't exist yet</div>
+            <div class="legend-item"><span class="legend-dot restructure"></span> Restructure — same content, new location</div>
+        </div>
+
+        <!-- Audit Grid -->
+        <div class="audit-grid">
+
+            <!-- Current WordPress Site -->
+            <div class="audit-panel">
+                <div class="audit-panel-header">
+                    <h2>Current WordPress Site</h2>
+                    <p>fmnrhub.com — existing page structure</p>
+                </div>
+                <div class="audit-panel-body">
+                    <ul class="tree">
+                        <li><span class="page-name">Home</span><span class="status restructure">Restructure</span></li>
+                        <li><span class="page-name">About FMNR</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">What is FMNR?</span><span class="status merge">Merge → Learn</span></li>
+                        <li class="indent-1"><span class="page-name">FMNR Fundamentals</span><span class="status merge">Merge → Learn</span></li>
+                        <li class="indent-1"><span class="page-name">How FMNR Works</span><span class="status merge">Merge → Learn</span></li>
+                        <li class="indent-1"><span class="page-name">History of FMNR</span><span class="status merge">Merge → About</span></li>
+                        <li><span class="page-name">Tony Rinaudo — The Forest Maker</span><span class="status keep">Keep</span></li>
+                        <li><span class="page-name">FMNR and World Vision</span><span class="status restructure">Restructure</span></li>
+                        <li><span class="page-name">Where We Work</span><span class="status restructure">Restructure</span></li>
+                        <li class="indent-1"><span class="page-name">Niger</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Ethiopia</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Kenya</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Zambia</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Uganda</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Mali</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Senegal</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Ghana</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Burkina Faso</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Indonesia</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Timor-Leste</span><span class="status keep">Keep</span></li>
+                        <li><span class="page-name">Partner with Us</span><span class="status restructure">Restructure</span></li>
+                        <li><span class="page-name">Impact & Evidence</span><span class="status restructure">Restructure</span></li>
+                        <li class="indent-1"><span class="page-name">Research</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Case Studies & Stories</span><span class="status keep">Keep</span></li>
+                        <li><span class="page-name">Resources Hub</span><span class="status restructure">Restructure</span></li>
+                        <li class="indent-1"><span class="page-name">Publications</span><span class="status merge">Merge → Resources</span></li>
+                        <li class="indent-1"><span class="page-name">Videos</span><span class="status merge">Merge → Resources</span></li>
+                        <li class="indent-1"><span class="page-name">Toolkits</span><span class="status merge">Merge → Resources</span></li>
+                        <li class="indent-1"><span class="page-name">E-Course</span><span class="status keep">Keep</span></li>
+                        <li><span class="page-name">Country Specific (landing)</span><span class="status restructure">Restructure</span></li>
+                        <li><span class="page-name">News & Stories (Blog Home)</span><span class="status restructure">Restructure</span></li>
+                        <li class="indent-1"><span class="page-name">Blog Posts (archive)</span><span class="status keep">Keep</span></li>
+                        <li><span class="page-name">GGW Action Webinar</span><span class="status remove">Remove</span></li>
+                        <li><span class="page-name">Get Involved</span><span class="status remove">Remove</span></li>
+                        <li class="indent-1"><span class="page-name">Support Us</span><span class="status remove">Remove</span></li>
+                        <li class="indent-1"><span class="page-name">Donate</span><span class="status remove">Remove</span></li>
+                        <li class="indent-1"><span class="page-name">Volunteer</span><span class="status remove">Remove</span></li>
+                        <li><span class="page-name">Contact Us</span><span class="status keep">Keep</span></li>
+                        <li><span class="page-name">Privacy Policy</span><span class="status keep">Keep</span></li>
+                        <li><span class="page-name">Terms & Conditions</span><span class="status remove">Remove</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- New IA -->
+            <div class="audit-panel">
+                <div class="audit-panel-header">
+                    <h2>New Information Architecture</h2>
+                    <p>Proposed structure — audience-first navigation</p>
+                </div>
+                <div class="audit-panel-body">
+                    <ul class="tree">
+                        <li><span class="page-name">Home (redesigned)</span><span class="status restructure">Restructure</span></li>
+                        <li><span class="page-name">Partner</span><span class="status restructure">← Partner with Us</span></li>
+                        <li class="indent-1"><span class="page-name">Faith-based Partners</span><span class="status new">New</span></li>
+                        <li class="indent-1"><span class="page-name">NGOs & Implementers</span><span class="status new">New</span></li>
+                        <li class="indent-1"><span class="page-name">Government & Policy</span><span class="status new">New</span></li>
+                        <li class="indent-1"><span class="page-name">Funders & Supporters</span><span class="status new">New</span></li>
+                        <li><span class="page-name">Learn</span><span class="status new">New</span></li>
+                        <li class="indent-1"><span class="page-name">FMNR Fundamentals</span><span class="status merge">← What is FMNR? + Fundamentals</span></li>
+                        <li class="indent-1"><span class="page-name">Science & Evidence</span><span class="status merge">← Research</span></li>
+                        <li class="indent-1"><span class="page-name">Global Activity Map</span><span class="status restructure">← Where We Work</span></li>
+                        <li><span class="page-name">Adopt</span><span class="status new">New</span></li>
+                        <li class="indent-1"><span class="page-name">Getting Started Guide</span><span class="status merge">← Toolkits</span></li>
+                        <li class="indent-1"><span class="page-name">Country Examples</span><span class="status restructure">← Country Specific + country pages</span></li>
+                        <li class="indent-1"><span class="page-name">E-Course</span><span class="status keep">← E-Course</span></li>
+                        <li><span class="page-name">Impact</span><span class="status restructure">← Impact & Evidence</span></li>
+                        <li class="indent-1"><span class="page-name">Impact Dashboard</span><span class="status new">New</span></li>
+                        <li class="indent-1"><span class="page-name">Stories & Blog</span><span class="status restructure">← Blog Home + Case Studies & Stories</span></li>
+                        <li class="indent-1"><span class="page-name">Case Studies</span><span class="status keep">← Case Studies & Stories</span></li>
+                        <li><span class="page-name">About</span><span class="status restructure">← About FMNR + History</span></li>
+                        <li class="indent-1"><span class="page-name">Tony Rinaudo</span><span class="status keep">← Tony Rinaudo</span></li>
+                        <li class="indent-1"><span class="page-name">FMNR Hub & World Vision</span><span class="status restructure">← FMNR and World Vision</span></li>
+                        <li class="indent-1"><span class="page-name">Connect / Contact</span><span class="status keep">← Contact Us</span></li>
+                        <li><span class="page-name">Resources Hub</span><span class="status restructure">← Resources Hub</span></li>
+                        <li class="indent-1"><span class="page-name">Publications</span><span class="status keep">Keep</span></li>
+                        <li class="indent-1"><span class="page-name">Video Library</span><span class="status merge">← Videos</span></li>
+                        <li class="indent-1"><span class="page-name">Field Toolkits</span><span class="status merge">← Toolkits + Publications</span></li>
+                        <li><span class="page-name">Search</span><span class="status new">New</span></li>
+                        <li><span class="page-name">Privacy Policy</span><span class="status keep">← Privacy Policy</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Migration Notes -->
+        <div class="notes">
+            <h3>Key Migration Decisions</h3>
+            <ul>
+                <li><strong>Navigation model change:</strong> Shifting from topic-based ("About FMNR", "Where We Work") to audience-based ("Partner", "Learn", "Adopt") to better serve distinct user groups</li>
+                <li><strong>"Partner with Us" evolves:</strong> Existing partnerships page becomes the top-level "Partner" section with sub-pages for each audience (faith, NGO, government, funders)</li>
+                <li><strong>"Get Involved" removal:</strong> Donate/Volunteer/Support Us pages removed — fundraising handled through World Vision main site; partnership now has its own top-level section</li>
+                <li><strong>Country pages preserved:</strong> All 11 country pages plus the "Country Specific" landing page migrate into "Adopt → Country Examples" with enhanced data and storytelling</li>
+                <li><strong>Resources consolidation:</strong> Publications, Videos, and Toolkits merge into a single filterable Resources Hub with taxonomy-based browsing</li>
+                <li><strong>E-Course kept:</strong> Existing e-course page migrates into the new "Adopt" section as a standalone learning pathway</li>
+                <li><strong>"FMNR Fundamentals" + "What is FMNR?" merge:</strong> Two overlapping explainer pages consolidate into "Learn → FMNR Fundamentals"</li>
+                <li><strong>"FMNR and World Vision" moves:</strong> Existing org page becomes "About → FMNR Hub & World Vision"</li>
+                <li><strong>"Learn" section is new:</strong> Combines content from "About FMNR", "FMNR Fundamentals", "How FMNR Works", and "Research" into a coherent educational pathway</li>
+                <li><strong>Impact Dashboard is new:</strong> A data-driven interactive page replacing the static "Impact & Evidence" section with live metrics and progress tracking</li>
+                <li><strong>Blog → Stories:</strong> Blog archive migrates but rebrands as "Stories" under Impact, with enhanced card-based browsing and tagging</li>
+                <li><strong>GGW Webinar removed:</strong> One-off event page is outdated — content can be archived or referenced in blog</li>
+                <li><strong>Search is new:</strong> Dedicated search results page with faceted filtering — does not exist on current WordPress site</li>
+                <li><strong>URL strategy:</strong> All old URLs (including ?page_id= permalinks) should 301 redirect to new equivalents — create redirect map during build phase</li>
+                <li><strong>SEO considerations:</strong> Preserve existing meta descriptions and H1 content where pages are kept; update canonical URLs for merged pages</li>
+            </ul>
+        </div>
+    </div>
+
+<script src="shared-header.js"></script>
+</body>
+</html>

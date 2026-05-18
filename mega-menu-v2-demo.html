@@ -117,6 +117,23 @@
     </style>
 </head>
 <body>
+<style id="demo-toolbar-style">
+body{padding-top:44px !important;} .site-header{top:44px !important;}
+#demo-toolbar{position:fixed;top:0;left:0;right:0;z-index:9999;height:44px;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;padding:0 20px;gap:0;font-family:'Lato',sans-serif;font-size:12px;box-sizing:border-box;}
+#demo-toolbar a{text-decoration:none;}
+.dtb-back{color:#0FFBAB;font-weight:700;white-space:nowrap;letter-spacing:.04em;flex-shrink:0;}
+.dtb-back:hover{opacity:.7;}
+.dtb-title{color:rgba(255,255,255,.45);flex:1;text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 16px;}
+.dtb-nav{display:flex;gap:16px;flex-shrink:0;}
+.dtb-prev,.dtb-next{color:rgba(255,255,255,.35);font-size:12px;white-space:nowrap;}
+.dtb-prev:hover,.dtb-next:hover{color:#fff;}
+.dtb-disabled{color:rgba(255,255,255,.12);pointer-events:none;font-size:12px;}
+</style>
+<div id="demo-toolbar">
+  <a class="dtb-back" href="components.html">← Components</a>
+  <span class="dtb-title">Mega Menu V2</span>
+  <nav class="dtb-nav"><a class="dtb-prev" href="mega-menu-demo.html">← Mega Menu</a><a class="dtb-next" href="mega-menu-v3-demo.html">Mega Menu V3 →</a></nav>
+</div>
 
     <header class="page-header">
         <h1>Mega Menu — Alternate Layouts</h1>
@@ -126,9 +143,10 @@
     <div class="section-nav">
         <span>Section:</span>
         <button class="section-btn active" data-section="partner">Partner</button>
-        <button class="section-btn" data-section="learn">Learn</button>
         <button class="section-btn" data-section="adopt">Adopt</button>
         <button class="section-btn" data-section="impact">Impact</button>
+        <button class="section-btn" data-section="resources">Resource Hub</button>
+        <button class="section-btn" data-section="stories">Stories</button>
         <button class="section-btn" data-section="about">About</button>
     </div>
 
@@ -147,7 +165,7 @@
                 <div class="frame-bar"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-url">fmnrhub.com.au</span></div>
                 <div class="frame-nav">
                     <img src="fmnr-logo-figma.png" class="frame-nav-logo" alt="FMNR">
-                    <div class="frame-nav-links" id="la-nav-links"><span class="active-link">Partner</span><span>Learn</span><span>Adopt</span><span>Impact</span><span>About</span></div>
+                    <div class="frame-nav-links" id="la-nav-links"><span class="active-link">Partner</span><span>Adopt</span><span>Impact</span><span>Resource Hub</span><span>Stories</span><span>About</span></div>
                     <span class="frame-nav-cta">Get in touch</span>
                 </div>
                 <div class="la" id="la-content"></div>
@@ -167,7 +185,7 @@
                 <div class="frame-bar"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-url">fmnrhub.com.au</span></div>
                 <div class="frame-nav">
                     <img src="fmnr-logo-figma.png" class="frame-nav-logo" alt="FMNR">
-                    <div class="frame-nav-links" id="lc-nav-links"><span class="active-link">Partner</span><span>Learn</span><span>Adopt</span><span>Impact</span><span>About</span></div>
+                    <div class="frame-nav-links" id="lc-nav-links"><span class="active-link">Partner</span><span>Adopt</span><span>Impact</span><span>Resource Hub</span><span>Stories</span><span>About</span></div>
                     <span class="frame-nav-cta">Get in touch</span>
                 </div>
                 <div class="lc" id="lc-content"></div>
@@ -187,7 +205,7 @@
                 <div class="frame-bar"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-url">fmnrhub.com.au</span></div>
                 <div class="frame-nav dark">
                     <img src="fmnr-logo-figma.png" class="frame-nav-logo" alt="FMNR">
-                    <div class="frame-nav-links" id="ld-nav-links"><span class="active-link">Partner</span><span>Learn</span><span>Adopt</span><span>Impact</span><span>About</span></div>
+                    <div class="frame-nav-links" id="ld-nav-links"><span class="active-link">Partner</span><span>Adopt</span><span>Impact</span><span>Resource Hub</span><span>Stories</span><span>About</span></div>
                     <span class="frame-nav-cta">Get in touch</span>
                 </div>
                 <div class="ld" id="ld-content"></div>
@@ -205,20 +223,10 @@
                 stat: { num: '180+', label: 'Partner organisations' },
                 feature: { eyebrow: 'Featured', title: 'Scaling FMNR across Sub-Saharan Africa', desc: 'See how faith networks and NGOs are driving landscape restoration.' },
                 items: [
-                    { icon: 'heart-handshake', label: 'Faith-based Actors',   desc: 'Churches, pastors and faith network leaders' },
-                    { icon: 'network',         label: 'NGOs & Implementers',  desc: 'Development organisations and programme teams' },
-                    { icon: 'landmark',        label: 'Governments & Policy', desc: 'Policy makers and national programme leaders' },
-                    { icon: 'trending-up',     label: 'Funders & Supporters', desc: 'Philanthropists, impact investors and grant-makers' }
-                ]
-            },
-            learn: {
-                title: 'Learn', desc: 'Discover how FMNR restores degraded land, boosts food security, and builds climate resilience.', href: '#',
-                stat: { num: '40+', label: 'Years of field evidence' },
-                feature: { eyebrow: 'Story', title: "From desert to forest: Niger\u2019s transformation", desc: 'How millions of farmers changed the Sahel.' },
-                items: [
-                    { icon: 'sprout',     label: 'FMNR Fundamentals',  desc: 'What it is, how it works and why it matters' },
-                    { icon: 'microscope', label: 'Science & Evidence', desc: 'Research, climate benefits and livelihood outcomes' },
-                    { icon: 'globe',      label: 'Global Activity',    desc: 'Maps, flagship countries and movement tracker' }
+                    { icon: 'heart-handshake', label: 'Faith-Based Partners', desc: 'Churches, pastors and faith network leaders' },
+                    { icon: 'network',         label: 'NGOs',                 desc: 'Development organisations and programme teams' },
+                    { icon: 'landmark',        label: 'Governments',          desc: 'Policy makers and national programme leaders' },
+                    { icon: 'trending-up',     label: 'Funders',              desc: 'Philanthropists, impact investors and grant-makers' }
                 ]
             },
             adopt: {
@@ -226,9 +234,9 @@
                 stat: { num: '28', label: 'Countries practicing FMNR' },
                 feature: { eyebrow: 'Guide', title: 'Field guide to FMNR adoption', desc: 'Step-by-step practitioner guide.' },
                 items: [
-                    { icon: 'book-open', label: 'Getting Started',  desc: 'Step-by-step guides, tools and video library' },
-                    { icon: 'map-pin',   label: 'Country Examples', desc: 'Niger, Ethiopia, Zambia, Mali and more' },
-                    { icon: 'users',     label: 'Connect to Adopt', desc: 'Find local support and share your story' }
+                    { icon: 'sprout',    label: 'How FMNR Works', desc: 'The technique and its core principles explained' },
+                    { icon: 'book-open', label: 'Adopt FMNR',     desc: 'Start implementing FMNR in your context' },
+                    { icon: 'library',   label: 'Resources',      desc: 'Tools and materials for adoption' }
                 ]
             },
             impact: {
@@ -236,9 +244,33 @@
                 stat: { num: '1B ha', label: 'Vision for restoration' },
                 feature: { eyebrow: 'Data', title: '1 Billion Hectare Vision', desc: 'Track progress toward our global target.' },
                 items: [
-                    { icon: 'library',     label: 'Resource Hub',        desc: 'Stories, research and featured content' },
-                    { icon: 'bar-chart-2', label: 'Impact Dashboard',    desc: 'People reached, hectares and the 1B vision' },
-                    { icon: 'mail',        label: 'Reporting & Updates', desc: 'Annual highlights, newsletter and community' }
+                    { icon: 'bar-chart-2', label: 'The Impact of FMNR',  desc: 'Comprehensive impact overview' },
+                    { icon: 'microscope',  label: 'Evidence of Impact',  desc: 'Research and data on FMNR outcomes' },
+                    { icon: 'book-heart',  label: 'Impact Stories',      desc: 'Stories from FMNR communities' }
+                ]
+            },
+            resources: {
+                title: 'Resource Hub', desc: 'Research, training materials and country-specific resources for FMNR practitioners.', href: 'resources.html',
+                stat: { num: '500+', label: 'Resources available' },
+                feature: { eyebrow: 'New', title: 'FMNR e-Courses now available', desc: 'Online learning modules for practitioners.' },
+                items: [
+                    { icon: 'library',        label: 'All Resources',              desc: 'Browse the complete resource library' },
+                    { icon: 'microscope',     label: 'Research',                    desc: 'Academic research and evidence base' },
+                    { icon: 'globe',          label: 'Country-Specific Resources', desc: 'Resources by country and region' },
+                    { icon: 'book-open',      label: 'FMNR Manual',                desc: 'The comprehensive FMNR manual' },
+                    { icon: 'film',           label: 'FMNR Media',                 desc: 'Videos, podcasts and multimedia' },
+                    { icon: 'graduation-cap', label: 'FMNR e-Courses',             desc: 'Online learning modules' },
+                    { icon: 'video',          label: 'FMNR Webinar',               desc: 'Watch recorded webinars' }
+                ]
+            },
+            stories: {
+                title: 'Stories', desc: 'Real stories from FMNR communities around the world.', href: 'blog.html',
+                stat: { num: '100+', label: 'Stories published' },
+                feature: { eyebrow: 'Latest', title: "From desert to forest: Niger\u2019s transformation", desc: 'How millions of farmers changed the Sahel.' },
+                items: [
+                    { icon: 'book-open', label: 'All Stories',    desc: 'Browse all FMNR stories' },
+                    { icon: 'tag',       label: 'Story Category', desc: 'Coming soon' },
+                    { icon: 'tag',       label: 'Story Category', desc: 'Coming soon' }
                 ]
             },
             about: {
@@ -246,9 +278,14 @@
                 stat: { num: '1983', label: 'Year FMNR was pioneered' },
                 feature: { eyebrow: 'Meet', title: "Tony Rinaudo \u2014 The Forest Maker", desc: 'The story of the man behind the movement.' },
                 items: [
-                    { icon: 'star',           label: 'Tony Rinaudo',            desc: 'The man who transformed the Sahel' },
-                    { icon: 'building-2',     label: 'FMNR Hub & World Vision', desc: 'Our mission, values and open-source commitment' },
-                    { icon: 'message-circle', label: 'Connect',                 desc: 'Contact, newsletter and community links' }
+                    { icon: 'star',           label: 'About FMNR',                         desc: 'The technique and movement explained' },
+                    { icon: 'user',           label: 'Tony Rinaudo \u2014 The Forest Maker', desc: 'The man who transformed the Sahel' },
+                    { icon: 'message-circle', label: 'Contact FMNR',                       desc: 'Get in touch with the team' },
+                    { icon: 'building-2',     label: 'FMNR and World Vision',              desc: 'Our partnership and mission' },
+                    { icon: 'rocket',         label: 'FMNR Scaling Projects',              desc: 'How FMNR is scaling worldwide' },
+                    { icon: 'activity',       label: 'FMNR Tracking Tool',                 desc: 'Monitor FMNR progress' },
+                    { icon: 'bell',           label: 'Latest Updates',                     desc: 'News and announcements' },
+                    { icon: 'help-circle',    label: 'FMNR FAQs',                          desc: 'Frequently asked questions' }
                 ]
             }
         };
@@ -296,7 +333,7 @@
         }
 
         function setNavActive(navId, key) {
-            var order = ['partner', 'learn', 'adopt', 'impact', 'about'];
+            var order = ['partner', 'adopt', 'impact', 'resources', 'stories', 'about'];
             var idx = order.indexOf(key);
             document.getElementById(navId).querySelectorAll('span').forEach(function(s, i) { s.classList.toggle('active-link', i === idx); });
         }
@@ -314,5 +351,6 @@
         renderAll('partner');
     })();
     </script>
+<script src="shared-header.js"></script>
 </body>
 </html>

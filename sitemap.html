@@ -3,282 +3,142 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sitemap — FMNR Hub</title>
+    <title>Sitemap — FMNR</title>
     <link rel="stylesheet" href="https://use.typekit.net/ajf0nww.css">
     <link href="design-tokens.css" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); color: var(--wp--preset--color--contrast); background: var(--wp--preset--color--base); -webkit-font-smoothing: antialiased; }
+        body { font-family: var(--font-body); color: #1d1d1f; background: #fff; -webkit-font-smoothing: antialiased; padding: 80px 48px; max-width: 1280px; margin: 0 auto; }
+        h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; margin-bottom: 8px; }
+        .subtitle { font-size: 17px; color: #6e6e73; margin-bottom: 64px; max-width: 560px; line-height: 1.5; }
 
-        .page-wrap { max-width: 1400px; margin: 0 auto; padding: 80px 48px 96px; }
+        .tree { display: flex; flex-direction: column; gap: 48px; }
 
-        h1 { font-family: var(--font-heading); font-size: clamp(32px, 4vw, 52px); text-transform: uppercase; margin-bottom: 6px; line-height: 1; }
-        .meta { font-size: 13px; color: var(--wp--preset--color--contrast-3); margin-bottom: 8px; }
-        .subtitle { font-size: 16px; color: var(--wp--preset--color--contrast-2); margin-bottom: 56px; max-width: 560px; line-height: 1.5; }
+        .root { text-align: center; }
+        .root .node { display: inline-block; background: var(--color-green); color: #fff; border-radius: 12px; padding: 16px 32px; }
+        .root .node h3 { font-size: 16px; font-weight: 700; }
 
-        /* ── Legend ── */
-        .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
-        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--wp--preset--color--contrast-2); }
-        .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-        .legend-dot.new { background: #077D57; }
-        .legend-dot.improve { background: #FA6B01; }
-        .legend-dot.existing { background: var(--wp--preset--color--contrast-3); }
+        .primary-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; }
+        .branch { display: flex; flex-direction: column; gap: 12px; }
+        .branch-head { background: #1d1d1f; color: #fff; border-radius: 10px; padding: 14px 16px; text-align: center; }
+        .branch-head h3 { font-size: 14px; font-weight: 700; }
 
-        /* ── Global row ── */
-        .global-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
-        .global-card { background: var(--wp--preset--color--contrast); color: var(--wp--preset--color--white); border-radius: 14px; padding: 20px 24px; }
-        .global-card .gc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
-        .global-card h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
-        .global-card .gc-items { display: flex; flex-wrap: wrap; gap: 6px; }
-        .global-card .gc-item { font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 6px; color: rgba(255,255,255,0.75); }
-        .global-card .gc-item.new { background: rgba(7,125,87,0.35); color: #0FFBAB; }
+        .sub-links { display: flex; flex-direction: column; gap: 4px; }
+        .sub-link { font-size: 13px; font-weight: 600; color: #1d1d1f; padding: 8px 12px; border-radius: 8px; background: #f5f5f7; border: 1px solid #ebebeb; }
+        .sub-link span { display: block; font-size: 11px; font-weight: 400; color: #86868b; margin-top: 2px; }
 
-        /* ── Section connector ── */
-        .divider-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--wp--preset--color--contrast-3); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #e5e5e5; }
+        .connector-center { display: flex; justify-content: center; }
+        .connector-line { width: 2px; height: 24px; background: #d1d1d6; }
 
-        /* ── Main sections grid ── */
-        .sections-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; align-items: start; }
+        .utility-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #86868b; margin-bottom: 12px; }
+        .utility-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .utility-node { font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: 8px; border: 1px solid #e5e5e5; color: #6e6e73; }
 
-        /* ── Section column ── */
-        .section-col { display: flex; flex-direction: column; gap: 0; }
-
-        .section-head { border-radius: 12px 12px 0 0; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
-        .section-head.learn   { background: #077D57; }
-        .section-head.adopt   { background: var(--wp--preset--color--contrast); }
-        .section-head.partner { background: #FA6B01; }
-        .section-head.impact  { background: #0a5c3f; }
-        .section-head.about   { background: #3a3a3c; }
-        .section-head h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--wp--preset--color--white); }
-        .priority-badge { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,0.2); color: var(--wp--preset--color--white); }
-
-        /* ── Groups within a section ── */
-        .section-body { background: var(--wp--preset--color--white); border-radius: 0 0 12px 12px; border: 1px solid #e5e5e5; border-top: none; overflow: hidden; }
-
-        .group { border-bottom: 1px solid #f0f0f0; }
-        .group:last-child { border-bottom: none; }
-        .group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--wp--preset--color--contrast-3); padding: 10px 14px 6px; background: var(--wp--preset--color--base); border-bottom: 1px solid #f0f0f0; }
-
-        /* ── Page items ── */
-        .page-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 14px; border-bottom: 1px solid #f7f7f7; }
-        .page-item:last-child { border-bottom: none; }
-        .page-item .page-title { font-size: 12px; color: var(--wp--preset--color--contrast); line-height: 1.3; }
-        .status-pill { flex-shrink: 0; margin-left: 6px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 4px; }
-        .status-pill.new     { background: rgba(7,125,87,0.1); color: #077D57; }
-        .status-pill.improve { background: rgba(250,107,1,0.1); color: #c85500; }
-
-        /* ── Landing page callout ── */
-        .lp-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
-        .lp-card { background: var(--wp--preset--color--white); border: 2px solid #FA6B01; border-radius: 12px; padding: 16px 18px; }
-        .lp-card .lp-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #FA6B01; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }
-        .lp-card .lp-tag svg { width: 10px; height: 10px; flex-shrink: 0; }
-        .lp-card h3 { font-size: 13px; font-weight: 700; color: var(--wp--preset--color--contrast); margin-bottom: 6px; line-height: 1.2; }
-        .lp-card p { font-size: 11px; color: var(--wp--preset--color--contrast-3); line-height: 1.5; margin-bottom: 10px; }
-        .lp-card .lp-pages { display: flex; flex-direction: column; gap: 4px; }
-        .lp-card .lp-page { font-size: 11px; color: var(--wp--preset--color--contrast); padding: 4px 8px; background: var(--wp--preset--color--white)7f2; border-radius: 5px; border-left: 2px solid #FA6B01; }
-        .lp-card.urgent { border-color: #c85500; background: var(--wp--preset--color--white)7f2; }
-        .lp-card.urgent .lp-tag { color: #c85500; }
-        .lp-card.urgent .lp-page { background: #ffe8d8; border-color: #c85500; }
-        .lp-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #FA6B01; background: rgba(250,107,1,0.1); padding: 1px 5px; border-radius: 3px; margin-left: 4px; vertical-align: middle; }
-
-        /* ── Footer note ── */
-        .footnote { margin-top: 48px; font-size: 12px; color: var(--wp--preset--color--contrast-3); line-height: 1.6; max-width: 560px; }
-        .footnote a { color: var(--color-green); text-decoration: none; }
-
-        @media (max-width: 1100px) { .sections-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 700px)  { .sections-grid { grid-template-columns: repeat(2, 1fr); } .global-row { grid-template-columns: 1fr; } }
-        @media (max-width: 480px)  { .sections-grid { grid-template-columns: 1fr; } .page-wrap { padding: 40px 20px 64px; } }
+        @media (max-width: 900px) { .primary-row { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { .primary-row { grid-template-columns: 1fr; } body { padding: 40px 24px; } }
     </style>
 </head>
 <body>
-<div class="page-wrap">
-
     <h1>Sitemap</h1>
-    <p class="meta">fmnrhub.com.au &mdash; Updated May 2025</p>
-    <p class="subtitle">Full site structure for the FMNR Hub redesign, reflecting audience-led navigation and new content priorities.</p>
+    <p class="subtitle">Complete site structure based on the primary navigation and mega menu architecture.</p>
 
-    <div class="legend">
-        <div class="legend-item"><span class="legend-dot new"></span> New page</div>
-        <div class="legend-item"><span class="legend-dot improve"></span> Improve existing</div>
-        <div class="legend-item"><span class="legend-dot existing"></span> Keep as-is</div>
+    <div class="tree">
+        <!-- Root -->
+        <div class="root">
+            <div class="node"><h3>Homepage</h3></div>
+        </div>
+
+        <div class="connector-center"><div class="connector-line"></div></div>
+
+        <!-- Primary Nav -->
+        <div class="primary-row">
+
+            <!-- Partner -->
+            <div class="branch">
+                <div class="branch-head"><h3>Partner</h3></div>
+                <div class="sub-links">
+                    <div class="sub-link">Partner with FMNR<span>Join the global FMNR movement</span></div>
+                    <div class="sub-link">Faith-Based Partners<span>Churches and faith communities</span></div>
+                    <div class="sub-link">NGOs<span>Development organisations</span></div>
+                    <div class="sub-link">Governments<span>National and regional policy</span></div>
+                    <div class="sub-link">Funders<span>Donors and institutional funders</span></div>
+                </div>
+            </div>
+
+            <!-- Adopt -->
+            <div class="branch">
+                <div class="branch-head"><h3>Adopt</h3></div>
+                <div class="sub-links">
+                    <div class="sub-link">How FMNR Works<span>The technique explained</span></div>
+                    <div class="sub-link">Adopt FMNR<span>Start implementing in your context</span></div>
+                    <div class="sub-link">Resources<span>Tools and materials for adoption</span></div>
+                </div>
+            </div>
+
+            <!-- Impact -->
+            <div class="branch">
+                <div class="branch-head"><h3>Impact</h3></div>
+                <div class="sub-links">
+                    <div class="sub-link">The Impact of FMNR<span>Comprehensive impact overview</span></div>
+                    <div class="sub-link">Evidence of Impact<span>Research and data</span></div>
+                    <div class="sub-link">Impact Stories<span>Stories from communities</span></div>
+                </div>
+            </div>
+
+            <!-- Resource Hub -->
+            <div class="branch">
+                <div class="branch-head"><h3>Resource Hub</h3></div>
+                <div class="sub-links">
+                    <div class="sub-link">All Resources<span>Complete resource library</span></div>
+                    <div class="sub-link">Research<span>Academic research and evidence</span></div>
+                    <div class="sub-link">Country-Specific Resources<span>By country and region</span></div>
+                    <div class="sub-link">FMNR Manual<span>Comprehensive practitioner guide</span></div>
+                    <div class="sub-link">FMNR Media<span>Videos, podcasts and multimedia</span></div>
+                    <div class="sub-link">FMNR e-Courses<span>Online learning modules</span></div>
+                    <div class="sub-link">FMNR Webinar<span>Recorded webinars</span></div>
+                </div>
+            </div>
+
+            <!-- Stories -->
+            <div class="branch">
+                <div class="branch-head"><h3>Stories</h3></div>
+                <div class="sub-links">
+                    <div class="sub-link">All Stories<span>Browse all FMNR stories</span></div>
+                    <div class="sub-link">Story Category<span>Coming soon</span></div>
+                    <div class="sub-link">Story Category<span>Coming soon</span></div>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="branch">
+                <div class="branch-head"><h3>About</h3></div>
+                <div class="sub-links">
+                    <div class="sub-link">About FMNR<span>The technique and movement</span></div>
+                    <div class="sub-link">Tony Rinaudo — The Forest Maker<span>The founder's journey</span></div>
+                    <div class="sub-link">Contact FMNR<span>Get in touch</span></div>
+                    <div class="sub-link">FMNR and World Vision<span>Our partnership and mission</span></div>
+                    <div class="sub-link">FMNR Scaling Projects<span>How FMNR is scaling worldwide</span></div>
+                    <div class="sub-link">FMNR Tracking Tool<span>Monitor progress</span></div>
+                    <div class="sub-link">Latest Updates<span>News and announcements</span></div>
+                    <div class="sub-link">FMNR FAQs<span>Frequently asked questions</span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="connector-center"><div class="connector-line"></div></div>
+
+        <!-- Utility -->
+        <div>
+            <p class="utility-label">Utility & Global</p>
+            <div class="utility-row">
+                <div class="utility-node">Search</div>
+                <div class="utility-node">Newsletter Signup</div>
+                <div class="utility-node">Privacy Policy</div>
+                <div class="utility-node">Terms of Use</div>
+            </div>
+        </div>
     </div>
-
-    <!-- Global / Utility -->
-    <p class="divider-label">Global</p>
-    <div class="global-row">
-
-        <div class="global-card">
-            <p class="gc-label">Entry point</p>
-            <h2>Homepage</h2>
-            <div class="gc-items">
-                <span class="gc-item new">Hero + audience entry points</span>
-                <span class="gc-item new">Audience selector cards</span>
-                <span class="gc-item new">Persistent EDM signup CTA</span>
-            </div>
-        </div>
-
-        <div class="global-card">
-            <p class="gc-label">Utility</p>
-            <h2>Search &amp; Resource Hub</h2>
-            <div class="gc-items">
-                <span class="gc-item new">Global FMNR activity map</span>
-                <span class="gc-item">Full-text search</span>
-                <span class="gc-item">Filters by type &amp; region</span>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Dedicated Landing Pages -->
-    <p class="divider-label">Dedicated Landing Pages <span style="font-size:10px;color:#FA6B01;font-weight:700;letter-spacing:0;text-transform:none;">&#9650; Gap identified — audience-specific templates required</span></p>
-    <div class="lp-row">
-
-        <div class="lp-card urgent">
-            <p class="lp-tag"><svg viewBox="0 0 10 10" fill="currentColor"><polygon points="5,0 10,10 0,10"/></svg> Urgent &mdash; Faith-based Actors</p>
-            <h3>Faith-based Partner Landing Page</h3>
-            <p>Dedicated entry point for faith leaders, pastors and church networks. Specifically needed for JR and community faith leader outreach.</p>
-            <div class="lp-pages">
-                <span class="lp-page">Why Faith &amp; FMNR</span>
-                <span class="lp-page">Leader Entry Point (JR &amp; others)</span>
-                <span class="lp-page">Sermon Kit download</span>
-                <span class="lp-page">Faith Network Map</span>
-                <span class="lp-page">Get Involved CTA</span>
-            </div>
-        </div>
-
-        <div class="lp-card">
-            <p class="lp-tag"><svg viewBox="0 0 10 10" fill="currentColor"><polygon points="5,0 10,10 0,10"/></svg> New &mdash; NGOs &amp; Implementers</p>
-            <h3>NGO Partner Landing Page</h3>
-            <p>Dedicated entry point for development organisations and NGOs looking to integrate FMNR into existing programmes.</p>
-            <div class="lp-pages">
-                <span class="lp-page">Programme integration tool</span>
-                <span class="lp-page">Technical partnership pathway</span>
-                <span class="lp-page">Evidence pack download</span>
-                <span class="lp-page">Partner enquiry form</span>
-            </div>
-        </div>
-
-        <div class="lp-card">
-            <p class="lp-tag"><svg viewBox="0 0 10 10" fill="currentColor"><polygon points="5,0 10,10 0,10"/></svg> New &mdash; Governments &amp; Policy</p>
-            <h3>Government Partner Landing Page</h3>
-            <p>Dedicated entry point for government bodies and policy makers assessing FMNR at a national or regional scale.</p>
-            <div class="lp-pages">
-                <span class="lp-page">Policy &amp; cost case</span>
-                <span class="lp-page">NDC / SDG alignment</span>
-                <span class="lp-page">National programme examples</span>
-                <span class="lp-page">Official enquiry form</span>
-            </div>
-        </div>
-
-        <div class="lp-card">
-            <p class="lp-tag"><svg viewBox="0 0 10 10" fill="currentColor"><polygon points="5,0 10,10 0,10"/></svg> New &mdash; Funders &amp; Supporters</p>
-            <h3>Funder Landing Page</h3>
-            <p>Dedicated entry point for philanthropic funders, impact investors and grant-making bodies evaluating FMNR.</p>
-            <div class="lp-pages">
-                <span class="lp-page">Impact ROI data</span>
-                <span class="lp-page">Funding priorities &amp; gaps</span>
-                <span class="lp-page">Private funder pathway</span>
-                <span class="lp-page">Funding contact form</span>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Primary sections -->
-    <p class="divider-label">Primary Navigation</p>
-    <div class="sections-grid">
-        <!-- PARTNER -->
-        <div class="section-col">
-            <div class="section-head partner">
-                <h2>Partner</h2>
-                <span class="priority-badge">Highest</span>
-            </div>
-            <div class="section-body">
-
-                <div class="group">
-                    <p class="group-label">Faith-based Actors <span class="lp-badge">Landing Page</span> &#9650; Urgent</p>
-                    <div class="page-item"><span class="page-title">Why Faith &amp; FMNR</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">Leader Entry Point</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">Case Studies</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">Sermon Kit</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">Faith Network Map</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">Get Involved CTA</span><span class="status-pill new">New</span></div>
-                </div>
-
-        <!-- LEARN -->
-        <div class="section-col">
-            <div class="section-head learn">
-                <h2>Learn</h2>
-                <span class="priority-badge">Medium</span>
-            </div>
-            <div class="section-body">
-
-                <div class="group">
-                    <p class="group-label">FMNR Fundamentals</p>
-                    <div class="page-item"><span class="page-title">What is FMNR</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">How it works (carousel)</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">Why it matters</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">1 Billion Hectare Vision</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">FMNR vs Conventional Restoration</span><span class="status-pill improve">Improve</span></div>
-                </div>
-
-        <!-- ADOPT -->
-        <div class="section-col">
-            <div class="section-head adopt">
-                <h2>Adopt</h2>
-                <span class="priority-badge">Medium</span>
-            </div>
-            <div class="section-body">
-
-                <div class="group">
-                    <p class="group-label">Getting Started</p>
-                    <div class="page-item"><span class="page-title">Step-by-step Guide</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">Tools &amp; Resources</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">Video Library</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">Downloadable Field Guides</span><span class="status-pill new">New</span></div>
-                    <div class="page-item"><span class="page-title">Complementary Techniques</span><span class="status-pill new">New</span></div>
-                </div>
-
-        <!-- IMPACT -->
-        <div class="section-col">
-            <div class="section-head impact">
-                <h2>Impact</h2>
-                <span class="priority-badge">High</span>
-            </div>
-            <div class="section-body">
-
-                <div class="group">
-                    <p class="group-label">Resource Hub</p>
-                    <div class="page-item"><span class="page-title">Stories &amp; Research</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">Content Filters</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">Featured Stories</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">Submit Story</span></div>
-                </div>
-
-        <!-- ABOUT -->
-        <div class="section-col">
-            <div class="section-head about">
-                <h2>About</h2>
-                <span class="priority-badge">High</span>
-            </div>
-            <div class="section-body">
-
-                <div class="group">
-                    <p class="group-label">Tony Rinaudo</p>
-                    <div class="page-item"><span class="page-title">Tony&rsquo;s Story</span><span class="status-pill improve">Improve</span></div>
-                    <div class="page-item"><span class="page-title">Podcasts</span></div>
-                    <div class="page-item"><span class="page-title">Articles</span></div>
-                    <div class="page-item"><span class="page-title">Awards</span></div>
-                    <div class="page-item"><span class="page-title">Speaking Enquiry</span></div>
-                </div>
-
-    </div><!-- /sections-grid -->
-
-    <p class="footnote">
-        Source: <code>IA/sitemap-new.json</code> &mdash; May 2025 &nbsp;&middot;&nbsp;
-        Priority: Partner (highest) &rarr; Impact / About (high) &rarr; Learn / Adopt (medium) &nbsp;&middot;&nbsp;
-        <a href="components.html">&larr; Back to Deliverables</a>
-    </p>
-
-</div>
+<script src="shared-header.js"></script>
 </body>
 </html>
